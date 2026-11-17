@@ -316,6 +316,20 @@ export const CustomerMenu: React.FC = () => {
               {settings?.secondaryCtaText || t.visitRoastery}
             </a>
           </div>
+
+          {/* Hero Ambiance & Color Inversion Switcher (Prominently visible on first load) */}
+          <div className="mt-8 flex flex-col items-center justify-center animate-in fade-in">
+            <div className="flex items-center gap-1.5 mb-2.5">
+              <Contrast className="w-4 h-4" style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }} />
+              <span
+                className="font-headline text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-bold"
+                style={{ color: textBody }}
+              >
+                Invert Colors / Ambiance
+              </span>
+            </div>
+            <ThemeSwitcher variant="segmented" />
+          </div>
         </div>
       </section>
 

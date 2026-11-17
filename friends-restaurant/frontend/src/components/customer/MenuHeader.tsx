@@ -95,13 +95,10 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             </a>
           </nav>
 
-          {/* Right Actions: Theme Toggle + Language Switcher + Guest Wi-Fi */}
-          <div className="flex items-center gap-1.5 sm:gap-2.5">
-            {/* Color Inversion Theme Switcher */}
-            <ThemeSwitcher variant="compact" />
-
+          {/* Right Actions: Language Switcher + Theme Toggle + Guest Wi-Fi + Mobile Menu */}
+          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
             {/* Language Switcher Bar */}
-            <div className="inline-flex items-center p-1 rounded-full bg-[#133834] border border-[#235750]">
+            <div className="inline-flex items-center p-0.5 sm:p-1 rounded-full bg-[#133834] border border-[#235750]">
               <button
                 type="button"
                 onClick={() => handleLangSelect('en')}
@@ -140,10 +137,13 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               </button>
             </div>
 
+            {/* Dedicated Color Inversion Theme Switcher (Contrast Icon 🌓) */}
+            <ThemeSwitcher variant="compact" />
+
             {/* Free Wi-Fi Button */}
             <button
               onClick={() => setIsWifiModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#1D4D47] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline uppercase font-semibold tracking-wider transition-all cursor-pointer"
+              className="w-9 h-9 sm:w-auto inline-flex items-center justify-center sm:gap-1.5 sm:px-3 sm:py-1.5 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#1D4D47] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline uppercase font-semibold tracking-wider transition-all cursor-pointer shrink-0"
               title={t.freeWifi}
             >
               <Wifi className="w-3.5 h-3.5 text-[#E5CFAF]" />
@@ -153,7 +153,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             {/* Mobile Hamburger Menu Toggle */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] hover:bg-[#18423D] transition-colors"
+              className="lg:hidden w-9 h-9 flex items-center justify-center rounded-xl bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] hover:bg-[#18423D] transition-colors shrink-0"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <MenuIcon className="w-5 h-5" />}
