@@ -12,6 +12,7 @@ import {
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { KabunLogo } from '../common/KabunLogo';
+import { ThemeSwitcher } from '../common/ThemeSwitcher';
 import { useSiteSettings } from '../../hooks/useMenu';
 import { Language, translations } from '../../i18n/translations';
 import { useTheme } from '../../context/ThemeContext';
@@ -94,28 +95,10 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             </a>
           </nav>
 
-          {/* Right Actions: Guest Wi-Fi + Theme Toggle + Language Switcher */}
+          {/* Right Actions: Theme Toggle + Language Switcher + Guest Wi-Fi */}
           <div className="flex items-center gap-1.5 sm:gap-2.5">
-            {/* Theme Switcher Toggle */}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              aria-label={theme === 'dark' ? 'Switch to Roastery Cream mode' : 'Switch to Midnight Roastery mode'}
-              title={theme === 'dark' ? 'Switch to Roastery Cream mode' : 'Switch to Midnight Roastery mode'}
-              className="inline-flex items-center gap-1.5 p-1.5 sm:px-2.5 sm:py-1 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#235750] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline font-bold uppercase tracking-wider transition-all cursor-pointer group shrink-0"
-            >
-              {theme === 'dark' ? (
-                <>
-                  <Sun className="w-3.5 h-3.5 text-[#E5CFAF] group-hover:rotate-45 transition-transform" />
-                  <span className="hidden md:inline text-[#E5CFAF] text-[10px] tracking-wider">Cream</span>
-                </>
-              ) : (
-                <>
-                  <Moon className="w-3.5 h-3.5 text-[#E5CFAF] group-hover:-rotate-12 transition-transform" />
-                  <span className="hidden md:inline text-[#E5CFAF] text-[10px] tracking-wider">Dark</span>
-                </>
-              )}
-            </button>
+            {/* Color Inversion Theme Switcher */}
+            <ThemeSwitcher variant="compact" />
 
             {/* Language Switcher Bar */}
             <div className="inline-flex items-center p-1 rounded-full bg-[#133834] border border-[#235750]">
@@ -217,20 +200,13 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               {t.locationHours}
             </a>
 
-            <div className="pt-2 border-t border-[#1D4D47] flex flex-col gap-2">
-              <button
-                type="button"
-                onClick={toggleTheme}
-                className="flex items-center justify-between w-full py-2.5 px-3 rounded-xl bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] font-headline text-xs font-bold uppercase tracking-wider"
-              >
-                <span className="flex items-center gap-2">
-                  {theme === 'dark' ? <Sun className="w-4 h-4 text-[#E5CFAF]" /> : <Moon className="w-4 h-4 text-[#E5CFAF]" />}
-                  <span>Theme: {theme === 'dark' ? 'Midnight Roastery' : 'Roastery Cream'}</span>
-                </span>
-                <span className="text-[10px] text-[#E5CFAF] font-mono px-2 py-0.5 rounded bg-[#0E2F2C] border border-[#1D4D47]">
-                  Switch
-                </span>
-              </button>
+            <div className="pt-2 border-t border-[#1D4D47] flex flex-col gap-2.5">
+              <div className="flex items-center justify-between px-1">
+                <span className="text-[10px] uppercase tracking-wider text-[#A3B8B5] font-semibold">Theme &amp; Inversion:</span>
+              </div>
+              <div className="flex justify-center">
+                <ThemeSwitcher variant="segmented" />
+              </div>
 
               <Button
                 variant="secondary"

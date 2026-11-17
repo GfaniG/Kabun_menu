@@ -8,6 +8,7 @@ import {
   Check,
   Copy,
   Lock,
+  Contrast,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMenu, useSiteSettings } from '../hooks/useMenu';
@@ -17,6 +18,7 @@ import { MenuCard } from '../components/customer/MenuCard';
 import { MenuItem } from '../types/menu';
 import { KabunLogo } from '../components/common/KabunLogo';
 import { KabunRoasteryRibbon } from '../components/customer/KabunRoasteryRibbon';
+import { ThemeSwitcher } from '../components/common/ThemeSwitcher';
 import { api } from '../api/client';
 import { Language, translations } from '../i18n/translations';
 import { INITIAL_CATEGORIES } from '../data/initialMenu';
@@ -177,7 +179,11 @@ export const CustomerMenu: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen text-[#FAF7F2] antialiased selection:bg-[#E5CFAF] selection:text-[#0E2F2C] transition-colors duration-300"
+      className={`min-h-screen antialiased transition-colors duration-300 ${
+        isCream
+          ? 'bg-[#F5EBDD] text-[#0E2F2C] selection:bg-[#0E2F2C] selection:text-[#E5CFAF]'
+          : 'bg-[#0E2F2C] text-[#FAF7F2] selection:bg-[#E5CFAF] selection:text-[#0E2F2C]'
+      }`}
       style={{
         backgroundColor: bgColor,
         fontFamily,
@@ -203,10 +209,14 @@ export const CustomerMenu: React.FC = () => {
           <div
             className="absolute inset-0 bg-gradient-to-t"
             style={{
-              backgroundImage: `linear-gradient(to top, ${bgColor}, ${bgColor}D9, ${bgColor}F2)`,
+              backgroundImage: isCream
+                ? `linear-gradient(to top, #F5EBDD, rgba(245, 235, 221, 0.85) 50%, rgba(245, 235, 221, 0.94) 100%)`
+                : `linear-gradient(to top, ${bgColor}, ${bgColor}D9, ${bgColor}F2)`,
             }}
           />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(14,47,44,0.92)_100%)]" />
+          {!isCream && (
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(14,47,44,0.92)_100%)]" />
+          )}
         </div>
 
         <div className="relative z-10 max-w-[1320px] mx-auto px-4 lg:px-8 text-center flex flex-col items-center">
@@ -233,29 +243,50 @@ export const CustomerMenu: React.FC = () => {
 
           {/* CRAFTED FROM COFFEE Master Headline */}
           <div className="flex flex-col items-center mb-6">
-            <h1 className="flex flex-col items-center text-center font-headline font-black uppercase text-[#FAF7F2] drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
+            <h1
+              className="flex flex-col items-center text-center font-headline font-black uppercase"
+              style={{
+                color: textHeading,
+                filter: isCream ? 'none' : 'drop-shadow(0 4px 24px rgba(0,0,0,0.9))',
+              }}
+            >
               {/* Line 1: CRAFTED FROM */}
               <span className="flex items-center justify-center gap-2 sm:gap-3 text-2xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.18em] sm:tracking-[0.24em] leading-tight">
                 <span>{settings?.heroTitle1 || 'CRAFTED FROM'}</span>
               </span>
 
               {/* Line 2: COFFEE */}
-              <span className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.22em] sm:tracking-[0.28em] mt-1 sm:mt-2 leading-none text-[#E5CFAF]">
+              <span
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl tracking-[0.22em] sm:tracking-[0.28em] mt-1 sm:mt-2 leading-none"
+                style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }}
+              >
                 {settings?.heroTitle2 || 'COFFEE'}
               </span>
             </h1>
 
             {/* Line 3: Coffee Bean & Finjal Emblem Motif */}
-            <div className="mt-4 flex items-center gap-2 text-[#E5CFAF] opacity-90">
-              <span className="w-8 h-px bg-[#E5CFAF]/40" />
-              <span className="font-headline text-xs uppercase tracking-[0.3em] font-semibold text-[#E5CFAF]">
+            <div
+              className="mt-4 flex items-center gap-2 opacity-90"
+              style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }}
+            >
+              <span
+                className="w-8 h-px"
+                style={{ backgroundColor: isCream ? '#0E2F2C' : '#E5CFAF', opacity: 0.4 }}
+              />
+              <span className="font-headline text-xs uppercase tracking-[0.3em] font-semibold">
                 ካቡን &bull; MEKELLE
               </span>
-              <span className="w-8 h-px bg-[#E5CFAF]/40" />
+              <span
+                className="w-8 h-px"
+                style={{ backgroundColor: isCream ? '#0E2F2C' : '#E5CFAF', opacity: 0.4 }}
+              />
             </div>
           </div>
 
-          <p className="font-body text-sm sm:text-base text-[#C5D5D3] max-w-2xl mx-auto mb-8 tracking-wide leading-relaxed">
+          <p
+            className="font-body text-sm sm:text-base max-w-2xl mx-auto mb-8 tracking-wide leading-relaxed"
+            style={{ color: textBody }}
+          >
             {settings?.heroDescription ||
               'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.'}
           </p>
@@ -326,6 +357,20 @@ export const CustomerMenu: React.FC = () => {
                 ? 'Single-origin Ethiopian roasts, precision espresso extractions, slow-steeped cold brews, and seasonal refreshers.'
                 : 'Pure French butter croissants, artisan pastries, decadent cakes, and freshly prepared savory toasts.'}
             </p>
+          </div>
+
+          {/* Ambiance & Color Inversion Selector */}
+          <div className="flex flex-col items-center justify-center mb-8">
+            <div className="flex items-center gap-2 mb-2.5">
+              <Contrast className="w-3.5 h-3.5" style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }} />
+              <span
+                className="font-headline text-[11px] uppercase tracking-[0.2em] font-bold"
+                style={{ color: textBody }}
+              >
+                Ambiance &amp; Color Inversion
+              </span>
+            </div>
+            <ThemeSwitcher variant="segmented" />
           </div>
 
           {/* Department and Category Switcher */}
@@ -1013,14 +1058,23 @@ export const CustomerMenu: React.FC = () => {
       <KabunRoasteryRibbon />
 
       {/* 8. FOOTER */}
-      <footer className="w-full border-t border-[#1D4D47]" style={{ backgroundColor: bgColor }}>
+      <footer
+        className="w-full border-t transition-colors duration-200"
+        style={{
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+        }}
+      >
         <div className="max-w-[1320px] mx-auto px-4 lg:px-8 py-16">
           <div className="flex flex-col items-center text-center">
             <div className="mb-6 relative">
               <KabunLogo variant="full" className="w-40 sm:w-48" />
             </div>
 
-            <p className="font-body text-xs text-[#C5D5D3] max-w-md mb-8">
+            <p
+              className="font-body text-xs max-w-md mb-8"
+              style={{ color: textBody }}
+            >
               Bespoke specialty coffee roastery, artisanal pour-over bar, and fresh viennoiserie.
             </p>
 
@@ -1030,8 +1084,12 @@ export const CustomerMenu: React.FC = () => {
                 href="https://www.instagram.com/kabuncoffee/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-[#1D4D47] hover:border-[#E5CFAF] flex items-center justify-center text-[#C5D5D3] hover:text-white transition-all hover:scale-105"
-                style={{ backgroundColor: cardColor }}
+                className="w-10 h-10 rounded-full border flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#C5D5D3',
+                }}
                 title="Instagram"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1045,8 +1103,12 @@ export const CustomerMenu: React.FC = () => {
                 href="https://www.tiktok.com/@kabuncoffee"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-[#1D4D47] hover:border-[#E5CFAF] flex items-center justify-center text-[#C5D5D3] hover:text-white transition-all hover:scale-105"
-                style={{ backgroundColor: cardColor }}
+                className="w-10 h-10 rounded-full border flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#C5D5D3',
+                }}
                 title="TikTok"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -1058,8 +1120,12 @@ export const CustomerMenu: React.FC = () => {
                 href="https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full border border-[#1D4D47] hover:border-[#E5CFAF] flex items-center justify-center text-[#C5D5D3] hover:text-white transition-all hover:scale-105"
-                style={{ backgroundColor: cardColor }}
+                className="w-10 h-10 rounded-full border flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#C5D5D3',
+                }}
                 title="Facebook"
               >
                 <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
@@ -1069,8 +1135,12 @@ export const CustomerMenu: React.FC = () => {
 
               <a
                 href={`tel:${settings?.phone1 || '0914000000'}`}
-                className="w-10 h-10 rounded-full border border-[#1D4D47] hover:border-[#E5CFAF] flex items-center justify-center text-[#C5D5D3] hover:text-white transition-all hover:scale-105"
-                style={{ backgroundColor: cardColor }}
+                className="w-10 h-10 rounded-full border flex items-center justify-center transition-all hover:scale-105"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#C5D5D3',
+                }}
                 title="Call"
               >
                 <span className="material-symbols-outlined text-[18px]">call</span>
@@ -1078,30 +1148,57 @@ export const CustomerMenu: React.FC = () => {
             </div>
 
             <nav className="flex flex-wrap items-center justify-center gap-7 mb-8 font-headline text-xs uppercase tracking-widest font-semibold">
-              <a href="#hero" className="text-white hover:text-[#E5CFAF] transition-colors">
+              <a
+                href="#hero"
+                className="transition-colors"
+                style={{ color: textHeading }}
+              >
                 {t.home}
               </a>
-              <a href="#menu-section" className="text-[#C5D5D3] hover:text-[#E5CFAF] transition-colors">
+              <a
+                href="#menu-section"
+                className="transition-colors"
+                style={{ color: textBody }}
+              >
                 {t.ourMenu}
               </a>
-              <a href="#about-section" className="text-[#C5D5D3] hover:text-[#E5CFAF] transition-colors">
+              <a
+                href="#about-section"
+                className="transition-colors"
+                style={{ color: textBody }}
+              >
                 {t.aboutUs}
               </a>
-              <a href="#gallery-section" className="text-[#C5D5D3] hover:text-[#E5CFAF] transition-colors">
+              <a
+                href="#gallery-section"
+                className="transition-colors"
+                style={{ color: textBody }}
+              >
                 {t.atmosphere}
               </a>
-              <a href="#location-section" className="text-[#C5D5D3] hover:text-[#E5CFAF] transition-colors">
+              <a
+                href="#location-section"
+                className="transition-colors"
+                style={{ color: textBody }}
+              >
                 {t.locationHours}
               </a>
             </nav>
 
-            <div className="pt-6 border-t border-[#1D4D47] w-full flex flex-col sm:flex-row items-center justify-between text-[11px] text-[#A3B8B5] gap-2">
+            <div
+              className="pt-6 border-t w-full flex flex-col sm:flex-row items-center justify-between text-[11px] gap-2 transition-colors"
+              style={{
+                borderColor: borderColor,
+                color: textBody,
+              }}
+            >
               <p>Copyright &copy; {settings?.restaurantName || 'Kabun Coffee + Roastery (ካቡን)'}. All rights reserved.</p>
               <div className="flex items-center gap-3">
-                <p className="text-[#718E8A]">Specialty Coffee Roastery &bull; Mekelle, Tigray, Ethiopia</p>
+                <p style={{ color: isCream ? '#6B807D' : '#718E8A' }}>Specialty Coffee Roastery &bull; Mekelle, Tigray, Ethiopia</p>
                 <button
                   onClick={() => navigate('/admin/login')}
-                  className="text-[#235750] hover:text-[#E5CFAF] transition-colors p-1"
+                  className="p-1 transition-colors"
+                  style={{ color: isCream ? '#0E2F2C' : '#235750' }}
                   title="Staff Portal Login"
                   aria-label="Staff Portal Login"
                 >
@@ -1130,6 +1227,9 @@ export const CustomerMenu: React.FC = () => {
           <ArrowUp className="w-5 h-5" />
         </button>
       )}
+
+      {/* Floating Theme Switcher Button for Instant Inversion Anywhere */}
+      <ThemeSwitcher variant="floating" />
     </div>
   );
 };
