@@ -2,46 +2,45 @@ import { FastifyReply, FastifyRequest } from 'fastify';
 import { prisma } from '../config/database.js';
 
 const DEFAULT_SETTINGS = {
-  restaurantName: 'MEREBA FRIENDS GARDEN',
-  tagline: 'BISTRO • GARDEN • CASUAL LUXURY',
-  heroTitle1: 'THE ONE WITH',
-  heroTitle2: 'THE FOOD',
+  restaurantName: 'KABUN COFFEE + ROASTERY',
+  tagline: 'CRAFTED FROM COFFEE',
+  heroTitle1: 'CRAFTED FROM',
+  heroTitle2: 'COFFEE',
   heroDescription:
-    'Good food, great company, and timeless memories. Browse our hand-rolled pastas, hearty pilafs, fresh garden bowls, and slow-simmered broths.',
-  primaryCtaText: 'EXPLORE OUR MENU',
-  secondaryCtaText: 'VISIT OUR GARDEN',
+    'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.',
+  primaryCtaText: 'EXPLORE ROASTERY MENU',
+  secondaryCtaText: 'OUR ROASTERY CRAFT',
 
-  wifiSsid: 'Mereba_Friends_Garden_5G',
-  wifiPassword: 'centralperkcoffee',
+  wifiSsid: 'Kabun_Guest_WiFi',
+  wifiPassword: 'craftedfromcoffee',
 
-  philosophyEyebrow: 'Our Philosophy',
-  philosophyTitle: 'MORE THAN FOOD. IT’S ABOUT FRIENDSHIP.',
+  philosophyEyebrow: 'Our Roastery Craft',
+  philosophyTitle: 'BORN IN ETHIOPIA.\nCRAFTED WITH OBSESSIVE PASSION.',
   philosophyDescription:
-    'Central Perk meets modern boutique lounge. Designed as a sanctuary for heartfelt conversations, spontaneous laughter, and unforgettable comfort food in our garden.',
-  manifestoQuote: 'Because Joey doesn’t share food, but we definitely think you should.',
-  manifestoAuthor: 'The Kitchen Manifesto',
+    'Kabun is more than a café — it is a sanctuary for coffee lovers, artists, and conversation. We source exceptional micro-lots from Yirgacheffe, Guji, and Sidama, hand-roasting small batches to honor Ethiopia\'s coffee heritage in a modern architectural lounge.',
+  manifestoQuote: 'Every great conversation begins with an exceptional roast.',
+  manifestoAuthor: 'The Roaster\'s Manifesto',
 
-  galleryTitle: 'THE ONE WITH THE GOOD TIMES',
+  galleryTitle: 'ATMOSPHERE & ARTISAN ROASTS',
   galleryDescription:
-    'A glimpse into our candlelit tables, laughter-filled dinners, and passionate artisan cooking in Mereba Friends Garden.',
+    'A glimpse into our warm wood interiors, illuminated night storefront, aromatic pour-over bar, and shared moments at Kabun.',
 
-  addressLine1: '17 ቀበሌ፣ ፊትለፊት በሰበርደ',
-  addressLine2: 'ናይቀደም ገዛ ተጋሩ',
-  openingHours: '11:00 AM – 11:00 PM',
-  phone1: '0970700488',
-  phone2: '0945986349',
-  instagramHandle: '@MEREBA_FRIENDS_GARDEN',
-  instagramUrl: 'https://www.instagram.com/mereba_friends_garden/',
-  tiktokHandle: '@FRIENDS_GARDEN',
-  tiktokUrl: 'https://www.tiktok.com/@friends_garden',
-  facebookHandle: 'FB: FRIENDS GARDEN - መረባ ፍሬንድስ',
-  facebookUrl:
-    'https://www.facebook.com/search/top?q=FRIENDS%20GARDEN%20-%20%E1%88%98%E1%88%A8%E1%89%A3%20%E1%87%8D%E1%88%AC%E1%8A%95%E1%8B%95%E1%88%B5',
+  addressLine1: 'Mekelle, Tigray, Ethiopia',
+  addressLine2: 'ካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)',
+  openingHours: '7:00 AM – 10:30 PM',
+  phone1: '0914000000',
+  phone2: '0920000000',
+  instagramHandle: '@KABUNCOFFEE',
+  instagramUrl: 'https://www.instagram.com/kabuncoffee/',
+  tiktokHandle: '@KABUNCOFFEE',
+  tiktokUrl: 'https://www.tiktok.com/@kabuncoffee',
+  facebookHandle: 'FB: KABUN COFFEE + ROASTERY - ካቡን',
+  facebookUrl: 'https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY',
 
-  accentColor: '#FFBD18',
-  backgroundColor: '#050505',
-  cardColor: '#121212',
-  fontFamily: 'Plus Jakarta Sans',
+  accentColor: '#E5CFAF',
+  backgroundColor: '#0E2F2C',
+  cardColor: '#143834',
+  fontFamily: 'Outfit, sans-serif',
 };
 
 export class SettingsController {

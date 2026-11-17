@@ -1,8 +1,8 @@
 {
-  "name": "friends-restaurant-backend",
+  "name": "kabun-coffee-backend",
   "version": "1.0.0",
   "type": "module",
-  "description": "Backend API for F.R.I.E.N.D.S Restaurant Menu & Admin",
+  "description": "Backend API for Kabun Coffee + Roastery (ካቡን) Menu & Admin Suite",
   "main": "dist/app.js",
   "scripts": {
     "dev": "tsx watch src/app.ts",

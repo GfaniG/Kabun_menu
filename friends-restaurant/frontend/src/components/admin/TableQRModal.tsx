@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
-import { QrCode, Download, Printer, Copy, Check, ExternalLink, Wifi, Sparkles } from 'lucide-react';
+import { QrCode, Download, Printer, Copy, Check, ExternalLink, Wifi } from 'lucide-react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
-import { MerebaLogo } from '../common/MerebaLogo';
+import { KabunLogo } from '../common/KabunLogo';
 import { useSiteSettings } from '../../hooks/useMenu';
 
 interface TableQRModalProps {
@@ -28,7 +28,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
       width: 512,
       margin: 2,
       color: {
-        dark: '#000000',
+        dark: '#0E2F2C',
         light: '#FFFFFF',
       },
       errorCorrectionLevel: 'H',
@@ -41,7 +41,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
     if (!qrDataUrl) return;
     const a = document.createElement('a');
     a.href = qrDataUrl;
-    a.download = `Friends-Garden-Official-Menu-QR.png`;
+    a.download = `Kabun-Coffee-Official-Menu-QR.png`;
     a.click();
   };
 
@@ -64,77 +64,100 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
       return;
     }
 
-    const wifiSsid = settings?.wifiSsid || 'Mereba_Friends_Garden_5G';
-    const wifiPassword = settings?.wifiPassword || 'centralperkcoffee';
+    const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
+    const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
 
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Mereba Friends Garden - Official Table QR Stand</title>
+          <title>Kabun Coffee + Roastery - Official Table QR Stand</title>
           <style>
-            @page { size: auto; margin: 12mm; }
+            @page { size: auto; margin: 10mm; }
             * { box-sizing: border-box; }
             body {
-              font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+              font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
               display: flex;
               justify-content: center;
               align-items: center;
               min-height: 100vh;
               margin: 0;
               background: #ffffff;
-              color: #000000;
+              color: #0E2F2C;
             }
             .acrylic-card {
-              width: 320px;
-              background-color: #0a0a0a !important;
-              color: #ffffff !important;
-              border: 3px solid #222222;
+              width: 330px;
+              background-color: #0E2F2C !important;
+              color: #FAF7F2 !important;
+              border: 3px solid #E5CFAF;
               border-radius: 28px;
               padding: 28px 24px;
               text-align: center;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
-              box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+              box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            }
+            .emblem-wrapper {
+              width: 64px;
+              height: 64px;
+              margin: 0 auto 8px;
+              border-radius: 50%;
+              overflow: hidden;
+              border: 2px solid #E5CFAF;
+              background: #0E2F2C;
+            }
+            .emblem-wrapper img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+            .geez-title {
+              font-size: 26px;
+              font-weight: 900;
+              color: #FAF7F2;
+              line-height: 1.1;
+              letter-spacing: 2px;
+              margin: 0;
             }
             .brand-name {
-              font-size: 15px;
-              font-weight: 900;
-              letter-spacing: 2px;
+              font-size: 13px;
+              font-weight: 800;
+              letter-spacing: 3px;
               text-transform: uppercase;
-              color: #ffffff;
-              margin: 8px 0 2px;
+              color: #E5CFAF;
+              margin: 2px 0 1px;
             }
             .brand-sub {
               font-size: 9px;
-              font-weight: 700;
-              letter-spacing: 3px;
-              color: #FFBD18;
+              font-weight: 600;
+              letter-spacing: 2px;
+              color: #C5D5D3;
               text-transform: uppercase;
               margin-bottom: 12px;
             }
             .badge {
               display: inline-block;
-              background-color: #FFBD18 !important;
-              color: #000000 !important;
-              font-size: 10px;
+              background-color: #E5CFAF !important;
+              color: #0E2F2C !important;
+              font-size: 9.5px;
               font-weight: 900;
-              letter-spacing: 2px;
+              letter-spacing: 1.5px;
               text-transform: uppercase;
               padding: 6px 14px;
               border-radius: 999px;
-              margin-bottom: 16px;
+              margin-bottom: 14px;
             }
             .qr-wrapper {
               background: #ffffff !important;
               padding: 12px;
               border-radius: 20px;
               display: inline-block;
-              margin-bottom: 14px;
+              margin-bottom: 12px;
+              border: 2px solid #E5CFAF;
             }
             .qr-wrapper img {
-              width: 180px;
-              height: 180px;
+              width: 175px;
+              height: 175px;
               display: block;
             }
             .instructions {
@@ -142,27 +165,28 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               font-weight: 800;
               text-transform: uppercase;
               letter-spacing: 1px;
-              color: #ffffff;
-              margin: 0 0 4px;
+              color: #FAF7F2;
+              margin: 0 0 3px;
             }
             .sub-instructions {
               font-size: 9px;
-              color: #a1a1aa;
-              margin: 0 0 16px;
+              color: #C5D5D3;
+              margin: 0 0 14px;
+              font-style: italic;
             }
             .wifi-box {
-              background-color: #141414 !important;
-              border-top: 1px solid #262626;
+              background-color: #133834 !important;
+              border: 1px solid #1D4D47;
               border-radius: 14px;
               padding: 10px 12px;
               font-size: 10px;
-              color: #d4d4d8;
+              color: #C5D5D3;
               text-align: center;
             }
             .wifi-header {
               font-weight: 800;
-              color: #ffffff;
-              margin-bottom: 4px;
+              color: #FAF7F2;
+              margin-bottom: 3px;
               text-transform: uppercase;
               font-size: 9px;
               letter-spacing: 1px;
@@ -172,24 +196,28 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               font-size: 10px;
               margin: 2px 0;
             }
-            .highlight { color: #FFBD18; font-weight: bold; }
+            .highlight { color: #E5CFAF; font-weight: bold; }
           </style>
         </head>
         <body>
           <div class="acrylic-card">
-            <div class="brand-name">MEREBA FRIENDS GARDEN</div>
-            <div class="brand-sub">መረባ ፍሬንድስ &bull; MEKELLE</div>
+            <div class="emblem-wrapper">
+              <img src="/assets/kabun/kabun-emblem-dark.png" alt="Kabun Logo" />
+            </div>
+            <div class="geez-title">ካቡን</div>
+            <div class="brand-name">KABUN COFFEE + ROASTERY</div>
+            <div class="brand-sub">MEKELLE &bull; ETHIOPIA</div>
             <div>
-              <span class="badge">SCAN FOR DIGITAL MENU</span>
+              <span class="badge">Crafted from coffee &bull; Scan for Menu &amp; Wi-Fi</span>
             </div>
             <div class="qr-wrapper">
               <img src="${qrDataUrl}" alt="Menu QR Code" />
             </div>
-            <p class="instructions">Point Your Camera to Browse</p>
-            <p class="sub-instructions">Artisan Dishes &bull; Signature Cocktails &bull; Coffee</p>
+            <p class="instructions">Scan to Explore Roastery Menu</p>
+            <p class="sub-instructions">Single-Origin Roasts &bull; Specialty Cold Brew &bull; Viennoiserie</p>
             <div class="wifi-box">
-              <div class="wifi-header">Guest Wi-Fi Access</div>
-              <div class="wifi-line">Network: <strong>${wifiSsid}</strong></div>
+              <div class="wifi-header">Complimentary Guest Wi-Fi</div>
+              <div class="wifi-line">SSID: <strong>${wifiSsid}</strong></div>
               <div class="wifi-line">Password: <span class="highlight">${wifiPassword}</span></div>
             </div>
           </div>
@@ -212,11 +240,11 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
       onClose={onClose}
       title={
         <div className="flex items-center gap-2">
-          <QrCode className="w-5 h-5 text-[#FFBD18]" />
-          <span>Official Restaurant QR Stand</span>
+          <QrCode className="w-5 h-5 text-[#E5CFAF]" />
+          <span>Official Roastery Master QR Stand</span>
         </div>
       }
-      subtitle="Print this single master QR card for tables, counters, and garden stands"
+      subtitle="Print this single master QR card for tables, counters, and roastery stands"
       maxWidth="md"
     >
       <div className="space-y-5">
@@ -224,25 +252,34 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
         <div className="flex justify-center">
           <div
             ref={printCardRef}
-            className="w-full max-w-xs bg-[#0c0c0c] text-white p-6 rounded-3xl shadow-2xl border-2 border-[#262626] text-center space-y-4"
+            className="w-full max-w-xs bg-[#0E2F2C] text-[#FAF7F2] p-6 rounded-3xl shadow-2xl border-2 border-[#E5CFAF] text-center space-y-3.5"
           >
-            {/* Friends Official Master Vector Logo */}
-            <div className="flex justify-center pt-2 pb-1">
-              <MerebaLogo variant="full" className="w-36 h-auto mx-auto" />
+            {/* Kabun Circular Emblem */}
+            <div className="flex justify-center pt-1">
+              <KabunLogo variant="emblem" className="w-16 h-16 mx-auto" />
+            </div>
+
+            <div>
+              <h2 className="font-headline font-black text-2xl text-[#FAF7F2] tracking-wider leading-none">
+                ካቡን
+              </h2>
+              <p className="font-headline font-extrabold text-xs text-[#E5CFAF] tracking-[0.25em] uppercase mt-0.5">
+                KABUN COFFEE + ROASTERY
+              </p>
             </div>
 
             <div className="py-0.5">
-              <span className="inline-block px-4 py-1 rounded-full bg-[#FFBD18] text-black text-[11px] font-headline font-black tracking-widest uppercase shadow-[0_0_12px_rgba(255,189,24,0.4)]">
-                SCAN FOR DIGITAL MENU
+              <span className="inline-block px-3.5 py-1 rounded-full bg-[#E5CFAF] text-[#0E2F2C] text-[10px] font-headline font-black tracking-wider uppercase shadow-[0_0_12px_rgba(229,207,175,0.4)]">
+                Crafted from coffee &bull; Scan for Menu &amp; Wi-Fi
               </span>
             </div>
 
             {/* High-Resolution QR Code */}
-            <div className="p-3 bg-white rounded-2xl inline-block shadow-lg">
+            <div className="p-3 bg-white rounded-2xl inline-block shadow-lg border-2 border-[#E5CFAF]">
               {qrDataUrl ? (
                 <img
                   src={qrDataUrl}
-                  alt="Official Friends Garden Menu QR Code"
+                  alt="Official Kabun Coffee Menu QR Code"
                   className="w-44 h-44 mx-auto object-contain"
                 />
               ) : (
@@ -252,40 +289,40 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               )}
             </div>
 
-            <div className="space-y-1">
-              <p className="font-headline text-xs font-extrabold text-white uppercase tracking-wider">
+            <div className="space-y-0.5">
+              <p className="font-headline text-xs font-extrabold text-[#FAF7F2] uppercase tracking-wider">
                 Scan with any Smartphone Camera
               </p>
-              <p className="text-[10px] text-[#A1A1AA]">
-                Browse Full Menu &bull; Artisan Dishes &bull; Refreshing Drinks
+              <p className="text-[10px] text-[#C5D5D3] italic">
+                Single-Origin Roasts &bull; Cold Brew &bull; Fresh Viennoiserie
               </p>
             </div>
 
             {/* Dynamic Wi-Fi callout at bottom of table card */}
-            <div className="pt-3 border-t border-[#222222] text-[10px] text-[#A1A1AA] space-y-1 bg-[#141414] rounded-xl p-2.5">
-              <div className="flex items-center justify-center gap-1.5 text-white font-semibold">
-                <Wifi className="w-3.5 h-3.5 text-[#FFBD18]" />
+            <div className="pt-2.5 border-t border-[#1D4D47] text-[10px] text-[#C5D5D3] space-y-1 bg-[#133834] rounded-xl p-2.5">
+              <div className="flex items-center justify-center gap-1.5 text-[#FAF7F2] font-semibold">
+                <Wifi className="w-3.5 h-3.5 text-[#E5CFAF]" />
                 <span>Complimentary Guest Wi-Fi</span>
               </div>
-              <p className="font-mono text-zinc-300">
-                Network: <span className="text-white font-bold">{settings?.wifiSsid || 'Mereba_Friends_Garden_5G'}</span>
+              <p className="font-mono text-[#FAF7F2]">
+                Network: <span className="text-white font-bold">{settings?.wifiSsid || 'Kabun_Guest_WiFi'}</span>
               </p>
-              <p className="font-mono text-zinc-300">
-                Password: <span className="text-[#FFBD18] font-bold">{settings?.wifiPassword || 'centralperkcoffee'}</span>
+              <p className="font-mono text-[#FAF7F2]">
+                Password: <span className="text-[#E5CFAF] font-bold">{settings?.wifiPassword || 'craftedfromcoffee'}</span>
               </p>
             </div>
           </div>
         </div>
 
         {/* Target link display & Copy */}
-        <div className="bg-[#0a0a0a] border border-[#222222] rounded-xl p-3 flex items-center justify-between gap-2">
-          <div className="truncate text-xs text-zinc-400 font-mono">
+        <div className="bg-[#0B2523] border border-[#1D4D47] rounded-xl p-3 flex items-center justify-between gap-2">
+          <div className="truncate text-xs text-[#C5D5D3] font-mono">
             {targetUrl}
           </div>
           <div className="flex items-center gap-1 shrink-0">
             <button
               onClick={handleCopy}
-              className="p-1.5 rounded-lg bg-[#181818] hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors flex items-center gap-1 text-xs"
+              className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] transition-colors flex items-center gap-1 text-xs cursor-pointer"
               title="Copy URL"
             >
               {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
@@ -295,7 +332,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               href={targetUrl}
               target="_blank"
               rel="noreferrer"
-              className="p-1.5 rounded-lg bg-[#181818] hover:bg-zinc-800 text-zinc-300 hover:text-white transition-colors"
+              className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] transition-colors"
               title="Open Link"
             >
               <ExternalLink className="w-3.5 h-3.5" />
@@ -304,7 +341,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
         </div>
 
         {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2 border-t border-[#222222]">
+        <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2 border-t border-[#1D4D47]">
           <Button variant="secondary" onClick={handleDownload} leftIcon={<Download className="w-4 h-4" />}>
             Download High-Res PNG
           </Button>
@@ -316,4 +353,3 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
     </Modal>
   );
 };
-

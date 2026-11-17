@@ -1,8 +1,8 @@
 {
-  "name": "friends-menu-suite",
+  "name": "kabun-menu-suite",
   "version": "1.0.0",
   "private": true,
-  "description": "Mereba Friends Garden - Commercial QR Menu & Admin Suite for Azure",
+  "description": "Kabun Coffee + Roastery (ካቡን) - Commercial Digital QR Menu & Admin Suite",
   "scripts": {
     "build:frontend": "cd friends-restaurant/frontend && npm install --include=dev && npm run build",
     "build:backend": "cd friends-restaurant/backend && npm install --include=dev && npx prisma generate && npm run build",

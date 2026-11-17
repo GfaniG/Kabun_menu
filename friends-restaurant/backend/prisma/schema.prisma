@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -67,42 +67,42 @@ model ServiceRequest {
 
 model SiteSetting {
   id                    String   @id @default("default")
-  restaurantName        String   @default("MEREBA FRIENDS GARDEN")
-  tagline               String   @default("BISTRO • GARDEN • CASUAL LUXURY")
-  heroTitle1            String   @default("THE ONE WITH")
-  heroTitle2            String   @default("THE FOOD")
-  heroDescription       String   @default("Good food, great company, and timeless memories. Browse our hand-rolled pastas, hearty pilafs, fresh garden bowls, and slow-simmered broths.")
-  primaryCtaText        String   @default("EXPLORE OUR MENU")
-  secondaryCtaText      String   @default("VISIT OUR GARDEN")
+  restaurantName        String   @default("KABUN COFFEE + ROASTERY")
+  tagline               String   @default("CRAFTED FROM COFFEE")
+  heroTitle1            String   @default("CRAFTED FROM")
+  heroTitle2            String   @default("COFFEE")
+  heroDescription       String   @default("Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.")
+  primaryCtaText        String   @default("EXPLORE ROASTERY MENU")
+  secondaryCtaText      String   @default("OUR ROASTERY CRAFT")
 
-  wifiSsid              String   @default("Mereba_Friends_Garden_5G")
-  wifiPassword          String   @default("centralperkcoffee")
+  wifiSsid              String   @default("Kabun_Guest_WiFi")
+  wifiPassword          String   @default("craftedfromcoffee")
 
-  philosophyEyebrow     String   @default("Our Philosophy")
-  philosophyTitle       String   @default("MORE THAN FOOD. IT'S ABOUT FRIENDSHIP.")
-  philosophyDescription String   @default("Central Perk meets modern boutique lounge. Designed as a sanctuary for heartfelt conversations, spontaneous laughter, and unforgettable comfort food in our garden.")
-  manifestoQuote        String   @default("Because Joey doesn’t share food, but we definitely think you should.")
-  manifestoAuthor       String   @default("The Kitchen Manifesto")
+  philosophyEyebrow     String   @default("Our Roastery Craft")
+  philosophyTitle       String   @default("BORN IN ETHIOPIA.\nCRAFTED WITH OBSESSIVE PASSION.")
+  philosophyDescription String   @default("Kabun is more than a café — it is a sanctuary for coffee lovers, artists, and conversation. We source exceptional micro-lots from Yirgacheffe, Guji, and Sidama, hand-roasting small batches to honor Ethiopia's coffee heritage in a modern architectural lounge.")
+  manifestoQuote        String   @default("Every great conversation begins with an exceptional roast.")
+  manifestoAuthor       String   @default("The Roaster's Manifesto")
 
-  galleryTitle          String   @default("THE ONE WITH THE GOOD TIMES")
-  galleryDescription    String   @default("A glimpse into our candlelit tables, laughter-filled dinners, and passionate artisan cooking in Mereba Friends Garden.")
+  galleryTitle          String   @default("ATMOSPHERE & ARTISAN ROASTS")
+  galleryDescription    String   @default("A glimpse into our warm wood interiors, illuminated night storefront, aromatic pour-over bar, and shared moments at Kabun.")
 
-  addressLine1          String   @default("17 ቀበሌ፣ ፊትለፊት በሰበርደ")
-  addressLine2          String   @default("ናይቀደም ገዛ ተጋሩ")
-  openingHours          String   @default("11:00 AM – 11:00 PM")
-  phone1                String   @default("0970700488")
-  phone2                String   @default("0945986349")
-  instagramHandle       String   @default("@MEREBA_FRIENDS_GARDEN")
-  instagramUrl          String   @default("https://www.instagram.com/mereba_friends_garden/")
-  tiktokHandle          String   @default("@FRIENDS_GARDEN")
-  tiktokUrl             String   @default("https://www.tiktok.com/@friends_garden")
-  facebookHandle        String   @default("FB: FRIENDS GARDEN - መረባ ፍሬንድስ")
-  facebookUrl           String   @default("https://www.facebook.com/search/top?q=FRIENDS%20GARDEN%20-%20%E1%88%98%E1%88%A8%E1%89%A3%20%E1%87%8D%E1%88%AC%E1%8A%95%E1%8B%95%E1%88%B5")
+  addressLine1          String   @default("Mekelle, Tigray, Ethiopia")
+  addressLine2          String   @default("ካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)")
+  openingHours          String   @default("7:00 AM – 10:30 PM")
+  phone1                String   @default("0914000000")
+  phone2                String   @default("0920000000")
+  instagramHandle       String   @default("@KABUNCOFFEE")
+  instagramUrl          String   @default("https://www.instagram.com/kabuncoffee/")
+  tiktokHandle          String   @default("@KABUNCOFFEE")
+  tiktokUrl             String   @default("https://www.tiktok.com/@kabuncoffee")
+  facebookHandle        String   @default("FB: KABUN COFFEE + ROASTERY - ካቡን")
+  facebookUrl           String   @default("https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY")
 
-  accentColor           String   @default("#FFBD18")
-  backgroundColor       String   @default("#050505")
-  cardColor             String   @default("#121212")
-  fontFamily            String   @default("Plus Jakarta Sans")
+  accentColor           String   @default("#E5CFAF")
+  backgroundColor       String   @default("#0E2F2C")
+  cardColor             String   @default("#143834")
+  fontFamily            String   @default("Outfit, sans-serif")
 
   updatedAt             DateTime @updatedAt
 }

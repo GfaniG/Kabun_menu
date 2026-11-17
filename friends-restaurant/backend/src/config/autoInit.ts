@@ -1,5 +1,11 @@
 import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { prisma } from './database.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export async function ensureDatabaseReady() {
   try {
@@ -9,28 +15,53 @@ export async function ensureDatabaseReady() {
       return;
     }
 
-    console.log('🔄 Synchronizing PostgreSQL database schema with Prisma...');
+    // Automatically align Prisma schema datasource provider with DATABASE_URL
+    const schemaPath = path.resolve(__dirname, '../../prisma/schema.prisma');
+    if (fs.existsSync(schemaPath)) {
+      let schema = fs.readFileSync(schemaPath, 'utf8');
+      const targetProvider = dbUrl.startsWith('file:') ? 'sqlite' : 'postgresql';
+      const currentProviderMatch = schema.match(/datasource\s+db\s+\{\s*provider\s*=\s*"([^"]+)"/);
+      if (currentProviderMatch && currentProviderMatch[1] !== targetProvider) {
+        console.log(`🔄 Switching Prisma datasource provider from ${currentProviderMatch[1]} to ${targetProvider}...`);
+        schema = schema.replace(
+          /(datasource\s+db\s+\{\s*provider\s*=\s*)"[^"]+"/,
+          `$1"${targetProvider}"`
+        );
+        fs.writeFileSync(schemaPath, schema, 'utf8');
+        execSync('npx prisma generate', {
+          stdio: 'inherit',
+          env: process.env,
+          timeout: 60000,
+        });
+      }
+    }
+
+    console.log('🔄 Synchronizing database schema with Prisma...');
     execSync('npx prisma db push --skip-generate --accept-data-loss', {
       stdio: 'inherit',
       env: process.env,
       timeout: 60000,
     });
 
-    // Check if database has been seeded
+    // Check if Kabun Coffee has been seeded
+    const kabunCategory = await prisma.category.findFirst({
+      where: { slug: 'espresso-hot-classics' },
+    }).catch(() => null);
+
     const adminCount = await prisma.admin.count().catch(() => 0);
-    if (adminCount === 0) {
-      console.log('🌱 First boot: running automated menu & admin seeding on PostgreSQL...');
+
+    if (!kabunCategory || adminCount === 0) {
+      console.log('🌱 Running automated Kabun Coffee + Roastery database seeding...');
       execSync('npx tsx prisma/seed.ts', {
         stdio: 'inherit',
         env: process.env,
         timeout: 60000,
       });
-      console.log('🎉 PostgreSQL database initialized and seeded successfully!');
+      console.log('🎉 Kabun Coffee + Roastery database initialized and seeded successfully!');
     } else {
-      console.log(`✅ PostgreSQL database ready (${adminCount} admin account(s) active). All custom dishes and prices preserved.`);
+      console.log(`✅ Kabun Coffee + Roastery database ready (${adminCount} admin account(s) active).`);
     }
   } catch (err: any) {
     console.warn('⚠️ Automated database setup notice:', err?.message || err);
   }
 }
-

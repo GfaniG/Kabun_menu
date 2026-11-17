@@ -52,8 +52,8 @@ async function main() {
   app.get('/api/health', async () => {
     return {
       status: 'ok',
-      restaurant: 'F.R.I.E.N.D.S (Mereba Friends Garden)',
-      tagline: "We'll be there for you.",
+      restaurant: 'Kabun Coffee + Roastery (ካቡን)',
+      tagline: 'Crafted from coffee.',
       timestamp: new Date().toISOString(),
     };
   });
@@ -97,7 +97,7 @@ async function main() {
 
   try {
     await app.listen({ port, host });
-    console.log(`☕ F.R.I.E.N.D.S Server running at http://${host}:${port}`);
+    console.log(`☕ KABUN COFFEE + ROASTERY Server running at http://${host}:${port}`);
     console.log(`📋 API Health: http://${host}:${port}/api/health`);
     console.log(`🍽️ Menu API: http://${host}:${port}/api/menu`);
 

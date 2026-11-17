@@ -104,15 +104,15 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={itemToEdit ? `Edit Dish: ${itemToEdit.name}` : 'Add New Dish'}
-      subtitle="Configure dish details, section, pricing, and photo for the digital menu"
+      title={itemToEdit ? `Edit Item: ${itemToEdit.name}` : 'Add New Menu Item'}
+      subtitle="Configure item details, department, pricing, and photo for the digital menu"
       maxWidth="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Name */}
         <Input
-          label="Dish Name"
-          placeholder="e.g. Spaghetti with carbonara sauce"
+          label="Item Name"
+          placeholder="e.g. V60 Single-Origin Pour-Over, Spanish Latte, Butter Croissant"
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
@@ -131,22 +131,28 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
               required
             >
               {(() => {
-                const foodCats = categories.filter((c) => (c.parentCategory || 'FOOD') === 'FOOD');
-                const drinkCats = categories.filter((c) => c.parentCategory === 'DRINKS');
+                const coffeeCats = categories.filter((c) => {
+                  const p = (c.parentCategory || 'COFFEE').toUpperCase();
+                  return p === 'COFFEE' || p === 'DRINKS';
+                });
+                const bakeryCats = categories.filter((c) => {
+                  const p = (c.parentCategory || 'COFFEE').toUpperCase();
+                  return p === 'BAKERY' || p === 'FOOD';
+                });
                 return (
                   <>
-                    {foodCats.length > 0 && (
-                      <optgroup label="🍽️ FOOD CATEGORIES" className="bg-[#181818] text-[#FFBD18] font-bold">
-                        {foodCats.map((c) => (
+                    {coffeeCats.length > 0 && (
+                      <optgroup label="☕ COFFEE &amp; BEVERAGES" className="bg-[#181818] text-[#E5CFAF] font-bold">
+                        {coffeeCats.map((c) => (
                           <option key={c.id} value={c.id} className="bg-[#121212] text-white font-normal">
                             {c.name}
                           </option>
                         ))}
                       </optgroup>
                     )}
-                    {drinkCats.length > 0 && (
-                      <optgroup label="🍹 DRINKS CATEGORIES" className="bg-[#181818] text-[#16B9E8] font-bold">
-                        {drinkCats.map((c) => (
+                    {bakeryCats.length > 0 && (
+                      <optgroup label="🥐 BAKERY &amp; BITES" className="bg-[#181818] text-[#E5CFAF] font-bold">
+                        {bakeryCats.map((c) => (
                           <option key={c.id} value={c.id} className="bg-[#121212] text-white font-normal">
                             {c.name}
                           </option>
@@ -234,8 +240,8 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
 
         {/* Description */}
         <TextArea
-          label="Dish Description"
-          placeholder="Aromatic ingredients, preparation style, and notes..."
+          label="Item Description"
+          placeholder="Tasting notes, micro-lot origins, roast profile, preparation style..."
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
@@ -243,17 +249,17 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
         {/* Tags */}
         <Input
           label="Highlight Badges (Comma-separated)"
-          placeholder="e.g., Signature, Chef Pick, Popular, Spicy"
+          placeholder="e.g., Single-Origin, Yirgacheffe, Roaster Signature, Baked Daily"
           value={tags}
           onChange={(e) => setTags(e.target.value)}
-          helperText="Badges appear as sleek translucent tags on the dish card."
+          helperText="Badges appear as sleek translucent tags on the item card."
         />
 
         {/* Image Mode & Upload/URL */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <label className="block font-headline text-[11px] uppercase tracking-wider font-bold text-white">
-              Dish Photography
+              Item Photography
             </label>
             <div className="flex bg-[#0a0a0a] p-0.5 rounded-xl border border-[#222222] text-xs font-headline uppercase font-bold">
               <button
@@ -334,7 +340,7 @@ export const ItemFormModal: React.FC<ItemFormModalProps> = ({
             Cancel
           </Button>
           <Button variant="yellow" type="submit" isLoading={isSaving}>
-            {itemToEdit ? 'Save Changes' : 'Create Dish'}
+            {itemToEdit ? 'Save Changes' : 'Create Item'}
           </Button>
         </div>
       </form>

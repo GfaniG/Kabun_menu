@@ -136,6 +136,7 @@ class ApiClient {
     description?: string;
     parentCategory?: string;
     icon?: string;
+    sortOrder?: number;
   }): Promise<{ success: boolean; data: Category }> {
     return this.request('/api/categories', {
       method: 'POST',

@@ -86,11 +86,11 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h3 className="font-headline text-lg font-bold text-white flex items-center gap-2">
-              <Utensils className="w-5 h-5 text-white" />
-              <span>Menu Dishes &amp; Live Pricing</span>
+              <Utensils className="w-5 h-5 text-[#E5CFAF]" />
+              <span>Menu Items &amp; Live Pricing</span>
             </h3>
             <p className="font-body text-xs text-[#A1A1AA] mt-1">
-              Instant dish editing, price updates, and customer menu visibility toggles.
+              Instant drink &amp; bite editing, price updates, and customer menu visibility toggles.
             </p>
           </div>
 
@@ -100,7 +100,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
             onClick={onAddNew}
             leftIcon={<Plus className="w-4 h-4 text-black font-extrabold" />}
           >
-            Add New Dish
+            Add Menu Item
           </Button>
         </div>
 
@@ -111,7 +111,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A]" />
             <input
               type="text"
-              placeholder="Search by dish name or ingredient..."
+              placeholder="Search by coffee, beverage, or bakery name..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-[#0a0a0a] text-white placeholder:text-[#71717A] text-xs sm:text-sm rounded-xl border border-[#222222] pl-10 pr-4 py-2.5 focus:outline-none focus:border-[#FFBD18] transition-all"
@@ -130,22 +130,28 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
             >
               <option value="all" className="bg-[#121212] text-white">All Items ({items.length})</option>
               {(() => {
-                const foodCats = categories.filter((c) => (c.parentCategory || 'FOOD') === 'FOOD');
-                const drinkCats = categories.filter((c) => c.parentCategory === 'DRINKS');
+                const coffeeCats = categories.filter((c) => {
+                  const p = (c.parentCategory || 'COFFEE').toUpperCase();
+                  return p === 'COFFEE' || p === 'DRINKS';
+                });
+                const bakeryCats = categories.filter((c) => {
+                  const p = (c.parentCategory || 'COFFEE').toUpperCase();
+                  return p === 'BAKERY' || p === 'FOOD';
+                });
                 return (
                   <>
-                    {foodCats.length > 0 && (
-                      <optgroup label="🍽️ FOOD" className="bg-[#181818] text-[#FFBD18] font-bold">
-                        {foodCats.map((c) => (
+                    {coffeeCats.length > 0 && (
+                      <optgroup label="☕ COFFEE &amp; BEVERAGES" className="bg-[#181818] text-[#E5CFAF] font-bold">
+                        {coffeeCats.map((c) => (
                           <option key={c.id} value={c.id} className="bg-[#121212] text-white font-normal">
                             {c.name}
                           </option>
                         ))}
                       </optgroup>
                     )}
-                    {drinkCats.length > 0 && (
-                      <optgroup label="🍹 DRINKS" className="bg-[#181818] text-[#16B9E8] font-bold">
-                        {drinkCats.map((c) => (
+                    {bakeryCats.length > 0 && (
+                      <optgroup label="🥐 BAKERY &amp; BITES" className="bg-[#181818] text-[#E5CFAF] font-bold">
+                        {bakeryCats.map((c) => (
                           <option key={c.id} value={c.id} className="bg-[#121212] text-white font-normal">
                             {c.name}
                           </option>
@@ -321,7 +327,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
         <table className="w-full text-left border-collapse text-xs sm:text-sm">
           <thead>
             <tr className="border-b border-[#222222] bg-[#0a0a0a] text-[#A1A1AA] uppercase font-headline text-[11px] font-bold tracking-wider">
-              <th className="py-3.5 px-5">Dish</th>
+              <th className="py-3.5 px-5">Item</th>
               <th className="py-3.5 px-5">Section</th>
               <th className="py-3.5 px-5">Price (ETB)</th>
               <th className="py-3.5 px-5 text-center">Menu Visibility</th>
@@ -336,7 +342,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
                   !item.isAvailable ? 'bg-black/40 opacity-50' : ''
                 }`}
               >
-                {/* Dish column */}
+                {/* Item column */}
                 <td className="py-4 px-5">
                   <div className="flex items-center gap-3.5">
                     {/* Thumbnail */}
@@ -509,7 +515,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
         isOpen={!!deleteCandidate}
         onClose={() => setDeleteCandidate(null)}
         title="Remove Menu Item?"
-        subtitle="This will permanently delete the dish from the digital menu"
+        subtitle="This will permanently delete the item from the digital menu"
       >
         <div className="space-y-4">
           <p className="text-sm text-[#A1A1AA]">
@@ -526,7 +532,7 @@ export const ItemListTable: React.FC<ItemListTableProps> = ({
               onClick={handleDeleteConfirm}
               isLoading={deleteItemMutation.isPending}
             >
-              Delete Dish
+              Delete Item
             </Button>
           </div>
         </div>

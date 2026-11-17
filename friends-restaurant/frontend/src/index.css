@@ -4,7 +4,7 @@
 
 @layer base {
   * {
-    border-color: #222222;
+    border-color: #1D4D47;
   }
 
   html {
@@ -13,8 +13,8 @@
   }
 
   body {
-    background-color: #050505;
-    color: #FFFFFF;
+    background-color: #0E2F2C;
+    color: #FAF7F2;
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     overflow-x: hidden;
   }
@@ -51,14 +51,14 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: #081E1C;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #222222;
+  background: #1D4D47;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #333333;
+  background: #286058;
 }

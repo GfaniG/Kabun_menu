@@ -80,7 +80,7 @@ export const AdminDashboard: React.FC = () => {
   const pausedMenuCount = items.filter((i) => !i.isAvailable).length;
 
   return (
-    <div className="min-h-screen bg-[#050505] font-body text-[#A1A1AA] flex flex-col selection:bg-[#FFBD18] selection:text-black">
+    <div className="min-h-screen bg-[#0E2F2C] font-body text-[#FAF7F2] flex flex-col selection:bg-[#E5CFAF] selection:text-[#0E2F2C]">
       {/* Header */}
       <AdminHeader />
 
@@ -89,13 +89,13 @@ export const AdminDashboard: React.FC = () => {
         {/* KPI Stats Grid */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
           {/* Total Dishes */}
-          <div className="bg-[#121212] border border-[#222222] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#181818] border border-[#262626] flex items-center justify-center text-white shrink-0">
+          <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] shrink-0">
               <Utensils className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold block leading-tight">
-                Total Dishes
+              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#C5D5D3] font-bold block leading-tight">
+                Total Items
               </span>
               <span className="font-headline text-xl sm:text-2xl font-bold font-mono text-white">
                 {totalItemsCount}
@@ -104,12 +104,12 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Menu Sections */}
-          <div className="bg-[#121212] border border-[#222222] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#181818] border border-[#262626] flex items-center justify-center text-white shrink-0">
+          <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] shrink-0">
               <FolderTree className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold block leading-tight">
+              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#C5D5D3] font-bold block leading-tight">
                 Categories
               </span>
               <span className="font-headline text-xl sm:text-2xl font-bold font-mono text-white">
@@ -119,12 +119,12 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Visible on Menu */}
-          <div className="bg-[#121212] border border-[#222222] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#181818] border border-[#262626] flex items-center justify-center text-[#FFBD18] shrink-0">
+          <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] shrink-0">
               <CheckCircle2 className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold block leading-tight">
+              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#C5D5D3] font-bold block leading-tight">
                 Live on Menu
               </span>
               <span className="font-headline text-xl sm:text-2xl font-bold font-mono text-white">
@@ -134,13 +134,13 @@ export const AdminDashboard: React.FC = () => {
           </div>
 
           {/* Paused / Hidden */}
-          <div className="bg-[#121212] border border-[#222222] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
-            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#181818] border border-[#262626] flex items-center justify-center text-[#71717A] shrink-0">
+          <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-3.5 sm:p-5 flex items-center gap-3 sm:gap-4 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#71717A] shrink-0">
               <EyeOff className="w-4 h-4 sm:w-5 sm:h-5" />
             </div>
             <div>
-              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold block leading-tight">
-                Hidden Dishes
+              <span className="font-headline text-[10px] sm:text-[11px] uppercase tracking-wider text-[#C5D5D3] font-bold block leading-tight">
+                Hidden Items
               </span>
               <span className="font-headline text-xl sm:text-2xl font-bold font-mono text-white">
                 {pausedMenuCount}
@@ -150,29 +150,29 @@ export const AdminDashboard: React.FC = () => {
         </div>
 
         {/* Navigation Tabs (Dishes vs Categories vs Customize Menu & CMS) */}
-        <div className="flex border-b border-[#222222] gap-1 sm:gap-2 overflow-x-auto no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
+        <div className="flex border-b border-[#1D4D47] gap-1 sm:gap-2 overflow-x-auto no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
           <button
             onClick={() => setActiveTab('items')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
               activeTab === 'items'
-                ? 'border-[#FFBD18] text-white bg-white/5'
-                : 'border-transparent text-[#A1A1AA] hover:text-white hover:bg-white/5'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
             }`}
           >
-            <Utensils className="w-4 h-4 text-white" />
-            <span className="hidden sm:inline">Dishes &amp; Live Pricing ({items.length})</span>
-            <span className="sm:hidden">Dishes ({items.length})</span>
+            <Utensils className="w-4 h-4 text-[#E5CFAF]" />
+            <span className="hidden sm:inline">Items &amp; Live Pricing ({items.length})</span>
+            <span className="sm:hidden">Items ({items.length})</span>
           </button>
 
           <button
             onClick={() => setActiveTab('categories')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
               activeTab === 'categories'
-                ? 'border-[#FFBD18] text-white bg-white/5'
-                : 'border-transparent text-[#A1A1AA] hover:text-white hover:bg-white/5'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
             }`}
           >
-            <FolderTree className="w-4 h-4 text-white" />
+            <FolderTree className="w-4 h-4 text-[#E5CFAF]" />
             <span className="hidden sm:inline">Category Manager ({categories.length})</span>
             <span className="sm:hidden">Categories ({categories.length})</span>
           </button>
@@ -181,11 +181,11 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setActiveTab('cms')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
               activeTab === 'cms'
-                ? 'border-[#FFBD18] text-[#FFBD18] bg-white/5 font-extrabold'
-                : 'border-transparent text-[#A1A1AA] hover:text-white hover:bg-white/5'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
             }`}
           >
-            <Palette className="w-4 h-4 text-[#FFBD18]" />
+            <Palette className="w-4 h-4 text-[#E5CFAF]" />
             <span className="hidden sm:inline">Customize Menu &amp; Live CMS</span>
             <span className="sm:hidden">Theme &amp; CMS</span>
           </button>
@@ -194,11 +194,11 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setActiveTab('analytics')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
               activeTab === 'analytics'
-                ? 'border-[#16B9E8] text-[#16B9E8] bg-white/5 font-extrabold'
-                : 'border-transparent text-[#A1A1AA] hover:text-white hover:bg-white/5'
+                ? 'border-[#348B82] text-[#348B82] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
             }`}
           >
-            <TrendingUp className="w-4 h-4 text-[#16B9E8]" />
+            <TrendingUp className="w-4 h-4 text-[#348B82]" />
             <span className="hidden sm:inline">Analytics &amp; Insights</span>
             <span className="sm:hidden">Analytics</span>
           </button>

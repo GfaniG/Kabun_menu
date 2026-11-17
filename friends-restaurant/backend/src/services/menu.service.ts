@@ -150,7 +150,7 @@ export class MenuService {
         name: data.name,
         slug,
         description: data.description,
-        parentCategory: data.parentCategory ? data.parentCategory.toUpperCase() : 'FOOD',
+        parentCategory: data.parentCategory ? data.parentCategory.toUpperCase() : 'COFFEE',
         icon: data.icon,
         sortOrder: data.sortOrder ?? 0,
       },

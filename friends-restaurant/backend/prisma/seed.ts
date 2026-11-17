@@ -4,11 +4,26 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log('🌱 Seeding F.R.I.E.N.D.S Restaurant Database...');
+  console.log('🌱 Seeding KABUN COFFEE + ROASTERY Database...');
 
   // 1. Seed Admin
   const adminPassword = await bcrypt.hash('admin123', 10);
   const admin = await prisma.admin.upsert({
+    where: { email: 'admin@kabuncoffee.com' },
+    update: {
+      password: adminPassword,
+      name: 'Manager',
+    },
+    create: {
+      email: 'admin@kabuncoffee.com',
+      password: adminPassword,
+      name: 'Manager',
+    },
+  });
+  console.log(`👤 Admin ready: ${admin.email}`);
+
+  // Also ensure legacy admin@friends.com points to Kabun or works if used
+  await prisma.admin.upsert({
     where: { email: 'admin@friends.com' },
     update: {
       password: adminPassword,
@@ -20,540 +35,477 @@ async function main() {
       name: 'Manager',
     },
   });
-  console.log(`👤 Admin ready: ${admin.email}`);
 
   // 2. Seed Default SiteSettings
   await prisma.siteSetting.upsert({
     where: { id: 'default' },
-    update: {},
+    update: {
+      restaurantName: 'KABUN COFFEE + ROASTERY',
+      tagline: 'CRAFTED FROM COFFEE',
+      heroTitle1: 'CRAFTED FROM',
+      heroTitle2: 'COFFEE',
+      heroDescription:
+        'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.',
+      primaryCtaText: 'EXPLORE ROASTERY MENU',
+      secondaryCtaText: 'OUR ROASTERY CRAFT',
+
+      wifiSsid: 'Kabun_Guest_WiFi',
+      wifiPassword: 'craftedfromcoffee',
+
+      philosophyEyebrow: 'Our Roastery Craft',
+      philosophyTitle: 'BORN IN ETHIOPIA.\nCRAFTED WITH OBSESSIVE PASSION.',
+      philosophyDescription:
+        'Kabun is more than a café — it is a sanctuary for coffee lovers, artists, and conversation. We source exceptional micro-lots from Yirgacheffe, Guji, and Sidama, hand-roasting small batches to honor Ethiopia\'s coffee heritage in a modern architectural lounge.',
+      manifestoQuote: 'Every great conversation begins with an exceptional roast.',
+      manifestoAuthor: 'The Roaster\'s Manifesto',
+
+      galleryTitle: 'ATMOSPHERE & ARTISAN ROASTS',
+      galleryDescription:
+        'A glimpse into our warm wood interiors, illuminated night storefront, aromatic pour-over bar, and shared moments at Kabun.',
+
+      addressLine1: 'Mekelle, Tigray, Ethiopia',
+      addressLine2: 'ካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)',
+      openingHours: '7:00 AM – 10:30 PM',
+      phone1: '0914000000',
+      phone2: '0920000000',
+      instagramHandle: '@KABUNCOFFEE',
+      instagramUrl: 'https://www.instagram.com/kabuncoffee/',
+      tiktokHandle: '@KABUNCOFFEE',
+      tiktokUrl: 'https://www.tiktok.com/@kabuncoffee',
+      facebookHandle: 'FB: KABUN COFFEE + ROASTERY - ካቡን',
+      facebookUrl: 'https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY',
+
+      accentColor: '#E5CFAF',
+      backgroundColor: '#0E2F2C',
+      cardColor: '#143834',
+      fontFamily: 'Outfit, sans-serif',
+    },
     create: {
       id: 'default',
-      restaurantName: 'MEREBA FRIENDS GARDEN',
-      tagline: 'BISTRO • GARDEN • CASUAL LUXURY',
-      heroTitle1: 'THE ONE WITH',
-      heroTitle2: 'THE FOOD',
+      restaurantName: 'KABUN COFFEE + ROASTERY',
+      tagline: 'CRAFTED FROM COFFEE',
+      heroTitle1: 'CRAFTED FROM',
+      heroTitle2: 'COFFEE',
       heroDescription:
-        'Good food, great company, and timeless memories. Browse our hand-rolled pastas, hearty pilafs, fresh garden bowls, and slow-simmered broths.',
-      primaryCtaText: 'EXPLORE OUR MENU',
-      secondaryCtaText: 'VISIT OUR GARDEN',
+        'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.',
+      primaryCtaText: 'EXPLORE ROASTERY MENU',
+      secondaryCtaText: 'OUR ROASTERY CRAFT',
 
-      wifiSsid: 'Mereba_Friends_Garden_5G',
-      wifiPassword: 'centralperkcoffee',
+      wifiSsid: 'Kabun_Guest_WiFi',
+      wifiPassword: 'craftedfromcoffee',
 
-      philosophyEyebrow: 'Our Philosophy',
-      philosophyTitle: 'MORE THAN FOOD. IT’S ABOUT FRIENDSHIP.',
+      philosophyEyebrow: 'Our Roastery Craft',
+      philosophyTitle: 'BORN IN ETHIOPIA.\nCRAFTED WITH OBSESSIVE PASSION.',
       philosophyDescription:
-        'Central Perk meets modern boutique lounge. Designed as a sanctuary for heartfelt conversations, spontaneous laughter, and unforgettable comfort food in our garden.',
-      manifestoQuote: 'Because Joey doesn’t share food, but we definitely think you should.',
-      manifestoAuthor: 'The Kitchen Manifesto',
+        'Kabun is more than a café — it is a sanctuary for coffee lovers, artists, and conversation. We source exceptional micro-lots from Yirgacheffe, Guji, and Sidama, hand-roasting small batches to honor Ethiopia\'s coffee heritage in a modern architectural lounge.',
+      manifestoQuote: 'Every great conversation begins with an exceptional roast.',
+      manifestoAuthor: 'The Roaster\'s Manifesto',
 
-      galleryTitle: 'THE ONE WITH THE GOOD TIMES',
+      galleryTitle: 'ATMOSPHERE & ARTISAN ROASTS',
       galleryDescription:
-        'A glimpse into our candlelit tables, laughter-filled dinners, and passionate artisan cooking in Mereba Friends Garden.',
+        'A glimpse into our warm wood interiors, illuminated night storefront, aromatic pour-over bar, and shared moments at Kabun.',
 
-      addressLine1: '17 ቀበሌ፣ ፊትለፊት በሰበርደ',
-      addressLine2: 'ናይቀደም ገዛ ተጋሩ',
-      openingHours: '11:00 AM – 11:00 PM',
-      phone1: '0970700488',
-      phone2: '0945986349',
-      instagramHandle: '@MEREBA_FRIENDS_GARDEN',
-      instagramUrl: 'https://www.instagram.com/mereba_friends_garden/',
-      tiktokHandle: '@FRIENDS_GARDEN',
-      tiktokUrl: 'https://www.tiktok.com/@friends_garden',
-      facebookHandle: 'FB: FRIENDS GARDEN - መረባ ፍሬንድስ',
-      facebookUrl:
-        'https://www.facebook.com/search/top?q=FRIENDS%20GARDEN%20-%20%E1%88%98%E1%88%A8%E1%89%A3%20%E1%87%8D%E1%88%AC%E1%8A%95%E1%8B%95%E1%88%B5',
+      addressLine1: 'Mekelle, Tigray, Ethiopia',
+      addressLine2: 'ካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)',
+      openingHours: '7:00 AM – 10:30 PM',
+      phone1: '0914000000',
+      phone2: '0920000000',
+      instagramHandle: '@KABUNCOFFEE',
+      instagramUrl: 'https://www.instagram.com/kabuncoffee/',
+      tiktokHandle: '@KABUNCOFFEE',
+      tiktokUrl: 'https://www.tiktok.com/@kabuncoffee',
+      facebookHandle: 'FB: KABUN COFFEE + ROASTERY - ካቡን',
+      facebookUrl: 'https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY',
 
-      accentColor: '#FFBD18',
-      backgroundColor: '#050505',
-      cardColor: '#121212',
-      fontFamily: 'Plus Jakarta Sans',
+      accentColor: '#E5CFAF',
+      backgroundColor: '#0E2F2C',
+      cardColor: '#143834',
+      fontFamily: 'Outfit, sans-serif',
     },
   });
-  console.log('⚙️ Default Site Settings seeded.');
+  console.log('⚙️ Default Kabun Site Settings seeded.');
 
-  // 3. Clear old items and categories for a clean slate
+  // 3. Clear previous items and categories for a clean slate
   await prisma.menuItem.deleteMany({});
   await prisma.category.deleteMany({});
   console.log('🧹 Purged previous items and categories.');
 
-  // 4. Two Main Groups: FOOD and DRINKS
+  // 4. Two Main Departments: COFFEE & BEVERAGES and BAKERY, PASTRIES & BITES
   const categoriesData = [
-    // --- FOOD CATEGORIES ---
+    // --- DEPARTMENT 1: COFFEE & BEVERAGES ---
     {
-      name: 'Tibs & Ethiopian Specials',
-      slug: 'tibs-ethiopian',
-      parentCategory: 'FOOD',
-      description: 'Sizzling Ethiopian specialties prepared with fresh farm herbs, aromatic berbere, and injera.',
+      name: 'Espresso & Hot Classics',
+      slug: 'espresso-hot-classics',
+      parentCategory: 'COFFEE',
+      description: 'Precision extracted single-origin espresso drinks crafted with textured microfoam and Ethiopian specialty roasts.',
       sortOrder: 1,
+      icon: 'coffee',
       items: [
         {
-          name: 'Sizzling Beef Tibs with Rice',
-          price: 320,
-          description: 'Tender cubed beef sizzling with rosemary, jalapeños, onions, served over savory spiced rice with boiled farm egg and injera.',
-          tags: 'House Special,Chef Signature',
-          image: '/assets/real/friends-tibs-rice.jpg',
+          name: 'Single Origin Espresso',
+          price: 70,
+          description: 'Intense, concentrated shot extracted under 9 bars with rich crema, notes of dark cocoa and bergamot from Yirgacheffe beans.',
+          tags: 'Single-Origin,Yirgacheffe,Roaster Signature',
+          image: 'https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Dereq Tibs with Awaze',
-          price: 340,
-          description: 'Crispy pan-fried beef cubes tossed with rosemary, garlic butter, and served with spicy house awaze and fresh injera.',
-          tags: 'Authentic,Sizzling',
-          image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Pizza',
-      slug: 'pizza',
-      parentCategory: 'FOOD',
-      description: 'Hand-stretched dough stone-baked to golden perfection with rich mozzarella and house marinara.',
-      sortOrder: 2,
-      items: [
-        {
-          name: 'The Joey Special Folded Pizza Platter',
-          price: 380,
-          description: 'Signature golden baked folded calzone-style pizza with rich meat, melted mozzarella, crispy french fries, house dips & ketchup Friends art.',
-          tags: 'Joey Favorite,House Special',
-          image: '/assets/real/friends-special-pizza.jpg',
+          name: 'Double Espresso (Doppio)',
+          price: 90,
+          description: 'Double shot of single-origin roast for bold richness, deep body, and clean citrus finish.',
+          tags: 'Double Shot,Bold,Specialty Roast',
+          image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Central Perk Margherita Pizza',
-          price: 280,
-          description: 'San Marzano tomato base, creamy whole milk mozzarella, cold-pressed olive oil, and sweet basil leaves.',
-          tags: 'Classic,Vegetarian',
-          image: 'https://images.unsplash.com/photo-1604382355076-af4b0eb60143?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Burger',
-      slug: 'burger',
-      parentCategory: 'FOOD',
-      description: 'Gourmet smashed and grilled patties served on artisan toasted brioche buns with crispy fries.',
-      sortOrder: 3,
-      items: [
-        {
-          name: 'Central Perk Classic Beef Burger',
-          price: 290,
-          description: 'Prime ground beef patty, melted cheddar, garden lettuce, ripe tomato, house pickle relish, served with hot golden fries.',
-          tags: 'Gourmet,Bestseller',
-          image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=800&q=80',
+          name: 'Traditional Macchiato',
+          price: 80,
+          description: 'Ethiopian classic layered with velvety steamed milk foam over rich single-origin espresso.',
+          tags: 'Ethiopian Classic,House Favorite',
+          image: 'https://images.unsplash.com/photo-1557006021-b85faa2bc5e2?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: "Joey's Double Cheese Smashed Burger",
-          price: 360,
-          description: 'Two smashed prime beef patties, double smoked cheddar, caramelized onions, secret sauce on buttery brioche.',
-          tags: 'Hearty,Chef Pick',
-          image: 'https://images.unsplash.com/photo-1586190848861-99aa4a171e90?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Pasta',
-      slug: 'pasta',
-      parentCategory: 'FOOD',
-      description: 'Handcrafted Italian pasta simmered in authentic herbs and slow-cooked sauces.',
-      sortOrder: 4,
-      items: [
-        {
-          name: 'Spaghetti Carbonara',
-          price: 280,
-          description: 'Velvety egg yolk emulsion, cured beef bacon, aged pecorino cheese, and fresh crushed black pepper.',
-          tags: 'Signature,Italian Classic',
-          image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Spaghetti with Tomato',
-          price: 230,
-          description: 'San Marzano tomato coulis, virgin olive oil, sweet basil, and parmesan flakes.',
-          tags: 'Vegetarian',
-          image: 'https://images.unsplash.com/photo-1551183053-bf91a1d81141?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Spaghetti with Vegetable',
-          price: 230,
-          description: 'Sautéed zucchini, bell peppers, button mushrooms, garlic, and fresh Italian parsley.',
-          tags: 'Farm Harvest',
-          image: 'https://images.unsplash.com/photo-1621996346565-e3d5d6281724?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Spaghetti with Meat',
-          price: 270,
-          description: 'Slow-simmered minced beef in aromatic red wine and garlic tomato reduction.',
-          tags: 'Prime Beef',
-          image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Spaghetti with Bologna',
-          price: 280,
-          description: 'Classic northern Italian ragù alla Bolognese with herbs and crushed tomatoes.',
-          tags: 'Emilia Tradition',
-          image: 'https://images.unsplash.com/photo-1608897013039-887f21d8c804?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Penne with Meat',
-          price: 270,
-          description: 'Penne rigate capturing seasoned ground beef in rich tomato fond.',
-          tags: 'Classic Cut',
-          image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Penne with Cream Sauce',
-          price: 280,
-          description: 'Garlic-infused dairy cream, roasted nutmeg hints, butter, and melted grana padano.',
-          tags: 'White Velvet',
-          image: 'https://images.unsplash.com/photo-1645112411341-6c4fd023714a?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Lasagna Traditional',
-          price: null,
-          description: 'Layered pasta sheets, velvety béchamel sauce, mozzarella crust, and herbed tomato base.',
-          tags: 'Baked Al Forno,Chef Special',
-          image: 'https://images.unsplash.com/photo-1574894709920-11b28e7367e3?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Lasagna with Meat Sauce',
-          price: null,
-          description: 'Generous layers of slow-braised beef ragù, spiced ricotta, and bubbling mozzarella.',
-          tags: 'Baked Al Forno,Chef Special',
-          image: 'https://images.unsplash.com/photo-1619895092538-128341789043?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Rice',
-      slug: 'rice',
-      parentCategory: 'FOOD',
-      description: 'Fragrant aromatic long-grain pilafs tossed with spices, veggies, and succulent proteins.',
-      sortOrder: 5,
-      items: [
-        {
-          name: 'Rice with Chicken',
-          price: 250,
-          description: 'Golden spiced long-grain rice infused with saffron, diced carrots, and tender seared chicken breast fillets.',
-          tags: 'Popular,High Protein',
-          image: 'https://images.unsplash.com/photo-1512058564366-18510be2db19?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Vegetable Rice',
-          price: 230,
-          description: 'Aromatic basmati rice tossed with garden sweet peas, sweet corn, carrots, bell peppers, and scallions.',
-          tags: 'Garden Fresh,Vegan',
-          image: 'https://images.unsplash.com/photo-1536304993881-ff6e9eefa2a6?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Rice with Fish',
-          price: 250,
-          description: 'Pan-seared Nile perch fillet gently flaked over spiced herb pilaf with lemon butter glaze.',
-          tags: 'Catch of the Day,Omega-3',
-          image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Rice with Meat',
-          price: 245,
-          description: 'Savory sautéed beef strips, caramelized red onions, roasted cumin, and long-grain rice.',
-          tags: 'Prime Beef,Hearty',
-          image: 'https://images.unsplash.com/photo-1603133872878-684f208fb84b?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Salad',
-      slug: 'salad',
-      parentCategory: 'FOOD',
-      description: 'Crisp hand-picked organic leaves, fresh garden dressings, and artisan toppings.',
-      sortOrder: 6,
-      items: [
-        {
-          name: 'Mereba Garden Family Feast Salad',
-          price: 290,
-          description: 'Crisp garden iceberg lettuce, shaved carrots, fresh sliced lime, diced tomatoes, dressed in house vinaigrette.',
-          tags: 'Garden Signature,Fresh Pick',
-          image: '/assets/real/friends-garden-feast.jpg',
-        },
-        {
-          name: 'Special Salad',
-          price: 280,
-          description: 'Mixed garden greens, chunk light tuna, farm-boiled eggs, sweet corn, kalamata olives, and house herb dressing.',
-          tags: 'Signature,Chef Pick',
-          image: 'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Mixed Salad',
-          price: 250,
-          description: 'Crisp romaine, shredded purple cabbage, cucumber coins, cherry tomatoes, and cold-pressed virgin olive oil.',
-          tags: 'Crisp Greens,Low Cal',
-          image: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Tuna Salad',
-          price: 230,
-          description: 'Flaked tuna, capers, diced red onions, crisp celery, and light lemon-herb vinaigrette.',
-          tags: 'Seafood,High Protein',
-          image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Chicken Salad',
-          price: 305,
-          description: 'Grilled herb chicken breast slices, mixed leaves, toasted croutons, and creamy house dressing.',
-          tags: 'Gourmet,Favorite',
-          image: 'https://images.unsplash.com/photo-1580013759032-c96505e24c1f?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Mayonnaise Salad',
-          price: 280,
-          description: 'Tender diced potatoes, carrots, green peas, and boiled egg folded in creamy velvet mayonnaise.',
-          tags: 'Creamy Classic,Comfort',
-          image: 'https://images.unsplash.com/photo-1550304943-4f24f54ddde9?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Avocado Salad',
-          price: 230,
-          description: 'Ripe sliced Ethiopian avocado, plum tomatoes, red onion rings, fresh lime juice, and sea salt.',
-          tags: 'Superfood,Healthy',
-          image: 'https://images.unsplash.com/photo-1529059997568-3d847b1154f0?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Tomato Salad',
-          price: 230,
-          description: 'Vine-ripened local tomatoes, thin red onions, spicy green chilies, and virgin olive oil.',
-          tags: 'Zesty,Fresh',
-          image: 'https://images.unsplash.com/photo-1592417817098-8f3d69109853?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Soup',
-      slug: 'soup',
-      parentCategory: 'FOOD',
-      description: 'Slow-simmered nourishing broths made daily from scratch with aromatic garden herbs.',
-      sortOrder: 7,
-      items: [
-        {
-          name: 'Vegetable Soup',
-          price: 150,
-          description: 'Hearty simmered seasonal garden vegetables in clear herbal broth with aromatic celery.',
-          tags: 'Comfort,Vegan',
-          image: 'https://images.unsplash.com/photo-1547592166-23ac45744acd?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Chicken Soup',
-          price: 230,
-          description: 'Slow-poached country chicken, diced root vegetables, cracked black pepper, and warm aromatic broth.',
-          tags: 'Warm Broth,Soul Food',
-          image: 'https://images.unsplash.com/photo-1603105037880-880cd4edfb0d?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Beef Soup',
-          price: 150,
-          description: 'Tender braised beef shanks, potatoes, and garlic in rich caramelized beef bouillon.',
-          tags: 'Rich Bouillon,Protein',
-          image: 'https://images.unsplash.com/photo-1578873375969-d652136e4f3a?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Tomato Soup',
-          price: 150,
-          description: 'Roasted plum tomatoes, fresh sweet basil puree, a splash of dairy cream, and roasted garlic.',
-          tags: 'Roasted Basil,Smooth',
-          image: 'https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Carrot Soup',
-          price: 150,
-          description: 'Velvety puréed sweet highland carrots, roasted ginger warmth, and toasted cumin seeds.',
-          tags: 'Velvet Purée,Healthy',
-          image: 'https://images.unsplash.com/photo-1605698802004-945fa64c0587?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Mushroom Soup',
-          price: 140,
-          description: 'Earthy sautéed button mushrooms, fresh thyme, butter, cream, and vegetable stock.',
-          tags: 'Earthy Wild,Creamy',
-          image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Minestrone',
-          price: 205,
-          description: 'Classic Italian thick vegetable stew with ditalini pasta, cannellini beans, and grated parmesan.',
-          tags: 'Italian Rustic,Wholesome',
-          image: 'https://images.unsplash.com/photo-1608797178974-15b35a61dd78?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-
-    // --- DRINKS CATEGORIES ---
-    {
-      name: 'Mojito & Mocktails',
-      slug: 'mojito-mocktails',
-      parentCategory: 'DRINKS',
-      description: 'Crafted with fresh muddled mint, garden citrus, crushed ice, and sparkling effervescence.',
-      sortOrder: 8,
-      items: [
-        {
-          name: 'Classic Garden Lime Mojito',
-          price: 160,
-          description: 'Fresh garden muddled lime wheels, aromatic mint sprigs, sparkling soda, and pure cane sugar in a Central Perk mason jar.',
-          tags: 'Signature,Mason Jar',
-          image: '/assets/real/friends-mojito-jars.jpg',
-        },
-        {
-          name: 'Strawberry Bliss Mojito',
-          price: 180,
-          description: 'Crushed ripe strawberries, fresh lime wedges, garden mint, and chilled sparkling club soda.',
-          tags: 'Berry Fizz,Refreshing',
-          image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Passionfruit Island Mocktail',
-          price: 190,
-          description: 'Tropical passionfruit nectar, fresh lemon zest, mint, and effervescent tonic on crushed ice.',
-          tags: 'Tropical,Exotic',
-          image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=800&q=80',
-        },
-      ],
-    },
-    {
-      name: 'Alcohol & Draft Beers',
-      slug: 'alcohol-beer',
-      parentCategory: 'DRINKS',
-      description: 'Chilled draft beers in heavy glass mugs, local craft brews, and selected table wines.',
-      sortOrder: 9,
-      items: [
-        {
-          name: 'St. George Draft Beer Mug',
+          name: 'Double Macchiato',
           price: 110,
-          description: 'Ice-cold draft beer in a heavy glass beer mug with crisp white foam head, perfect for the couch lounge vibe.',
-          tags: 'Draft Beer,Chilled Mug',
-          image: '/assets/real/friends-vibe-couch.jpg',
+          description: 'Double shot of single-origin espresso marked with dense, sweet microfoam.',
+          tags: 'Double Shot,Rich Crema',
+          image: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Bedele Special Premium Lager',
+          name: 'Cortado',
+          price: 95,
+          description: 'Equal parts double espresso and warm silky milk, reducing acidity while preserving rich roast character.',
+          tags: 'Balanced,Silky,Barista Pick',
+          image: 'https://images.unsplash.com/photo-1534778101976-62847782c213?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Artisan Cappuccino',
+          price: 110,
+          description: 'Rich espresso topped with equal parts steamed milk and thick velvety microfoam with a dusting of cocoa.',
+          tags: 'Velvety Microfoam,Classic',
+          image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Café Latte',
           price: 120,
-          description: 'Cold Ethiopian premium bottled beer brewed with finest golden malted barley.',
-          tags: 'Premium Lager,Ice Cold',
-          image: 'https://images.unsplash.com/photo-1608270191763-7c37f2ff6265?auto=format&fit=crop&w=800&q=80',
+          description: 'Smooth single-origin espresso with generous velvety steamed milk and delicate hand-poured latte art.',
+          tags: 'Latte Art,Smooth,All-Day',
+          image: 'https://images.unsplash.com/photo-1561882468-9110e03e0f78?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'House Red Wine Glass',
-          price: 220,
-          description: 'Velvety dry red wine with ripe berry notes and smooth finish.',
-          tags: 'Wine,Evening Lounge',
-          image: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=800&q=80',
+          name: 'Flat White',
+          price: 120,
+          description: 'Double ristretto poured with finely micro-textured milk for a strong, velvety coffee profile without stiff foam.',
+          tags: 'Double Ristretto,Microfoam,Specialty',
+          image: 'https://images.unsplash.com/photo-1577968897966-3d4325b36b61?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Spanish Latte',
+          price: 140,
+          description: 'Creamy espresso blended with sweetened condensed milk and steamed whole milk, sweet, smooth, and comforting.',
+          tags: 'Sweet & Creamy,House Special',
+          image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Café Mocha',
+          price: 140,
+          description: 'Espresso layered with rich artisan dark chocolate ganache, steamed whole milk, and light cocoa dusting.',
+          tags: 'Belgian Chocolate,Espresso Ganache',
+          image: 'https://images.unsplash.com/photo-1607681034540-2c46cc71896d?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Rich Hot Chocolate',
+          price: 120,
+          description: 'Melted Belgian cocoa steamed with creamy whole milk and finished with toasted marshmallow foam.',
+          tags: 'Velvety Cocoa,Warm Comfort',
+          image: 'https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=800&q=80',
         },
       ],
     },
     {
-      name: 'Juice & Smoothies',
-      slug: 'juice-smoothies',
-      parentCategory: 'DRINKS',
-      description: 'Pure 100% freshly pressed Ethiopian fruits, vitamin-rich and prepared à la minute.',
-      sortOrder: 10,
+      name: 'Signature & Cold Brews',
+      slug: 'signature-cold-brews',
+      parentCategory: 'COFFEE',
+      description: 'Slow-steeped cold brews, iced signature lattes, and Italian chilled espresso creations.',
+      sortOrder: 2,
+      icon: 'ice-cream',
       items: [
         {
-          name: 'Fresh Mango Juice',
-          price: 140,
-          description: 'Pure ripe seasonal mango blended velvety smooth without added preservatives.',
-          tags: '100% Pure,Vitamin C',
-          image: 'https://images.unsplash.com/photo-1546173159-315724a31696?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Avocado Special Smoothie',
-          price: 150,
-          description: 'Thick creamy Hass avocado layered with fresh lime squeeze and pure highland honey.',
-          tags: 'Creamy Rich,Superfood',
-          image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?auto=format&fit=crop&w=800&q=80',
-        },
-        {
-          name: 'Spris (Layered Trio Juice)',
+          name: 'Iced Spanish Latte',
           price: 160,
-          description: 'Traditional Ethiopian layered juice: ripe papaya, mango, and avocado in three colorful natural tiers.',
-          tags: 'Layered Trio,House Favorite',
+          description: 'Chilled espresso poured over sweet condensed milk, fresh milk, and crystal ice cubes. Sweet, creamy, and revitalizing.',
+          tags: 'Iced Signature,Sweet Cream,Bestseller',
+          image: 'https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Iced Caramel Macchiato',
+          price: 160,
+          description: 'Chilled milk marked with a fresh shot of espresso and drizzled with house-made salted caramel sauce.',
+          tags: 'Caramel Drizzle,Chilled,Popular',
+          image: 'https://images.unsplash.com/photo-1461023058943-07fcbe16d735?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Kabun 16-Hour Cold Brew',
+          price: 150,
+          description: 'Coarse-ground Guji micro-lot beans slow-steeped in cold filtered water for 16 hours. Ultra smooth, low acidity, notes of stone fruit and chocolate.',
+          tags: '16hr Steeped,Low Acidity,Guji Micro-Lot',
+          image: 'https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Affogato al Caffè',
+          price: 140,
+          description: 'A generous scoop of handcrafted vanilla bean gelato drowned in a hot double shot of fresh Kabun espresso.',
+          tags: 'Vanilla Gelato,Hot Espresso,Italian Classic',
+          image: 'https://images.unsplash.com/photo-1598908314732-07113901949e?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Shakerato',
+          price: 130,
+          description: 'Double espresso vigorously hand-shaken over ice and raw demerara sugar with a velvety frosted crema head.',
+          tags: 'Hand-Shaken,Demerara Crema,Refreshing',
+          image: 'https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80',
+        },
+      ],
+    },
+    {
+      name: 'Hand-Brewed / Roastery Pour-Over',
+      slug: 'hand-brewed-pour-over',
+      parentCategory: 'COFFEE',
+      description: 'Artisanal manual filter brewing celebrating micro-lots from Yirgacheffe, Guji, and Sidama.',
+      sortOrder: 3,
+      icon: 'flame',
+      items: [
+        {
+          name: 'V60 Single-Origin Pour-Over',
+          price: 130,
+          description: 'Hand-poured filter brew highlighting delicate floral jasmine, bergamot, and sweet peach notes of washed Yirgacheffe.',
+          tags: 'Floral Jasmine,Bergamot,Yirgacheffe,Specialty Filter',
+          image: 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Chemex Clean Batch Brew',
+          price: 150,
+          description: 'Three-cup Chemex extraction delivering an exceptionally crisp, clean body with balanced sweetness and aromatic brightness.',
+          tags: 'Crisp Body,Multi-Cup,Shared Experience',
+          image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Traditional Ethiopian Jebena Buna (Single-Origin)',
+          price: 80,
+          description: 'Hand-roasted specialty beans simmered in traditional clay jebena pot with ceremonial frankincense smoke and popcorn.',
+          tags: 'Ceremonial,Clay Pot,Frankincense Aroma,Heritage',
+          image: 'https://images.unsplash.com/photo-1587734195503-904fca47e0e9?auto=format&fit=crop&w=800&q=80',
+        },
+      ],
+    },
+    {
+      name: 'Frappes, Shakes & Smoothies',
+      slug: 'frappes-shakes-smoothies',
+      parentCategory: 'COFFEE',
+      description: 'Hand-blended frappes, thick creamy shakes, and 100% freshly squeezed seasonal Ethiopian fruit juices.',
+      sortOrder: 4,
+      icon: 'cup-soda',
+      items: [
+        {
+          name: 'Signature Oreo Cookie Frappe',
+          price: 180,
+          description: 'Blended Oreo cookies, double espresso, rich vanilla cream, crowned with fluffy whipped cream and chocolate biscuit crumble.',
+          tags: 'Oreo Crunch,Blended Espresso,House Bestseller',
+          image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Caramel Coffee Frappe',
+          price: 175,
+          description: 'Fresh espresso blended with rich caramel cream and ice, crowned with a golden caramel drizzle.',
+          tags: 'Golden Caramel,Iced Espresso,Sweet Delight',
+          image: 'https://images.unsplash.com/photo-1586985289688-ca3cf47d3e6e?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Artisan Chocolate Milkshake',
+          price: 160,
+          description: 'Thick dark chocolate cream blended with chilled whole milk, vanilla gelato, and chocolate shavings.',
+          tags: 'Belgian Dark Cocoa,Rich & Creamy',
+          image: 'https://images.unsplash.com/photo-1579954115545-a95591f28bfc?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Fresh Seasonal Fruit Juice',
+          price: 120,
+          description: '100% freshly pressed local mango, avocado, strawberry, or classic Ethiopian layered Spris with lime squeeze.',
+          tags: '100% Fresh,Mango,Avocado,Spris',
           image: 'https://images.unsplash.com/photo-1613478223719-2ab802602423?auto=format&fit=crop&w=800&q=80',
         },
       ],
     },
     {
-      name: 'Cold Drinks & Soft Drinks',
-      slug: 'cold-drinks',
-      parentCategory: 'DRINKS',
-      description: 'Refreshing carbonated soft drinks, sparkling mineral waters, and chilled iced teas.',
-      sortOrder: 11,
+      name: 'Artisanal Teas & Refreshers',
+      slug: 'artisanal-teas-refreshers',
+      parentCategory: 'COFFEE',
+      description: 'Spiced highland black teas, aromatic herbs, and chilled fruity infusions.',
+      sortOrder: 5,
+      icon: 'leaf',
       items: [
         {
-          name: 'Central Perk Iced Mason Jar Soda',
+          name: 'Spiced Ethiopian Tea',
           price: 70,
-          description: 'Ice-cold Coca-Cola, Sprite, or Fanta served over crushed ice in an authentic glass mason jar with retro striped straw.',
-          tags: 'Mason Jar,Ice Cold',
-          image: '/assets/real/friends-mojito-jars.jpg',
+          description: 'Fragrant black tea infused with whole cardamom (korerima), cinnamon bark, and cloves. Warming and restorative.',
+          tags: 'Cardamom (Korerima),Cinnamon,Highland Spices',
+          image: 'https://images.unsplash.com/photo-1576092768241-dec231879fc3?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Ambo Sparkling Mineral Water',
-          price: 50,
-          description: 'Naturally sparkling Ethiopian volcanic mineral water served chilled with fresh lime wedge.',
-          tags: 'Natural Sparkling',
-          image: 'https://images.unsplash.com/photo-1548839140-29a749e1bc4e?auto=format&fit=crop&w=800&q=80',
+          name: 'Moroccan Mint Green Tea',
+          price: 90,
+          description: 'Gunpowder green tea steeped with fresh garden spearmint leaves and natural honey.',
+          tags: 'Fresh Spearmint,Antioxidant,Revitalizing',
+          image: 'https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Iced Hibiscus & Peach Tea',
+          price: 120,
+          description: 'Chilled ruby hibiscus tea infused with natural peach nectar, citrus slice, and mint garnish.',
+          tags: 'Chilled Ruby Tea,Peach Nectar,Caffeine-Free',
+          image: 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?auto=format&fit=crop&w=800&q=80',
+        },
+      ],
+    },
+
+    // --- DEPARTMENT 2: BAKERY, PASTRIES & BITES ---
+    {
+      name: 'Viennoiserie & Pastries',
+      slug: 'viennoiserie-pastries',
+      parentCategory: 'BAKERY',
+      description: 'Hand-laminated pure French butter pastries and brioche baked fresh every morning in our roastery kitchen.',
+      sortOrder: 6,
+      icon: 'croissant',
+      items: [
+        {
+          name: 'Flaky Butter Croissant',
+          price: 110,
+          description: 'Hand-laminated pure French butter croissant, baked golden with airy honeycomb interior layers.',
+          tags: 'French Butter,Honeycomb Layers,Baked Daily',
+          image: 'https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Pain au Chocolat',
+          price: 130,
+          description: 'Flaky golden pastry filled with twin batons of rich Belgian dark chocolate.',
+          tags: 'Belgian Dark Chocolate,Flaky Brioche,Morning Favorite',
+          image: 'https://images.unsplash.com/photo-1608198093002-ad4e005484ec?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Glazed Cinnamon Roll',
+          price: 120,
+          description: 'Warm spiraled brioche dough rolled with Korintje cinnamon, brown butter, and creamy vanilla glaze.',
+          tags: 'Warm Brioche,Cream Cheese Glaze,Sweet Treat',
+          image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Artisan Biscotti & Shortbread Duo',
+          price: 80,
+          description: 'Twice-baked almond biscotti and buttery vanilla shortbread cookies, ideal for dipping into hot macchiato.',
+          tags: 'Twice-Baked Almond,Perfect Dip,Classic Pairing',
+          image: 'https://images.unsplash.com/photo-1558961363-fa8fdf82db35?auto=format&fit=crop&w=800&q=80',
         },
       ],
     },
     {
-      name: 'Hot Drinks & Coffee',
-      slug: 'hot-drinks-coffee',
-      parentCategory: 'DRINKS',
-      description: 'Central Perk roasts, traditional clay pot jebena brews, and silky steamed macchiatos.',
-      sortOrder: 12,
+      name: 'Cakes & Desserts',
+      slug: 'cakes-desserts',
+      parentCategory: 'BAKERY',
+      description: 'Artisanal cakes, Italian espresso-infused desserts, and rich patisserie.',
+      sortOrder: 7,
+      icon: 'cake',
       items: [
         {
-          name: 'Authentic Ethiopian Macchiato',
-          price: 60,
-          description: 'Rich dark espresso roast layered with velvety steamed milk foam in a classic glass cup.',
-          tags: 'Bestseller,Espresso Roast',
-          image: 'https://images.unsplash.com/photo-1541167760496-1628856ab772?auto=format&fit=crop&w=800&q=80',
+          name: 'Classic Italian Tiramisu',
+          price: 170,
+          description: 'Italian savoiardi ladyfingers soaked in Kabun single-origin espresso and layered with mascarpone cream and cocoa.',
+          tags: 'Kabun Espresso Soaked,Mascarpone,Chef Signature',
+          image: 'https://images.unsplash.com/photo-1571877227200-a0d98ea607e9?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Traditional Clay Pot Jebena Coffee',
-          price: 50,
-          description: 'Freshly roasted Ethiopian highland coffee beans brewed traditionally in clay jebena with aromatic frankincense smoke.',
-          tags: 'Heritage,Clay Jebena',
-          image: 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80',
+          name: 'New York Style Baked Cheesecake',
+          price: 180,
+          description: 'Dense, velvety baked cream cheese with buttery graham cracker crust and wild berry compote.',
+          tags: 'Velvety Cream,Graham Crust,Berry Compote',
+          image: 'https://images.unsplash.com/photo-1533134242443-d4fd215305ad?auto=format&fit=crop&w=800&q=80',
         },
         {
-          name: 'Central Perk Cappuccino',
-          price: 90,
-          description: 'Double espresso topped with thick creamy microfoam and dusting of raw Dutch cocoa powder.',
-          tags: 'Central Perk,Comfort Mug',
-          image: 'https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=800&q=80',
+          name: 'Rich Chocolate Fudge Cake',
+          price: 170,
+          description: 'Decadent multi-layered dark chocolate sponge filled with molten chocolate ganache and chocolate curls.',
+          tags: 'Multi-Layer,Molten Ganache,Decadent',
+          image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Spiced Carrot Cake',
+          price: 150,
+          description: 'Moist spiced sponge studded with toasted walnuts and finished with velvety cream cheese frosting.',
+          tags: 'Toasted Walnuts,Velvet Cream Cheese,Comforting',
+          image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&w=800&q=80',
+        },
+      ],
+    },
+    {
+      name: 'Light Savory Bites & Breakfast',
+      slug: 'light-savory-bites',
+      parentCategory: 'BAKERY',
+      description: 'Artisan toasts, toasted ciabatta paninis, and hearty morning plates.',
+      sortOrder: 8,
+      icon: 'sandwich',
+      items: [
+        {
+          name: 'Sourdough Avocado Toast',
+          price: 220,
+          description: 'Toasted artisan sourdough bread, smashed avocado, soft-poached farm egg, chili flakes, and extra virgin olive oil.',
+          tags: 'Poached Egg,Artisan Sourdough,Chili Flakes,Healthy',
+          image: 'https://images.unsplash.com/photo-1525351484163-7529414344d8?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Roastery Club Sandwich',
+          price: 240,
+          description: 'Triple-decker toasted brioche with grilled herb chicken breast, smoked beef, cheddar, crisp lettuce, tomato, and dijonnaise with crispy potato wedges.',
+          tags: 'Herb Chicken,Smoked Beef,Crispy Wedges,Hearty',
+          image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Artisan Grilled Panini',
+          price: 210,
+          description: 'Warm ciabatta pressed with fresh mozzarella, sun-dried tomatoes, basil pesto, and balsamic glaze.',
+          tags: 'Fresh Mozzarella,Basil Pesto,Sundried Tomato,Vegetarian',
+          image: 'https://images.unsplash.com/photo-1509722747041-616f39b57569?auto=format&fit=crop&w=800&q=80',
+        },
+        {
+          name: 'Breakfast Omelette & Croissant Platter',
+          price: 230,
+          description: 'Fluffy three-egg herb omelette with melted cheddar, paired with a fresh warm butter croissant, side salad, and seasonal fruit.',
+          tags: 'Fluffy Herb Eggs,Butter Croissant,Fruit,Breakfast Combo',
+          image: 'https://images.unsplash.com/photo-1533089860892-a7c6f0a88666?auto=format&fit=crop&w=800&q=80',
         },
       ],
     },
   ];
 
-  let totalItemsCount = 0;
   for (const catData of categoriesData) {
-    const { items, ...catDetails } = catData;
+    const { items, ...categoryFields } = catData;
+
     const category = await prisma.category.create({
-      data: catDetails,
+      data: categoryFields,
     });
+    console.log(`📁 Created Category: ${category.name} (${category.parentCategory})`);
 
     for (let i = 0; i < items.length; i++) {
-      const item = items[i];
+      const itemData = items[i];
       await prisma.menuItem.create({
         data: {
-          name: item.name,
-          price: item.price,
-          description: item.description,
-          tags: item.tags,
-          image: item.image,
+          ...itemData,
           categoryId: category.id,
-          sortOrder: i,
+          sortOrder: i + 1,
           isAvailable: true,
         },
       });
-      totalItemsCount++;
     }
+    console.log(`   ✨ Seeded ${items.length} items in ${category.name}`);
   }
 
-  console.log(`✅ Seeded ${categoriesData.length} categories across FOOD and DRINKS with ${totalItemsCount} menu items!`);
+  console.log('🎉 KABUN COFFEE + ROASTERY Database seeded successfully!');
 }
 
 main()

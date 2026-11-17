@@ -1,8 +1,9 @@
 {
-  "name": "friends-restaurant-frontend",
+  "name": "kabun-coffee-frontend",
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "description": "Customer QR View and Admin Management Suite for Kabun Coffee + Roastery",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",

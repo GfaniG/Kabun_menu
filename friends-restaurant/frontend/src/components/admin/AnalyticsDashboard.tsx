@@ -3,9 +3,8 @@ import {
   TrendingUp,
   QrCode,
   Eye,
-  Utensils,
+  Coffee,
   Sparkles,
-  Layers,
   ArrowUpRight,
   Flame,
 } from 'lucide-react';
@@ -17,7 +16,7 @@ export const AnalyticsDashboard: React.FC = () => {
   if (isLoading) {
     return (
       <div className="py-20 flex flex-col items-center justify-center space-y-3">
-        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#FFBD18] animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#E5CFAF] animate-spin" />
         <p className="font-headline text-xs uppercase tracking-widest text-[#A1A1AA]">
           Loading Analytics...
         </p>
@@ -43,7 +42,7 @@ export const AnalyticsDashboard: React.FC = () => {
             <span className="font-headline text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold">
               Total Table QR Scans
             </span>
-            <div className="w-8 h-8 rounded-lg bg-[#FFBD18]/10 text-[#FFBD18] flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-[#E5CFAF]/10 text-[#E5CFAF] flex items-center justify-center">
               <QrCode className="w-4 h-4" />
             </div>
           </div>
@@ -56,7 +55,7 @@ export const AnalyticsDashboard: React.FC = () => {
             </span>
           </div>
           <p className="text-[11px] text-[#71717A] mt-1">
-            Physical QR codes scanned at dining tables
+            Physical QR codes scanned at café tables
           </p>
         </div>
 
@@ -87,22 +86,22 @@ export const AnalyticsDashboard: React.FC = () => {
         <div className="bg-[#121212] border border-[#222222] rounded-2xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
           <div className="flex items-center justify-between mb-3">
             <span className="font-headline text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold">
-              Dish Detail Taps
+              Drink &amp; Bite Taps
             </span>
-            <div className="w-8 h-8 rounded-lg bg-white/10 text-white flex items-center justify-center">
-              <Utensils className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-[#E5CFAF]/10 text-[#E5CFAF] flex items-center justify-center">
+              <Coffee className="w-4 h-4" />
             </div>
           </div>
           <div className="flex items-baseline gap-2">
             <span className="font-headline text-3xl font-bold font-mono text-white">
               {totalDishViews}
             </span>
-            <span className="text-xs text-[#FFBD18] font-bold">
+            <span className="text-xs text-[#E5CFAF] font-bold">
               High Interest
             </span>
           </div>
           <p className="text-[11px] text-[#71717A] mt-1">
-            Customers expanded dish cards to view photos
+            Guests expanded item cards to view coffee &amp; pastry details
           </p>
         </div>
 
@@ -110,9 +109,9 @@ export const AnalyticsDashboard: React.FC = () => {
         <div className="bg-[#121212] border border-[#222222] rounded-2xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.6)]">
           <div className="flex items-center justify-between mb-3">
             <span className="font-headline text-[11px] uppercase tracking-wider text-[#A1A1AA] font-bold">
-              Avg Dishes per Visit
+              Avg Items per Visit
             </span>
-            <div className="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
               <TrendingUp className="w-4 h-4" />
             </div>
           </div>
@@ -120,25 +119,25 @@ export const AnalyticsDashboard: React.FC = () => {
             <span className="font-headline text-3xl font-bold font-mono text-white">
               {totalPageViews > 0 ? (totalDishViews / totalPageViews).toFixed(1) : '0'}
             </span>
-            <span className="text-xs text-purple-400 font-bold">
-              Dishes / scan
+            <span className="text-xs text-emerald-400 font-bold">
+              Items / scan
             </span>
           </div>
           <p className="text-[11px] text-[#71717A] mt-1">
-            Customer engagement depth per session
+            Guest exploration depth per coffee shop visit
           </p>
         </div>
       </div>
 
-      {/* Main Grid: Most Popular Dishes + Official QR Stand */}
+      {/* Main Grid: Most Popular Items + Official QR Stand */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Column: Top Viewed Dishes (8 Cols) */}
+        {/* Left Column: Top Viewed Items (8 Cols) */}
         <div className="lg:col-span-8 bg-[#121212] border border-[#222222] rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.6)] space-y-5">
           <div className="flex items-center justify-between pb-4 border-b border-[#222222]">
             <div>
               <h3 className="font-headline text-lg font-bold text-white flex items-center gap-2">
-                <Flame className="w-5 h-5 text-[#FFBD18]" />
-                <span>Top Most Popular Dishes &amp; Drinks</span>
+                <Flame className="w-5 h-5 text-[#E5CFAF]" />
+                <span>Top Most Popular Coffee &amp; Bites</span>
               </h3>
               <p className="text-xs text-[#A1A1AA] mt-0.5">
                 Real customer interest based on card expansions &amp; photo views
@@ -188,7 +187,7 @@ export const AnalyticsDashboard: React.FC = () => {
 
                     {/* Views Count */}
                     <div className="text-right shrink-0">
-                      <span className="font-headline text-base font-bold text-[#FFBD18] font-mono">
+                      <span className="font-headline text-base font-bold text-[#E5CFAF] font-mono">
                         {dish.viewsCount}
                       </span>
                       <span className="text-[10px] text-[#71717A] uppercase font-headline font-bold block">
@@ -200,7 +199,7 @@ export const AnalyticsDashboard: React.FC = () => {
                   {/* Visual popularity progress bar */}
                   <div className="w-full bg-[#181818] rounded-full h-1.5 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-[#FFBD18] to-amber-500 h-1.5 rounded-full transition-all duration-500"
+                      className="bg-gradient-to-r from-[#E5CFAF] to-[#C59B63] h-1.5 rounded-full transition-all duration-500"
                       style={{ width: `${Math.max(percentage, 8)}%` }}
                     />
                   </div>
@@ -220,8 +219,8 @@ export const AnalyticsDashboard: React.FC = () => {
         <div className="lg:col-span-4 bg-[#121212] border border-[#222222] rounded-2xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.6)] space-y-5">
           <div className="pb-4 border-b border-[#222222]">
             <h3 className="font-headline text-base font-bold text-white flex items-center gap-2">
-              <QrCode className="w-4 h-4 text-[#FFBD18]" />
-              <span>Official QR Stand</span>
+              <QrCode className="w-4 h-4 text-[#E5CFAF]" />
+              <span>Official Roastery QR Stand</span>
             </h3>
             <p className="text-xs text-[#A1A1AA] mt-0.5">
               One unified QR code for all tables
@@ -229,7 +228,7 @@ export const AnalyticsDashboard: React.FC = () => {
           </div>
 
           <div className="p-4 rounded-xl bg-[#0a0a0a] border border-[#222222] space-y-3 text-center">
-            <div className="w-12 h-12 rounded-2xl bg-[#FFBD18]/10 text-[#FFBD18] flex items-center justify-center mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-[#E5CFAF]/10 text-[#E5CFAF] flex items-center justify-center mx-auto">
               <QrCode className="w-6 h-6" />
             </div>
             <div>
@@ -237,19 +236,19 @@ export const AnalyticsDashboard: React.FC = () => {
                 One Code &bull; Unified Scans
               </p>
               <p className="text-xs text-[#A1A1AA] mt-1 leading-relaxed">
-                Print the high-resolution acrylic stand card for your tables. All guest scans are counted together in real time.
+                Print the 4x6" acrylic table tent for your café &amp; roastery tables. All guest scans are counted in real time.
               </p>
             </div>
           </div>
 
-          {/* Business Pitch Tip for Restaurant Owner */}
+          {/* Business Pitch Tip for Roastery Manager */}
           <div className="p-4 rounded-xl bg-white/5 border border-white/10 space-y-2 text-xs text-[#d4d4d8]">
             <p className="font-headline font-bold text-white flex items-center gap-1.5">
-              <Sparkles className="w-3.5 h-3.5 text-[#FFBD18]" />
-              <span>Kitchen &amp; Manager Tip</span>
+              <Sparkles className="w-3.5 h-3.5 text-[#E5CFAF]" />
+              <span>Barista &amp; Manager Tip</span>
             </p>
             <p className="text-[#A1A1AA] text-[11px] leading-relaxed">
-              Dishes with the highest views are prime candidates for promotional discounts or kitchen prep prioritization during peak evening hours!
+              Beverages and pastries with high views are prime candidates for morning combo specials or barista prep prioritization during peak hours!
             </p>
           </div>
         </div>

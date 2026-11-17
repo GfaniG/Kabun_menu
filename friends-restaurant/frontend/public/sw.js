@@ -1,21 +1,21 @@
-const CACHE_NAME = 'friends-menu-cache-v1';
+const CACHE_NAME = 'kabun-menu-cache-v1';
 
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/assets/real/friends-vibe-couch.jpg',
-  '/assets/real/friends-mojito-jars.jpg',
-  '/assets/real/friends-tibs-rice.jpg',
-  '/assets/real/friends-garden-feast.jpg',
-  '/assets/real/friends-special-pizza.jpg',
+  '/assets/kabun/kabun-emblem-dark.png',
+  '/assets/kabun/kabun-emblem-light.png',
+  '/assets/kabun/kabun-storefront-facade.jpg',
+  '/assets/kabun/kabun-interior-lounge.jpg',
+  '/assets/kabun/kabun-patio-entrance.jpg',
 ];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       return cache.addAll(STATIC_ASSETS).catch((err) => {
-        console.warn('Pre-cache error (non-fatal):', err);
+        console.warn('Pre-cache warning (non-fatal):', err);
       });
     })
   );
@@ -50,26 +50,28 @@ self.addEventListener('fetch', (event) => {
           }
           return response;
         })
-        .catch(() => caches.match(event.request))
+        .catch(async () => {
+          const cached = await caches.match(event.request);
+          if (cached) return cached;
+          return new Response(JSON.stringify({ success: false, offline: true }), {
+            headers: { 'Content-Type': 'application/json' },
+          });
+        })
     );
     return;
   }
 
-  // Static Assets / Images / Fonts: Stale-While-Revalidate
+  // Static Assets / Images: Cache-First
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      const fetchPromise = fetch(event.request)
-        .then((networkResponse) => {
-          if (networkResponse && networkResponse.status === 200) {
-            const clone = networkResponse.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
-          }
-          return networkResponse;
-        })
-        .catch(() => cachedResponse);
-
-      return cachedResponse || fetchPromise;
+    caches.match(event.request).then((cached) => {
+      if (cached) return cached;
+      return fetch(event.request).then((response) => {
+        if (response.status === 200) {
+          const clone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+        }
+        return response;
+      });
     })
   );
 });
-

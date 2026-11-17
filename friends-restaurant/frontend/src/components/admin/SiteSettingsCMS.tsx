@@ -171,16 +171,16 @@ export const SiteSettingsCMS: React.FC = () => {
           <div className="space-y-4 animate-in fade-in">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <Input
-                label="Restaurant Name"
+                label="Roastery / Café Name"
                 value={formData.restaurantName || ''}
                 onChange={(e) => handleChange('restaurantName', e.target.value)}
-                placeholder="MEREBA FRIENDS GARDEN"
+                placeholder="KABUN COFFEE + ROASTERY"
               />
               <Input
                 label="Subtitle Tagline"
                 value={formData.tagline || ''}
                 onChange={(e) => handleChange('tagline', e.target.value)}
-                placeholder="BISTRO • GARDEN • CASUAL LUXURY"
+                placeholder="SPECIALTY COFFEE • ROASTERY • BISTRO"
               />
             </div>
 
@@ -189,13 +189,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Hero Title Line 1"
                 value={formData.heroTitle1 || ''}
                 onChange={(e) => handleChange('heroTitle1', e.target.value)}
-                placeholder="THE ONE WITH"
+                placeholder="CRAFTED FROM"
               />
               <Input
                 label="Hero Title Line 2"
                 value={formData.heroTitle2 || ''}
                 onChange={(e) => handleChange('heroTitle2', e.target.value)}
-                placeholder="THE FOOD"
+                placeholder="COFFEE"
               />
             </div>
 
@@ -203,7 +203,7 @@ export const SiteSettingsCMS: React.FC = () => {
               label="Hero Welcome Description"
               value={formData.heroDescription || ''}
               onChange={(e) => handleChange('heroDescription', e.target.value)}
-              placeholder="Good food, great company..."
+              placeholder="Upscale specialty coffee roastery in Mekelle..."
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -211,13 +211,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Primary Button Text"
                 value={formData.primaryCtaText || ''}
                 onChange={(e) => handleChange('primaryCtaText', e.target.value)}
-                placeholder="EXPLORE OUR MENU"
+                placeholder="EXPLORE ROASTERY MENU"
               />
               <Input
                 label="Secondary Button Text"
                 value={formData.secondaryCtaText || ''}
                 onChange={(e) => handleChange('secondaryCtaText', e.target.value)}
-                placeholder="VISIT OUR GARDEN"
+                placeholder="OUR ROASTERY CRAFT"
               />
             </div>
           </div>
@@ -227,14 +227,14 @@ export const SiteSettingsCMS: React.FC = () => {
         {activeTab === 'wifi' && (
           <div className="space-y-4 animate-in fade-in max-w-xl">
             <p className="text-xs text-[#A1A1AA]">
-              Customers can tap &quot;Free Wi-Fi&quot; in the navigation header or scan table cards to view and copy this password.
+              Customers can tap &quot;Guest Wi-Fi&quot; in the navigation header or scan table cards to view and copy this password.
             </p>
 
             <Input
               label="Wi-Fi Network Name (SSID)"
               value={formData.wifiSsid || ''}
               onChange={(e) => handleChange('wifiSsid', e.target.value)}
-              placeholder="Mereba_Friends_Garden_5G"
+              placeholder="Kabun_Guest_WiFi"
               leftIcon={<Wifi className="w-4 h-4 text-[#71717A]" />}
             />
 
@@ -242,7 +242,7 @@ export const SiteSettingsCMS: React.FC = () => {
               label="Wi-Fi Password"
               value={formData.wifiPassword || ''}
               onChange={(e) => handleChange('wifiPassword', e.target.value)}
-              placeholder="centralperkcoffee"
+              placeholder="craftedfromcoffee"
             />
           </div>
         )}
@@ -255,13 +255,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Philosophy Section Eyebrow"
                 value={formData.philosophyEyebrow || ''}
                 onChange={(e) => handleChange('philosophyEyebrow', e.target.value)}
-                placeholder="Our Philosophy"
+                placeholder="Our Roastery Craft"
               />
               <Input
                 label="Philosophy Section Title"
                 value={formData.philosophyTitle || ''}
                 onChange={(e) => handleChange('philosophyTitle', e.target.value)}
-                placeholder="MORE THAN FOOD. IT'S ABOUT FRIENDSHIP."
+                placeholder="BORN IN ETHIOPIA. CRAFTED WITH OBSESSIVE PASSION."
               />
             </div>
 
@@ -269,7 +269,7 @@ export const SiteSettingsCMS: React.FC = () => {
               label="Philosophy Description"
               value={formData.philosophyDescription || ''}
               onChange={(e) => handleChange('philosophyDescription', e.target.value)}
-              placeholder="Central Perk meets modern boutique lounge..."
+              placeholder="Kabun is more than a café — it is a sanctuary for coffee lovers..."
             />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -277,14 +277,14 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Featured Quote"
                 value={formData.manifestoQuote || ''}
                 onChange={(e) => handleChange('manifestoQuote', e.target.value)}
-                placeholder="Because Joey doesn’t share food..."
+                placeholder="Every great conversation begins with an exceptional roast."
                 leftIcon={<MessageSquareQuote className="w-4 h-4 text-[#71717A]" />}
               />
               <Input
                 label="Quote Attribution / Author"
                 value={formData.manifestoAuthor || ''}
                 onChange={(e) => handleChange('manifestoAuthor', e.target.value)}
-                placeholder="The Kitchen Manifesto"
+                placeholder="The Roaster's Manifesto"
               />
             </div>
 
@@ -293,13 +293,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Atmosphere Gallery Title"
                 value={formData.galleryTitle || ''}
                 onChange={(e) => handleChange('galleryTitle', e.target.value)}
-                placeholder="THE ONE WITH THE GOOD TIMES"
+                placeholder="ATMOSPHERE & ARTISAN ROASTS"
               />
               <Input
                 label="Gallery Description"
                 value={formData.galleryDescription || ''}
                 onChange={(e) => handleChange('galleryDescription', e.target.value)}
-                placeholder="A glimpse into our candlelit tables..."
+                placeholder="A glimpse into our warm wood interiors, illuminated night storefront..."
               />
             </div>
           </div>
@@ -313,37 +313,37 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Address Line 1"
                 value={formData.addressLine1 || ''}
                 onChange={(e) => handleChange('addressLine1', e.target.value)}
-                placeholder="17 ቀበሌ፣ ፊትለፊት በሰበርደ"
+                placeholder="Mekelle, Tigray, Ethiopia"
                 leftIcon={<MapPin className="w-4 h-4 text-[#71717A]" />}
               />
               <Input
                 label="Address Line 2 / Landmark"
                 value={formData.addressLine2 || ''}
                 onChange={(e) => handleChange('addressLine2', e.target.value)}
-                placeholder="ናይቀደም ገዛ ተጋሩ"
+                placeholder="ካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)"
               />
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <Input
-                label="Dining Operating Hours"
+                label="Roastery Operating Hours"
                 value={formData.openingHours || ''}
                 onChange={(e) => handleChange('openingHours', e.target.value)}
-                placeholder="11:00 AM – 11:00 PM"
+                placeholder="7:00 AM – 10:30 PM"
                 leftIcon={<Clock className="w-4 h-4 text-[#71717A]" />}
               />
               <Input
                 label="Primary Phone Number"
                 value={formData.phone1 || ''}
                 onChange={(e) => handleChange('phone1', e.target.value)}
-                placeholder="0970700488"
+                placeholder="0914000000"
                 leftIcon={<Phone className="w-4 h-4 text-[#71717A]" />}
               />
               <Input
                 label="Secondary Phone Number"
                 value={formData.phone2 || ''}
                 onChange={(e) => handleChange('phone2', e.target.value)}
-                placeholder="0945986349"
+                placeholder="0920000000"
                 leftIcon={<Phone className="w-4 h-4 text-[#71717A]" />}
               />
             </div>
@@ -407,19 +407,19 @@ export const SiteSettingsCMS: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={formData.accentColor || '#FFBD18'}
+                    value={formData.accentColor || '#E5CFAF'}
                     onChange={(e) => handleChange('accentColor', e.target.value)}
                     className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-0"
                   />
                   <input
                     type="text"
-                    value={formData.accentColor || '#FFBD18'}
+                    value={formData.accentColor || '#E5CFAF'}
                     onChange={(e) => handleChange('accentColor', e.target.value)}
                     className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
                   />
                 </div>
                 <p className="text-[10px] text-[#A1A1AA]">
-                  Used for primary buttons, prices, and highlights.
+                  Warm Roasted Oat / Parchment Cream accent (#E5CFAF).
                 </p>
               </div>
 
@@ -431,43 +431,43 @@ export const SiteSettingsCMS: React.FC = () => {
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={formData.backgroundColor || '#050505'}
+                    value={formData.backgroundColor || '#0E2F2C'}
                     onChange={(e) => handleChange('backgroundColor', e.target.value)}
                     className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-0"
                   />
                   <input
                     type="text"
-                    value={formData.backgroundColor || '#050505'}
+                    value={formData.backgroundColor || '#0E2F2C'}
                     onChange={(e) => handleChange('backgroundColor', e.target.value)}
                     className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
                   />
                 </div>
                 <p className="text-[10px] text-[#A1A1AA]">
-                  Main site canvas color (e.g. #050505).
+                  Deep Roastery Forest Teal canvas background (#0E2F2C).
                 </p>
               </div>
 
               {/* Card Color */}
               <div className="bg-[#0a0a0a] border border-[#222222] p-4 rounded-xl space-y-2">
                 <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white">
-                  Dish Card Surface
+                  Menu Card Surface
                 </label>
                 <div className="flex items-center gap-3">
                   <input
                     type="color"
-                    value={formData.cardColor || '#121212'}
+                    value={formData.cardColor || '#143834'}
                     onChange={(e) => handleChange('cardColor', e.target.value)}
                     className="w-10 h-10 rounded-lg cursor-pointer bg-transparent border-0"
                   />
                   <input
                     type="text"
-                    value={formData.cardColor || '#121212'}
+                    value={formData.cardColor || '#143834'}
                     onChange={(e) => handleChange('cardColor', e.target.value)}
                     className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
                   />
                 </div>
                 <p className="text-[10px] text-[#A1A1AA]">
-                  Surface tint for food and drinks cards.
+                  Surface tint for coffee and bakery cards (#143834).
                 </p>
               </div>
             </div>
@@ -526,12 +526,12 @@ export const SiteSettingsCMS: React.FC = () => {
       <Modal
         isOpen={isResetConfirmOpen}
         onClose={() => setIsResetConfirmOpen(false)}
-        title="Restore All Settings to Default?"
-        subtitle="This will reset all custom texts, topics, colors, and Wi-Fi credentials back to original"
+        title="Restore All Settings to Kabun Default?"
+        subtitle="This will reset all custom texts, topics, colors, and Wi-Fi credentials back to Kabun Coffee defaults"
       >
         <div className="space-y-4">
           <p className="text-sm text-[#A1A1AA]">
-            Are you sure you want to revert all site customizations back to the default curated template? Dishes and menu sections will be preserved.
+            Are you sure you want to revert all site customizations back to Kabun Coffee + Roastery defaults? Menu items and sections will be preserved.
           </p>
 
           <div className="flex justify-end gap-2.5 pt-2">
