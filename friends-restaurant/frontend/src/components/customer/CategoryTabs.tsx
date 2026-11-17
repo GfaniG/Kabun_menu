@@ -2,6 +2,7 @@ import React from 'react';
 import { Coffee, Croissant } from 'lucide-react';
 import { Category } from '../../types/menu';
 import { Language, translations, translateCategory } from '../../i18n/translations';
+import { useTheme } from '../../context/ThemeContext';
 
 interface CategoryTabsProps {
   categories: Category[];
@@ -24,6 +25,8 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
   totalDrinkCount,
   currentLang = 'en',
 }) => {
+  const { theme } = useTheme();
+  const isCream = theme === 'cream';
   const t = translations[currentLang] || translations.en;
 
   const isCoffeeActive = activeParent === 'COFFEE' || activeParent === 'DRINKS';
@@ -41,7 +44,13 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
   return (
     <div className="w-full flex flex-col items-center gap-3.5">
       {/* 1. Primary Department Switcher: COFFEE & BEVERAGES vs BAKERY & BITES */}
-      <div className="inline-flex items-center p-1.5 rounded-full bg-[#133834] border border-[#1D4D47] shadow-[0_4px_24px_rgba(0,0,0,0.6)]">
+      <div
+        className={`inline-flex items-center p-1.5 rounded-full border transition-all duration-300 ${
+          isCream
+            ? 'bg-[#EADAC3] border-[#DFC9AA] shadow-[0_4px_20px_rgba(14,47,44,0.08)]'
+            : 'bg-[#133834] border-[#1D4D47] shadow-[0_4px_24px_rgba(0,0,0,0.6)]'
+        }`}
+      >
         {/* Department 1: Coffee & Beverages */}
         <button
           type="button"
@@ -51,7 +60,11 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
           }}
           className={`flex items-center gap-2 px-5 sm:px-7 py-2.5 rounded-full font-headline text-xs sm:text-sm font-extrabold uppercase tracking-widest transition-all duration-300 cursor-pointer ${
             isCoffeeActive
-              ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_20px_rgba(229,207,175,0.4)] scale-102'
+              ? isCream
+                ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_0_18px_rgba(14,47,44,0.25)] scale-102'
+                : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_20px_rgba(229,207,175,0.4)] scale-102'
+              : isCream
+              ? 'text-[#3D524F] hover:text-[#0E2F2C] hover:bg-[#DFC9AA]/40'
               : 'text-[#C5D5D3] hover:text-[#FAF7F2] hover:bg-white/5'
           }`}
         >
@@ -68,7 +81,11 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
           }}
           className={`flex items-center gap-2 px-5 sm:px-7 py-2.5 rounded-full font-headline text-xs sm:text-sm font-extrabold uppercase tracking-widest transition-all duration-300 cursor-pointer ${
             isBakeryActive
-              ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_20px_rgba(229,207,175,0.4)] scale-102'
+              ? isCream
+                ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_0_18px_rgba(14,47,44,0.25)] scale-102'
+                : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_20px_rgba(229,207,175,0.4)] scale-102'
+              : isCream
+              ? 'text-[#3D524F] hover:text-[#0E2F2C] hover:bg-[#DFC9AA]/40'
               : 'text-[#C5D5D3] hover:text-[#FAF7F2] hover:bg-white/5'
           }`}
         >
@@ -85,7 +102,11 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
           type="button"
           className={`px-4 sm:px-5 py-2 rounded-full font-headline text-xs uppercase tracking-wider font-bold transition-all duration-200 shrink-0 cursor-pointer ${
             activeCategory === 'all'
-              ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.35)]'
+              ? isCream
+                ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_2px_10px_rgba(14,47,44,0.2)]'
+                : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.35)]'
+              : isCream
+              ? 'bg-[#EADAC3] text-[#0E2F2C] hover:bg-[#DFC9AA] border border-[#DFC9AA]'
               : 'bg-[#133834] text-[#C5D5D3] hover:text-[#FAF7F2] hover:bg-[#18423D] border border-[#1D4D47]'
           }`}
         >
@@ -104,7 +125,11 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
               type="button"
               className={`px-4 sm:px-5 py-2 rounded-full font-headline text-xs uppercase tracking-wider font-bold transition-all duration-200 shrink-0 cursor-pointer ${
                 isActive
-                  ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.35)]'
+                  ? isCream
+                    ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_2px_10px_rgba(14,47,44,0.2)]'
+                    : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.35)]'
+                  : isCream
+                  ? 'bg-[#EADAC3] text-[#0E2F2C] hover:bg-[#DFC9AA] border border-[#DFC9AA]'
                   : 'bg-[#133834] text-[#C5D5D3] hover:text-[#FAF7F2] hover:bg-[#18423D] border border-[#1D4D47]'
               }`}
             >

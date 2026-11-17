@@ -398,6 +398,67 @@ export const SiteSettingsCMS: React.FC = () => {
         {/* Tab 5: Colors & Fonts */}
         {activeTab === 'appearance' && (
           <div className="space-y-6 animate-in fade-in">
+            {/* Default QR Scanner Theme */}
+            <div className="bg-[#0a0a0a] border border-[#222222] p-5 rounded-xl space-y-3">
+              <div>
+                <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#E5CFAF]" />
+                  <span>Default Ambiance for First-Time QR Scanners</span>
+                </label>
+                <p className="text-[11px] text-[#A1A1AA] mt-0.5">
+                  Choose which visual theme loads by default when guests scan your table QR tents. Guests can toggle anytime.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
+                {/* Midnight Roastery */}
+                <button
+                  type="button"
+                  onClick={() => handleChange('defaultTheme', 'dark')}
+                  className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
+                    (formData.defaultTheme || 'dark') === 'dark'
+                      ? 'bg-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.25)]'
+                      : 'bg-[#121212] border-[#222222] hover:border-[#333333]'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#081E1C] border border-[#1D4D47] flex items-center justify-center shrink-0 text-[#E5CFAF] text-sm">
+                    🌙
+                  </div>
+                  <div>
+                    <p className="font-headline text-xs font-bold text-white uppercase tracking-wider">
+                      Midnight Roastery (Dark Teal)
+                    </p>
+                    <p className="text-[11px] text-[#C5D5D3] mt-0.5 leading-relaxed">
+                      Deep Roastery Forest Teal canvas with warm roasted cream accents. Ideal for cozy evening ambiance and signature night roastery aesthetics.
+                    </p>
+                  </div>
+                </button>
+
+                {/* Roastery Cream */}
+                <button
+                  type="button"
+                  onClick={() => handleChange('defaultTheme', 'cream')}
+                  className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
+                    formData.defaultTheme === 'cream'
+                      ? 'bg-[#F5EBDD] border-[#0E2F2C] text-[#0E2F2C] shadow-[0_0_15px_rgba(14,47,44,0.2)]'
+                      : 'bg-[#121212] border-[#222222] hover:border-[#333333]'
+                  }`}
+                >
+                  <div className="w-8 h-8 rounded-lg bg-[#EADAC3] border border-[#DFC9AA] flex items-center justify-center shrink-0 text-[#0E2F2C] text-sm">
+                    ☀️
+                  </div>
+                  <div>
+                    <p className={`font-headline text-xs font-bold uppercase tracking-wider ${formData.defaultTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>
+                      Roastery Cream (Warm Light)
+                    </p>
+                    <p className={`text-[11px] mt-0.5 leading-relaxed ${formData.defaultTheme === 'cream' ? 'text-[#3D524F]' : 'text-[#A1A1AA]'}`}>
+                      Warm Roasted Oat parchment background with deep forest teal typography and crisp ivory cards. Perfect for sunlit morning café dining.
+                    </p>
+                  </div>
+                </button>
+              </div>
+            </div>
+
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Accent Color */}
               <div className="bg-[#0a0a0a] border border-[#222222] p-4 rounded-xl space-y-2">

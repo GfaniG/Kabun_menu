@@ -79,6 +79,7 @@ async function main() {
       backgroundColor: '#0E2F2C',
       cardColor: '#143834',
       fontFamily: 'Outfit, sans-serif',
+      defaultTheme: 'dark',
     },
     create: {
       id: 'default',
@@ -121,6 +122,7 @@ async function main() {
       backgroundColor: '#0E2F2C',
       cardColor: '#143834',
       fontFamily: 'Outfit, sans-serif',
+      defaultTheme: 'dark',
     },
   });
   console.log('⚙️ Default Kabun Site Settings seeded.');

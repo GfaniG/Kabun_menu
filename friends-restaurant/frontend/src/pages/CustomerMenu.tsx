@@ -20,6 +20,7 @@ import { KabunRoasteryRibbon } from '../components/customer/KabunRoasteryRibbon'
 import { api } from '../api/client';
 import { Language, translations } from '../i18n/translations';
 import { INITIAL_CATEGORIES } from '../data/initialMenu';
+import { useTheme } from '../context/ThemeContext';
 
 export const CustomerMenu: React.FC = () => {
   const { data: categories = [], isLoading, error, refetch } = useMenu();
@@ -63,11 +64,23 @@ export const CustomerMenu: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // Dynamic theme values from CMS settings
-  const accentColor = settings?.accentColor || '#E5CFAF';
-  const bgColor = settings?.backgroundColor || '#0E2F2C';
-  const cardColor = settings?.cardColor || '#133834';
+  const { theme } = useTheme();
+  const isCream = theme === 'cream';
+
+  // Dynamic theme values adapting to Dark vs Cream mode
+  const cmsAccentColor = settings?.accentColor || '#E5CFAF';
+  const cmsBgColor = settings?.backgroundColor || '#0E2F2C';
+  const cmsCardColor = settings?.cardColor || '#133834';
   const fontFamily = settings?.fontFamily || 'Outfit, sans-serif';
+
+  const bgColor = isCream ? '#F5EBDD' : cmsBgColor;
+  const cardColor = isCream ? '#FAF6F0' : cmsCardColor;
+  const elevatedBgColor = isCream ? '#EDE2D1' : '#0B2523';
+  const borderColor = isCream ? '#DFC9AA' : '#1D4D47';
+  const accentColor = isCream ? '#0E2F2C' : cmsAccentColor;
+  const textHeading = isCream ? '#0E2F2C' : '#FAF7F2';
+  const textBody = isCream ? '#3D524F' : '#C5D5D3';
+  const badgeColor = isCream ? '#0E2F2C' : '#E5CFAF';
 
   const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
   const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
@@ -199,10 +212,16 @@ export const CustomerMenu: React.FC = () => {
         <div className="relative z-10 max-w-[1320px] mx-auto px-4 lg:px-8 text-center flex flex-col items-center">
           {/* Brand Heritage Badge */}
           <div
-            className="inline-flex items-center px-4 py-1.5 rounded-full border border-[#1D4D47] mb-6 shadow-sm"
-            style={{ backgroundColor: cardColor }}
+            className="inline-flex items-center px-4 py-1.5 rounded-full border mb-6 shadow-sm"
+            style={{
+              backgroundColor: isCream ? '#EADAC3' : cardColor,
+              borderColor: borderColor,
+            }}
           >
-            <span className="font-headline text-[11px] uppercase tracking-[0.25em] text-[#E5CFAF] font-bold">
+            <span
+              className="font-headline text-[11px] uppercase tracking-[0.25em] font-bold"
+              style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }}
+            >
               {settings?.tagline || 'SPECIALTY COFFEE • ROASTERY • BISTRO'}
             </span>
           </div>
@@ -247,8 +266,8 @@ export const CustomerMenu: React.FC = () => {
               href="#menu-section"
               className="px-7 py-3 rounded-full text-xs font-headline font-extrabold uppercase tracking-widest transition-all hover:scale-105 shadow-[0_4px_20px_rgba(229,207,175,0.35)]"
               style={{
-                backgroundColor: accentColor,
-                color: '#0E2F2C',
+                backgroundColor: isCream ? '#0E2F2C' : accentColor,
+                color: isCream ? '#E5CFAF' : '#0E2F2C',
               }}
             >
               {settings?.primaryCtaText || t.exploreMenu}
@@ -256,7 +275,12 @@ export const CustomerMenu: React.FC = () => {
 
             <a
               href="#about-section"
-              className="px-6 py-3 rounded-full text-xs font-headline font-semibold uppercase tracking-widest text-[#FAF7F2] border border-[#1D4D47] hover:border-[#E5CFAF] transition-all hover:bg-white/5"
+              className="px-6 py-3 rounded-full text-xs font-headline font-semibold uppercase tracking-widest border transition-all hover:scale-102"
+              style={{
+                color: isCream ? '#0E2F2C' : '#FAF7F2',
+                borderColor: borderColor,
+                backgroundColor: isCream ? '#FAF6F0' : 'transparent',
+              }}
             >
               {settings?.secondaryCtaText || t.visitRoastery}
             </a>
@@ -267,16 +291,25 @@ export const CustomerMenu: React.FC = () => {
       {/* 3. MENU SECTION */}
       <section
         id="menu-section"
-        className="w-full py-16 sm:py-20 relative border-t border-[#1D4D47]"
-        style={{ backgroundColor: bgColor }}
+        className="w-full py-16 sm:py-20 relative border-t transition-colors duration-200"
+        style={{
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+        }}
       >
         <div className="max-w-[1320px] mx-auto px-4 lg:px-8">
           {/* Section Header */}
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 font-headline text-xs text-[#E5CFAF] tracking-[0.2em] uppercase mb-2 font-semibold">
+            <div
+              className="inline-flex items-center gap-2 font-headline text-xs tracking-[0.2em] uppercase mb-2 font-semibold"
+              style={{ color: badgeColor }}
+            >
               <span>{settings?.restaurantName || 'Kabun Coffee + Roastery'} &bull; Specialty Roastery</span>
             </div>
-            <h2 className="font-headline text-2xl sm:text-4xl text-[#FAF7F2] uppercase font-extrabold tracking-wide">
+            <h2
+              className="font-headline text-2xl sm:text-4xl uppercase font-extrabold tracking-wide"
+              style={{ color: textHeading }}
+            >
               {getSectionTitle(
                 activeCategory === 'all'
                   ? activeParent === 'COFFEE'
@@ -285,7 +318,10 @@ export const CustomerMenu: React.FC = () => {
                   : safeCategories.find((c) => c.id === activeCategory)?.name
               )}
             </h2>
-            <p className="font-body text-xs sm:text-sm text-[#C5D5D3] mt-2 max-w-xl mx-auto">
+            <p
+              className="font-body text-xs sm:text-sm mt-2 max-w-xl mx-auto"
+              style={{ color: textBody }}
+            >
               {activeParent === 'COFFEE'
                 ? 'Single-origin Ethiopian roasts, precision espresso extractions, slow-steeped cold brews, and seasonal refreshers.'
                 : 'Pure French butter croissants, artisan pastries, decadent cakes, and freshly prepared savory toasts.'}
@@ -309,21 +345,28 @@ export const CustomerMenu: React.FC = () => {
           {/* Search Bar */}
           <div className="max-w-md mx-auto mb-10">
             <div
-              className="relative flex items-center rounded-full border border-[#1D4D47] px-4 py-2.5 shadow-md focus-within:border-[#E5CFAF] transition-all"
-              style={{ backgroundColor: cardColor }}
+              className="relative flex items-center rounded-full border px-4 py-2.5 shadow-md transition-all"
+              style={{
+                backgroundColor: cardColor,
+                borderColor: borderColor,
+              }}
             >
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={activeParent === 'COFFEE' ? t.searchPlaceholderCoffee : t.searchPlaceholderBakery}
-                className="w-full bg-transparent text-xs sm:text-sm text-[#FAF7F2] placeholder-[#A3B8B5] outline-none pr-8 font-body"
+                className="w-full bg-transparent text-xs sm:text-sm outline-none pr-8 font-body transition-colors"
+                style={{
+                  color: isCream ? '#0E2F2C' : '#FAF7F2',
+                }}
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery('')}
-                  className="absolute right-3.5 text-[#C5D5D3] hover:text-[#FAF7F2]"
+                  className="absolute right-3.5 transition-colors"
+                  style={{ color: textBody }}
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -334,13 +377,14 @@ export const CustomerMenu: React.FC = () => {
           {/* Active Search Notification */}
           {searchQuery && (
             <div className="text-center mb-6">
-              <span className="text-xs text-[#C5D5D3] font-body mr-2">
-                Showing results for &ldquo;<span className="text-[#E5CFAF] font-semibold">{searchQuery}</span>&rdquo;
+              <span className="text-xs font-body mr-2" style={{ color: textBody }}>
+                Showing results for &ldquo;<span className="font-semibold" style={{ color: badgeColor }}>{searchQuery}</span>&rdquo;
               </span>
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="text-[#FAF7F2] hover:underline font-headline uppercase tracking-wider text-[11px] font-semibold"
+                className="hover:underline font-headline uppercase tracking-wider text-[11px] font-semibold"
+                style={{ color: textHeading }}
               >
                 {t.clearSearch}
               </button>
@@ -421,46 +465,80 @@ export const CustomerMenu: React.FC = () => {
       {/* 4. ABOUT US & ROASTERY PHILOSOPHY */}
       <section
         id="about-section"
-        className="w-full py-20 sm:py-24 relative overflow-hidden border-t border-[#1D4D47]"
-        style={{ backgroundColor: bgColor }}
+        className="w-full py-20 sm:py-24 relative overflow-hidden border-t transition-colors duration-200"
+        style={{
+          backgroundColor: elevatedBgColor,
+          borderColor: borderColor,
+        }}
       >
         <div className="max-w-[1320px] mx-auto px-4 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Column */}
             <div className="lg:col-span-5 flex flex-col items-start">
-              <div className="inline-flex items-center gap-2 font-headline text-xs text-[#E5CFAF] tracking-[0.2em] uppercase mb-2 font-semibold">
+              <div
+                className="inline-flex items-center gap-2 font-headline text-xs tracking-[0.2em] uppercase mb-2 font-semibold"
+                style={{ color: badgeColor }}
+              >
                 {settings?.philosophyEyebrow || 'Our Roastery Craft'}
               </div>
-              <h2 className="font-headline text-2xl sm:text-4xl text-[#FAF7F2] uppercase font-extrabold leading-tight mb-4 tracking-wide whitespace-pre-line">
+              <h2
+                className="font-headline text-2xl sm:text-4xl uppercase font-extrabold leading-tight mb-4 tracking-wide whitespace-pre-line"
+                style={{ color: textHeading }}
+              >
                 {settings?.philosophyTitle || 'BORN IN ETHIOPIA.\nCRAFTED WITH OBSESSIVE PASSION.'}
               </h2>
-              <p className="font-body text-sm sm:text-base text-[#C5D5D3] leading-relaxed mb-6">
+              <p
+                className="font-body text-sm sm:text-base leading-relaxed mb-6"
+                style={{ color: textBody }}
+              >
                 {settings?.philosophyDescription ||
                   'Kabun is more than a café — it is a sanctuary for coffee lovers, artists, and conversation. We source exceptional micro-lots from Yirgacheffe, Guji, and Sidama, hand-roasting small batches to honor Ethiopia\'s coffee heritage in a modern architectural lounge.'}
               </p>
 
               <div
-                className="p-5 rounded-2xl border border-[#1D4D47] w-full mb-6"
-                style={{ backgroundColor: cardColor }}
+                className="p-5 rounded-2xl border w-full mb-6 transition-colors"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                }}
               >
-                <p className="font-headline text-base text-[#FAF7F2] italic font-semibold">
+                <p
+                  className="font-headline text-base italic font-semibold"
+                  style={{ color: textHeading }}
+                >
                   &ldquo;{settings?.manifestoQuote || 'Every great conversation begins with an exceptional roast.'}&rdquo;
                 </p>
-                <p className="font-headline text-[11px] text-[#E5CFAF] uppercase tracking-wider mt-2 font-bold">
+                <p
+                  className="font-headline text-[11px] uppercase tracking-wider mt-2 font-bold"
+                  style={{ color: badgeColor }}
+                >
                   &mdash; {settings?.manifestoAuthor || "The Roaster's Manifesto"}
                 </p>
               </div>
 
               {/* The Roastery Tasting Lounge */}
               <div className="flex items-center gap-4 pt-1">
-                <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF]">
+                <div
+                  className="w-12 h-12 rounded-xl border flex items-center justify-center transition-colors"
+                  style={{
+                    backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                    borderColor: borderColor,
+                    color: isCream ? '#0E2F2C' : '#E5CFAF',
+                  }}
+                >
                   <span className="material-symbols-outlined text-[24px]">local_cafe</span>
                 </div>
                 <div>
-                  <p className="font-headline text-xs uppercase tracking-wider text-[#FAF7F2] font-bold">
+                  <p
+                    className="font-headline text-xs uppercase tracking-wider font-bold"
+                    style={{ color: textHeading }}
+                  >
                     The Specialty Tasting Bar
                   </p>
-                  <p className="font-body text-xs text-[#C5D5D3]">
+                  <p
+                    className="font-body text-xs"
+                    style={{ color: textBody }}
+                  >
                     Single-origin cuppings, manual pour-overs &amp; artisan baked goods
                   </p>
                 </div>
@@ -470,51 +548,99 @@ export const CustomerMenu: React.FC = () => {
             {/* Right Column: 3 Feature Cards Bento */}
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-5">
               <div
-                className="sm:col-span-2 p-6 rounded-2xl border border-[#1D4D47] hover:border-[#E5CFAF]/40 transition-all flex flex-col md:flex-row items-start md:items-center gap-5"
-                style={{ backgroundColor: cardColor }}
+                className="sm:col-span-2 p-6 rounded-2xl border transition-all flex flex-col md:flex-row items-start md:items-center gap-5"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                }}
               >
-                <div className="w-14 h-14 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex-shrink-0 flex items-center justify-center text-[#E5CFAF]">
+                <div
+                  className="w-14 h-14 rounded-xl border flex-shrink-0 flex items-center justify-center transition-colors"
+                  style={{
+                    backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                    borderColor: borderColor,
+                    color: isCream ? '#0E2F2C' : '#E5CFAF',
+                  }}
+                >
                   <span className="material-symbols-outlined text-[30px]">coffee_maker</span>
                 </div>
                 <div>
-                  <h3 className="font-headline text-lg text-[#FAF7F2] mb-1 font-bold">
+                  <h3
+                    className="font-headline text-lg mb-1 font-bold"
+                    style={{ color: textHeading }}
+                  >
                     Micro-Lot Precision Roasting
                   </h3>
-                  <p className="font-body text-xs text-[#C5D5D3] leading-relaxed">
+                  <p
+                    className="font-body text-xs leading-relaxed"
+                    style={{ color: textBody }}
+                  >
                     Small-batch profile roasting that celebrates the natural fruit, floral, and chocolate terroir of Ethiopian coffee regions.
                   </p>
                 </div>
               </div>
 
               <div
-                className="p-6 rounded-2xl border border-[#1D4D47] hover:border-[#E5CFAF]/40 transition-all flex flex-col justify-between"
-                style={{ backgroundColor: cardColor }}
+                className="p-6 rounded-2xl border transition-all flex flex-col justify-between"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                }}
               >
-                <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mb-4">
+                <div
+                  className="w-12 h-12 rounded-xl border flex items-center justify-center mb-4 transition-colors"
+                  style={{
+                    backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                    borderColor: borderColor,
+                    color: isCream ? '#0E2F2C' : '#E5CFAF',
+                  }}
+                >
                   <span className="material-symbols-outlined text-[26px]">bakery_dining</span>
                 </div>
                 <div>
-                  <h3 className="font-headline text-lg text-[#FAF7F2] mb-1 font-bold">
+                  <h3
+                    className="font-headline text-lg mb-1 font-bold"
+                    style={{ color: textHeading }}
+                  >
                     Daily French Viennoiserie
                   </h3>
-                  <p className="font-body text-xs text-[#C5D5D3] leading-relaxed">
+                  <p
+                    className="font-body text-xs leading-relaxed"
+                    style={{ color: textBody }}
+                  >
                     Pure French butter croissants, pain au chocolat, artisan brioche, and espresso-soaked Italian tiramisu baked fresh daily.
                   </p>
                 </div>
               </div>
 
               <div
-                className="p-6 rounded-2xl border border-[#1D4D47] hover:border-[#E5CFAF]/40 transition-all flex flex-col justify-between"
-                style={{ backgroundColor: cardColor }}
+                className="p-6 rounded-2xl border transition-all flex flex-col justify-between"
+                style={{
+                  backgroundColor: cardColor,
+                  borderColor: borderColor,
+                }}
               >
-                <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mb-4">
+                <div
+                  className="w-12 h-12 rounded-xl border flex items-center justify-center mb-4 transition-colors"
+                  style={{
+                    backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                    borderColor: borderColor,
+                    color: isCream ? '#0E2F2C' : '#E5CFAF',
+                  }}
+                >
                   <span className="material-symbols-outlined text-[26px]">wifi</span>
                 </div>
                 <div>
-                  <h3 className="font-headline text-lg text-[#FAF7F2] mb-1 font-bold">
+                  <h3
+                    className="font-headline text-lg mb-1 font-bold"
+                    style={{ color: textHeading }}
+                  >
                     Modern Roastery Atmosphere
                   </h3>
-                  <p className="font-body text-xs text-[#C5D5D3] leading-relaxed">
+                  <p
+                    className="font-body text-xs leading-relaxed"
+                    style={{ color: textBody }}
+                  >
                     Two-story illuminated modern glass facade, warm architectural wood interiors, high-speed Wi-Fi, and cozy conversation nooks.
                   </p>
                 </div>
@@ -527,20 +653,32 @@ export const CustomerMenu: React.FC = () => {
       {/* 5. EDITORIAL GALLERY SECTION: REAL PHOTOS FROM KABUN COFFEE */}
       <section
         id="gallery-section"
-        className="w-full py-20 sm:py-24 border-t border-[#1D4D47]"
-        style={{ backgroundColor: bgColor }}
+        className="w-full py-20 sm:py-24 border-t transition-colors duration-200"
+        style={{
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+        }}
       >
         <div className="max-w-[1320px] mx-auto px-4 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
             <div>
-              <div className="inline-flex items-center gap-2 font-headline text-xs text-[#E5CFAF] tracking-[0.2em] uppercase mb-2 font-semibold">
+              <div
+                className="inline-flex items-center gap-2 font-headline text-xs tracking-[0.2em] uppercase mb-2 font-semibold"
+                style={{ color: badgeColor }}
+              >
                 {t.atmosphereEyebrow}
               </div>
-              <h2 className="font-headline text-2xl sm:text-4xl text-[#FAF7F2] uppercase font-extrabold tracking-wide">
+              <h2
+                className="font-headline text-2xl sm:text-4xl uppercase font-extrabold tracking-wide"
+                style={{ color: textHeading }}
+              >
                 {settings?.galleryTitle || 'ATMOSPHERE & ARTISAN ROASTS'}
               </h2>
             </div>
-            <p className="font-body text-xs text-[#C5D5D3] max-w-md leading-relaxed">
+            <p
+              className="font-body text-xs max-w-md leading-relaxed"
+              style={{ color: textBody }}
+            >
               {settings?.galleryDescription ||
                 'A glimpse into our warm wood interiors, illuminated night storefront, aromatic pour-over bar, and shared moments at Kabun.'}
             </p>
@@ -549,7 +687,10 @@ export const CustomerMenu: React.FC = () => {
           {/* Bento Gallery Featuring Real Kabun Coffee Photography */}
           <div className="grid grid-cols-1 md:grid-cols-12 gap-5">
             {/* Real Photo 1: Illuminated Two-Story Roastery Facade */}
-            <div className="md:col-span-7 h-[380px] md:h-[460px] rounded-2xl overflow-hidden relative group border border-[#1D4D47]">
+            <div
+              className="md:col-span-7 h-[380px] md:h-[460px] rounded-2xl overflow-hidden relative group border transition-all"
+              style={{ borderColor: borderColor }}
+            >
               <img
                 src="/assets/kabun/kabun-storefront-facade.jpg"
                 alt="Kabun Coffee + Roastery two-story storefront at night"
@@ -572,7 +713,10 @@ export const CustomerMenu: React.FC = () => {
             {/* Right Stack: 2 Real Photos */}
             <div className="md:col-span-5 flex flex-col gap-5">
               {/* Real Photo 2: Lush Garden Patio Entrance */}
-              <div className="h-[180px] md:h-[218px] rounded-2xl overflow-hidden relative group border border-[#1D4D47]">
+              <div
+                className="h-[180px] md:h-[218px] rounded-2xl overflow-hidden relative group border transition-all"
+                style={{ borderColor: borderColor }}
+              >
                 <img
                   src="/assets/kabun/kabun-patio-entrance.jpg"
                   alt="Kabun Coffee lush patio entrance at night"
@@ -588,7 +732,10 @@ export const CustomerMenu: React.FC = () => {
               </div>
 
               {/* Real Photo 3: Interior Cafe Seating with Gallery Wall */}
-              <div className="h-[180px] md:h-[218px] rounded-2xl overflow-hidden relative group border border-[#1D4D47]">
+              <div
+                className="h-[180px] md:h-[218px] rounded-2xl overflow-hidden relative group border transition-all"
+                style={{ borderColor: borderColor }}
+              >
                 <img
                   src="/assets/kabun/kabun-interior-lounge.jpg"
                   alt="Kabun Coffee warm interior lounge with friends seated"
@@ -610,18 +757,30 @@ export const CustomerMenu: React.FC = () => {
       {/* 6. LOCATION, OPERATING HOURS & GUEST WI-FI */}
       <section
         id="location-section"
-        className="w-full py-20 sm:py-24 relative border-t border-[#1D4D47]"
-        style={{ backgroundColor: bgColor }}
+        className="w-full py-20 sm:py-24 relative border-t transition-colors duration-200"
+        style={{
+          backgroundColor: elevatedBgColor,
+          borderColor: borderColor,
+        }}
       >
         <div className="max-w-[1320px] mx-auto px-4 lg:px-8">
           <div className="text-center max-w-2xl mx-auto mb-12">
-            <div className="inline-flex items-center gap-2 font-headline text-xs text-[#E5CFAF] tracking-[0.2em] uppercase mb-2 font-semibold">
+            <div
+              className="inline-flex items-center gap-2 font-headline text-xs tracking-[0.2em] uppercase mb-2 font-semibold"
+              style={{ color: badgeColor }}
+            >
               <span>{settings?.restaurantName || 'Kabun Coffee + Roastery'}</span>
             </div>
-            <h2 className="font-headline text-2xl sm:text-4xl text-[#FAF7F2] uppercase font-extrabold tracking-wide">
+            <h2
+              className="font-headline text-2xl sm:text-4xl uppercase font-extrabold tracking-wide"
+              style={{ color: textHeading }}
+            >
               VISIT OUR ROASTERY &amp; LOUNGE
             </h2>
-            <p className="font-body text-xs sm:text-sm text-[#C5D5D3] mt-2 leading-relaxed">
+            <p
+              className="font-body text-xs sm:text-sm mt-2 leading-relaxed"
+              style={{ color: textBody }}
+            >
               Step in for freshly brewed single-origin coffee, morning pastries, high-speed Wi-Fi, and heartfelt conversations.
             </p>
           </div>
@@ -629,15 +788,33 @@ export const CustomerMenu: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-5xl mx-auto">
             {/* Location Card */}
             <div
-              className="border border-[#1D4D47] rounded-2xl p-6 text-center space-y-3"
-              style={{ backgroundColor: cardColor }}
+              className="border rounded-2xl p-6 text-center space-y-3 transition-colors"
+              style={{
+                backgroundColor: cardColor,
+                borderColor: borderColor,
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mx-auto">
+              <div
+                className="w-12 h-12 rounded-xl border flex items-center justify-center mx-auto transition-colors"
+                style={{
+                  backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#E5CFAF',
+                }}
+              >
                 <span className="material-symbols-outlined text-[24px]">location_on</span>
               </div>
-              <h3 className="font-headline text-base font-bold text-white">Roastery Location</h3>
-              <p className="font-body text-xs text-[#C5D5D3] leading-relaxed whitespace-pre-line">
-                <strong className="text-[#FAF7F2]">
+              <h3
+                className="font-headline text-base font-bold"
+                style={{ color: textHeading }}
+              >
+                Roastery Location
+              </h3>
+              <p
+                className="font-body text-xs leading-relaxed whitespace-pre-line"
+                style={{ color: textBody }}
+              >
+                <strong style={{ color: textHeading }}>
                   {[settings?.addressLine1, settings?.addressLine2].filter(Boolean).join('\n') || 'Mekelle, Tigray, Ethiopia\nካቡን ኮፊ እና ሮስተሪ (Kebele 17 / Main Roastery)'}
                 </strong>
               </p>
@@ -645,38 +822,80 @@ export const CustomerMenu: React.FC = () => {
 
             {/* Operating Hours */}
             <div
-              className="border border-[#1D4D47] rounded-2xl p-6 text-center space-y-3"
-              style={{ backgroundColor: cardColor }}
+              className="border rounded-2xl p-6 text-center space-y-3 transition-colors"
+              style={{
+                backgroundColor: cardColor,
+                borderColor: borderColor,
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mx-auto">
+              <div
+                className="w-12 h-12 rounded-xl border flex items-center justify-center mx-auto transition-colors"
+                style={{
+                  backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#E5CFAF',
+                }}
+              >
                 <span className="material-symbols-outlined text-[24px]">schedule</span>
               </div>
-              <h3 className="font-headline text-base font-bold text-white">{t.diningHours}</h3>
-              <p className="font-body text-xs text-[#C5D5D3] leading-relaxed">
-                <strong className="text-[#FAF7F2] font-headline text-xs font-bold block mb-1">
+              <h3
+                className="font-headline text-base font-bold"
+                style={{ color: textHeading }}
+              >
+                {t.diningHours}
+              </h3>
+              <p
+                className="font-body text-xs leading-relaxed"
+                style={{ color: textBody }}
+              >
+                <strong
+                  className="font-headline text-xs font-bold block mb-1"
+                  style={{ color: textHeading }}
+                >
                   {settings?.openingHours || 'Monday – Sunday\n7:00 AM – 10:30 PM'}
                 </strong>
-                <span className="text-[#A3B8B5]">{t.kitchenCloses}</span>
+                <span style={{ color: isCream ? '#6B807D' : '#A3B8B5' }}>{t.kitchenCloses}</span>
               </p>
             </div>
 
             {/* Free Guest Wi-Fi Card */}
             <div
-              className="border border-[#1D4D47] rounded-2xl p-6 text-center space-y-3"
-              style={{ backgroundColor: cardColor }}
+              className="border rounded-2xl p-6 text-center space-y-3 transition-colors"
+              style={{
+                backgroundColor: cardColor,
+                borderColor: borderColor,
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mx-auto">
-                <Wifi className="w-5 h-5 text-[#E5CFAF]" />
+              <div
+                className="w-12 h-12 rounded-xl border flex items-center justify-center mx-auto transition-colors"
+                style={{
+                  backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#E5CFAF',
+                }}
+              >
+                <Wifi className="w-5 h-5" />
               </div>
-              <h3 className="font-headline text-base font-bold text-white">{t.freeWifi}</h3>
-              <p className="font-mono text-xs text-[#C5D5D3] truncate">
+              <h3
+                className="font-headline text-base font-bold"
+                style={{ color: textHeading }}
+              >
+                {t.freeWifi}
+              </h3>
+              <p
+                className="font-mono text-xs truncate"
+                style={{ color: textBody }}
+              >
                 {wifiSsid}
               </p>
               <button
                 type="button"
                 onClick={handleCopyWifi}
-                className="w-full py-2 px-3 rounded-lg text-[#0E2F2C] font-headline text-[11px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm hover:brightness-110"
-                style={{ backgroundColor: accentColor }}
+                className="w-full py-2 px-3 rounded-lg font-headline text-[11px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm hover:brightness-110"
+                style={{
+                  backgroundColor: isCream ? '#0E2F2C' : accentColor,
+                  color: isCream ? '#E5CFAF' : '#0E2F2C',
+                }}
               >
                 {copiedWifi ? (
                   <>
@@ -694,27 +913,44 @@ export const CustomerMenu: React.FC = () => {
 
             {/* Phone Lines & Socials */}
             <div
-              className="border border-[#1D4D47] rounded-2xl p-6 text-center space-y-3"
-              style={{ backgroundColor: cardColor }}
+              className="border rounded-2xl p-6 text-center space-y-3 transition-colors"
+              style={{
+                backgroundColor: cardColor,
+                borderColor: borderColor,
+              }}
             >
-              <div className="w-12 h-12 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-center text-[#E5CFAF] mx-auto">
+              <div
+                className="w-12 h-12 rounded-xl border flex items-center justify-center mx-auto transition-colors"
+                style={{
+                  backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                  borderColor: borderColor,
+                  color: isCream ? '#0E2F2C' : '#E5CFAF',
+                }}
+              >
                 <span className="material-symbols-outlined text-[24px]">call</span>
               </div>
-              <h3 className="font-headline text-base font-bold text-white">{t.contactSocial}</h3>
+              <h3
+                className="font-headline text-base font-bold"
+                style={{ color: textHeading }}
+              >
+                {t.contactSocial}
+              </h3>
 
               <div className="flex flex-col gap-1.5 text-xs">
                 {/* Direct Dial Phone Links */}
                 <div className="flex items-center justify-center gap-2">
                   <a
                     href={`tel:${settings?.phone1 || '0914000000'}`}
-                    className="inline-flex items-center gap-1 text-white hover:text-[#E5CFAF] font-mono font-bold transition-colors py-0.5"
+                    className="inline-flex items-center gap-1 font-mono font-bold transition-colors py-0.5 hover:opacity-80"
+                    style={{ color: textHeading }}
                   >
                     <span>{settings?.phone1 || '0914000000'}</span>
                   </a>
-                  <span className="text-[#1D4D47]">&bull;</span>
+                  <span style={{ color: borderColor }}>&bull;</span>
                   <a
                     href={`tel:${settings?.phone2 || '0920000000'}`}
-                    className="inline-flex items-center gap-1 text-white hover:text-[#E5CFAF] font-mono font-bold transition-colors py-0.5"
+                    className="inline-flex items-center gap-1 font-mono font-bold transition-colors py-0.5 hover:opacity-80"
+                    style={{ color: textHeading }}
                   >
                     <span>{settings?.phone2 || '0920000000'}</span>
                   </a>
@@ -726,30 +962,45 @@ export const CustomerMenu: React.FC = () => {
                     href="https://www.instagram.com/kabuncoffee/"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0B2523] hover:bg-[#18423D] border border-[#1D4D47] text-[#C5D5D3] hover:text-white transition-all text-[10px]"
+                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-[10px]"
+                    style={{
+                      backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                      borderColor: borderColor,
+                      color: isCream ? '#0E2F2C' : '#C5D5D3',
+                    }}
                   >
                     <span className="truncate">IG: {settings?.instagramHandle || '@KABUNCOFFEE'}</span>
-                    <ExternalLink className="w-2.5 h-2.5 text-[#A3B8B5] group-hover:text-white shrink-0" />
+                    <ExternalLink className="w-2.5 h-2.5 opacity-70 group-hover:opacity-100 shrink-0" />
                   </a>
 
                   <a
                     href="https://www.tiktok.com/@kabuncoffee"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0B2523] hover:bg-[#18423D] border border-[#1D4D47] text-[#C5D5D3] hover:text-white transition-all text-[10px]"
+                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-[10px]"
+                    style={{
+                      backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                      borderColor: borderColor,
+                      color: isCream ? '#0E2F2C' : '#C5D5D3',
+                    }}
                   >
                     <span className="truncate">TikTok: {settings?.tiktokHandle || '@KABUNCOFFEE'}</span>
-                    <ExternalLink className="w-2.5 h-2.5 text-[#A3B8B5] group-hover:text-white shrink-0" />
+                    <ExternalLink className="w-2.5 h-2.5 opacity-70 group-hover:opacity-100 shrink-0" />
                   </a>
 
                   <a
                     href="https://www.facebook.com/search/top?q=KABUN%20COFFEE%20ROASTERY"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg bg-[#0B2523] hover:bg-[#18423D] border border-[#1D4D47] text-[#C5D5D3] hover:text-white transition-all text-[10px]"
+                    className="group flex items-center justify-between gap-1.5 px-2.5 py-1.5 rounded-lg border transition-all text-[10px]"
+                    style={{
+                      backgroundColor: isCream ? '#EADAC3' : '#0B2523',
+                      borderColor: borderColor,
+                      color: isCream ? '#0E2F2C' : '#C5D5D3',
+                    }}
                   >
                     <span className="truncate">FB: {settings?.facebookHandle || 'KABUN COFFEE + ROASTERY - ካቡን'}</span>
-                    <ExternalLink className="w-2.5 h-2.5 text-[#A3B8B5] group-hover:text-white shrink-0" />
+                    <ExternalLink className="w-2.5 h-2.5 opacity-70 group-hover:opacity-100 shrink-0" />
                   </a>
                 </div>
               </div>
@@ -868,9 +1119,11 @@ export const CustomerMenu: React.FC = () => {
           onClick={scrollToTop}
           type="button"
           aria-label="Scroll back to top"
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full backdrop-blur-md border border-[#1D4D47] text-[#FAF7F2] shadow-[0_10px_25px_rgba(0,0,0,0.8)] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
+          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
           style={{
-            backgroundColor: `${cardColor}E6`,
+            backgroundColor: isCream ? '#0E2F2C' : `${cardColor}E6`,
+            color: isCream ? '#E5CFAF' : '#FAF7F2',
+            borderColor: isCream ? '#E5CFAF' : borderColor,
           }}
           title="Back to Top"
         >

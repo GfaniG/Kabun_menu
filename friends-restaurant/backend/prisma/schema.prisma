@@ -103,6 +103,7 @@ model SiteSetting {
   backgroundColor       String   @default("#0E2F2C")
   cardColor             String   @default("#143834")
   fontFamily            String   @default("Outfit, sans-serif")
+  defaultTheme          String   @default("dark") // "dark" | "cream"
 
   updatedAt             DateTime @updatedAt
 }

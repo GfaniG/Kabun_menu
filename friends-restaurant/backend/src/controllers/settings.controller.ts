@@ -41,6 +41,7 @@ const DEFAULT_SETTINGS = {
   backgroundColor: '#0E2F2C',
   cardColor: '#143834',
   fontFamily: 'Outfit, sans-serif',
+  defaultTheme: 'dark',
 };
 
 export class SettingsController {

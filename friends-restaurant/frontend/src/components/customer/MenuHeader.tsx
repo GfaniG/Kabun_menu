@@ -6,12 +6,15 @@ import {
   Copy,
   Menu as MenuIcon,
   X,
+  Sun,
+  Moon,
 } from 'lucide-react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { KabunLogo } from '../common/KabunLogo';
 import { useSiteSettings } from '../../hooks/useMenu';
 import { Language, translations } from '../../i18n/translations';
+import { useTheme } from '../../context/ThemeContext';
 
 interface MenuHeaderProps {
   currentLang?: Language;
@@ -26,6 +29,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
   const urlTable = searchParams.get('table');
 
   const { data: settings } = useSiteSettings();
+  const { theme, toggleTheme } = useTheme();
   const t = translations[currentLang] || translations.en;
 
   const [tableNumber, setTableNumber] = useState<string | null>(() => {
@@ -90,14 +94,35 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             </a>
           </nav>
 
-          {/* Right Actions: Guest Wi-Fi + Language Switcher */}
-          <div className="flex items-center gap-2 sm:gap-3">
+          {/* Right Actions: Guest Wi-Fi + Theme Toggle + Language Switcher */}
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
+            {/* Theme Switcher Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              aria-label={theme === 'dark' ? 'Switch to Roastery Cream mode' : 'Switch to Midnight Roastery mode'}
+              title={theme === 'dark' ? 'Switch to Roastery Cream mode' : 'Switch to Midnight Roastery mode'}
+              className="inline-flex items-center gap-1.5 p-1.5 sm:px-2.5 sm:py-1 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#235750] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline font-bold uppercase tracking-wider transition-all cursor-pointer group shrink-0"
+            >
+              {theme === 'dark' ? (
+                <>
+                  <Sun className="w-3.5 h-3.5 text-[#E5CFAF] group-hover:rotate-45 transition-transform" />
+                  <span className="hidden md:inline text-[#E5CFAF] text-[10px] tracking-wider">Cream</span>
+                </>
+              ) : (
+                <>
+                  <Moon className="w-3.5 h-3.5 text-[#E5CFAF] group-hover:-rotate-12 transition-transform" />
+                  <span className="hidden md:inline text-[#E5CFAF] text-[10px] tracking-wider">Dark</span>
+                </>
+              )}
+            </button>
+
             {/* Language Switcher Bar */}
             <div className="inline-flex items-center p-1 rounded-full bg-[#133834] border border-[#235750]">
               <button
                 type="button"
                 onClick={() => handleLangSelect('en')}
-                className={`px-2.5 py-1 rounded-full text-[11px] font-headline font-bold uppercase tracking-wider transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-headline font-bold uppercase tracking-wider transition-all cursor-pointer ${
                   currentLang === 'en'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-sm font-extrabold'
                     : 'text-[#C5D5D3] hover:text-white'
@@ -109,7 +134,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               <button
                 type="button"
                 onClick={() => handleLangSelect('ti')}
-                className={`px-2.5 py-1 rounded-full text-[11px] font-headline font-bold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-headline font-bold transition-all cursor-pointer ${
                   currentLang === 'ti'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-sm font-extrabold'
                     : 'text-[#C5D5D3] hover:text-white'
@@ -121,7 +146,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               <button
                 type="button"
                 onClick={() => handleLangSelect('am')}
-                className={`px-2.5 py-1 rounded-full text-[11px] font-headline font-bold transition-all cursor-pointer ${
+                className={`px-2 sm:px-2.5 py-1 rounded-full text-[10px] sm:text-[11px] font-headline font-bold transition-all cursor-pointer ${
                   currentLang === 'am'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-sm font-extrabold'
                     : 'text-[#C5D5D3] hover:text-white'
@@ -135,7 +160,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             {/* Free Wi-Fi Button */}
             <button
               onClick={() => setIsWifiModalOpen(true)}
-              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#1D4D47] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline uppercase font-semibold tracking-wider transition-all cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#133834] hover:bg-[#18423D] border border-[#1D4D47] hover:border-[#E5CFAF] text-[#FAF7F2] text-xs font-headline uppercase font-semibold tracking-wider transition-all cursor-pointer"
               title={t.freeWifi}
             >
               <Wifi className="w-3.5 h-3.5 text-[#E5CFAF]" />
@@ -192,7 +217,21 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               {t.locationHours}
             </a>
 
-            <div className="pt-2 border-t border-[#1D4D47] flex gap-2">
+            <div className="pt-2 border-t border-[#1D4D47] flex flex-col gap-2">
+              <button
+                type="button"
+                onClick={toggleTheme}
+                className="flex items-center justify-between w-full py-2.5 px-3 rounded-xl bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] font-headline text-xs font-bold uppercase tracking-wider"
+              >
+                <span className="flex items-center gap-2">
+                  {theme === 'dark' ? <Sun className="w-4 h-4 text-[#E5CFAF]" /> : <Moon className="w-4 h-4 text-[#E5CFAF]" />}
+                  <span>Theme: {theme === 'dark' ? 'Midnight Roastery' : 'Roastery Cream'}</span>
+                </span>
+                <span className="text-[10px] text-[#E5CFAF] font-mono px-2 py-0.5 rounded bg-[#0E2F2C] border border-[#1D4D47]">
+                  Switch
+                </span>
+              </button>
+
               <Button
                 variant="secondary"
                 size="sm"
@@ -216,10 +255,10 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
         onClose={() => setIsWifiModalOpen(false)}
         title={
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-full bg-[#133834] border border-[#235750] flex items-center justify-center text-[#E5CFAF]">
-              <Wifi className="w-4 h-4 text-[#E5CFAF]" />
+            <div className={`w-8 h-8 rounded-full flex items-center justify-center ${theme === 'cream' ? 'bg-[#EADAC3] border border-[#DFC9AA] text-[#0E2F2C]' : 'bg-[#133834] border border-[#235750] text-[#E5CFAF]'}`}>
+              <Wifi className={`w-4 h-4 ${theme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
             </div>
-            <span className="font-headline text-base sm:text-lg uppercase tracking-wider text-white font-bold">
+            <span className={`font-headline text-base sm:text-lg uppercase tracking-wider font-bold ${theme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>
               {t.guestWifi}
             </span>
           </div>
@@ -227,22 +266,22 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
         subtitle="Enjoy high-speed connection in our roastery lounge"
       >
         <div className="space-y-4">
-          <div className="bg-[#0B2523] border border-[#1D4D47] rounded-xl p-4 sm:p-5 space-y-3.5">
+          <div className={`rounded-xl p-4 sm:p-5 space-y-3.5 border ${theme === 'cream' ? 'bg-[#FAF6F0] border-[#DFC9AA]' : 'bg-[#0B2523] border-[#1D4D47]'}`}>
             <div>
-              <span className="font-sans text-[10px] text-[#C5D5D3] uppercase tracking-[0.15em] font-semibold block">
+              <span className={`font-sans text-[10px] uppercase tracking-[0.15em] font-semibold block ${theme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'}`}>
                 Network (SSID)
               </span>
-              <p className="font-headline text-base sm:text-lg font-bold text-[#FAF7F2] tracking-wide mt-0.5">
+              <p className={`font-headline text-base sm:text-lg font-bold tracking-wide mt-0.5 ${theme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'}`}>
                 {wifiSsid}
               </p>
             </div>
 
-            <div className="pt-3 border-t border-[#1D4D47] flex items-center justify-between gap-3">
+            <div className={`pt-3 border-t flex items-center justify-between gap-3 ${theme === 'cream' ? 'border-[#DFC9AA]' : 'border-[#1D4D47]'}`}>
               <div className="min-w-0">
-                <span className="font-sans text-[10px] text-[#C5D5D3] uppercase tracking-[0.15em] font-semibold block">
+                <span className={`font-sans text-[10px] uppercase tracking-[0.15em] font-semibold block ${theme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'}`}>
                   Password
                 </span>
-                <p className="font-mono text-sm sm:text-base font-bold text-[#E5CFAF] tracking-widest bg-[#133834] px-3 py-1.5 rounded-lg border border-[#1D4D47] mt-0.5 inline-block select-all">
+                <p className={`font-mono text-sm sm:text-base font-bold tracking-widest px-3 py-1.5 rounded-lg border mt-0.5 inline-block select-all ${theme === 'cream' ? 'bg-[#EADAC3] border-[#DFC9AA] text-[#0E2F2C]' : 'bg-[#133834] border-[#1D4D47] text-[#E5CFAF]'}`}>
                   {wifiPassword}
                 </p>
               </div>
@@ -250,16 +289,16 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               <button
                 type="button"
                 onClick={handleCopyWifi}
-                className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-[#E5CFAF] hover:brightness-110 text-[#0E2F2C] font-sans font-bold text-xs uppercase tracking-wider transition-all shadow-sm shrink-0 cursor-pointer"
+                className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-lg font-sans font-bold text-xs uppercase tracking-wider transition-all shadow-sm shrink-0 cursor-pointer ${theme === 'cream' ? 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]' : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'}`}
               >
                 {copiedWifi ? (
                   <>
-                    <Check className="w-3.5 h-3.5 text-[#0E2F2C]" />
+                    <Check className={`w-3.5 h-3.5 ${theme === 'cream' ? 'text-[#E5CFAF]' : 'text-[#0E2F2C]'}`} />
                     <span>{t.passwordCopied}</span>
                   </>
                 ) : (
                   <>
-                    <Copy className="w-3.5 h-3.5 text-[#0E2F2C]" />
+                    <Copy className={`w-3.5 h-3.5 ${theme === 'cream' ? 'text-[#E5CFAF]' : 'text-[#0E2F2C]'}`} />
                     <span>{t.copyPassword}</span>
                   </>
                 )}
@@ -267,13 +306,13 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             </div>
           </div>
 
-          <p className="text-xs text-[#C5D5D3] leading-relaxed">
-            Select <strong className="text-white font-semibold">{wifiSsid}</strong> in your device settings and paste the credentials above.
+          <p className={`text-xs leading-relaxed ${theme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'}`}>
+            Select <strong className={`font-semibold ${theme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>{wifiSsid}</strong> in your device settings and paste the credentials above.
           </p>
 
           <button
             type="button"
-            className="w-full py-2.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] font-headline uppercase tracking-wider text-xs font-bold border border-[#1D4D47] transition-colors cursor-pointer"
+            className={`w-full py-2.5 rounded-lg font-headline uppercase tracking-wider text-xs font-bold border transition-colors cursor-pointer ${theme === 'cream' ? 'bg-[#EADAC3] hover:bg-[#DFC9AA] text-[#0E2F2C] border-[#DFC9AA]' : 'bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] border-[#1D4D47]'}`}
             onClick={() => setIsWifiModalOpen(false)}
           >
             {t.close}

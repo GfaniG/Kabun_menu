@@ -67,6 +67,7 @@ export interface SiteSettings {
   backgroundColor: string;
   cardColor: string;
   fontFamily: string;
+  defaultTheme?: string;
 
   updatedAt?: string;
 }
