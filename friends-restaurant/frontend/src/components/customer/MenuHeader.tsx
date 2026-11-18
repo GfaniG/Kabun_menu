@@ -200,14 +200,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               {t.locationHours}
             </a>
 
-            <div className="pt-2 border-t border-[#1D4D47] flex flex-col gap-2.5">
-              <div className="flex items-center justify-between px-1">
-                <span className="text-[10px] uppercase tracking-wider text-[#A3B8B5] font-semibold">Theme &amp; Inversion:</span>
-              </div>
-              <div className="flex justify-center">
-                <ThemeSwitcher variant="segmented" />
-              </div>
-
+            <div className="pt-2 border-t border-[#1D4D47]">
               <Button
                 variant="secondary"
                 size="sm"

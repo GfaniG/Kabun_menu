@@ -8,7 +8,6 @@ import {
   Check,
   Copy,
   Lock,
-  Contrast,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMenu, useSiteSettings } from '../hooks/useMenu';
@@ -18,7 +17,6 @@ import { MenuCard } from '../components/customer/MenuCard';
 import { MenuItem } from '../types/menu';
 import { KabunLogo } from '../components/common/KabunLogo';
 import { KabunRoasteryRibbon } from '../components/customer/KabunRoasteryRibbon';
-import { ThemeSwitcher } from '../components/common/ThemeSwitcher';
 import { api } from '../api/client';
 import { Language, translations } from '../i18n/translations';
 import { INITIAL_CATEGORIES } from '../data/initialMenu';
@@ -316,20 +314,6 @@ export const CustomerMenu: React.FC = () => {
               {settings?.secondaryCtaText || t.visitRoastery}
             </a>
           </div>
-
-          {/* Hero Ambiance & Color Inversion Switcher (Prominently visible on first load) */}
-          <div className="mt-8 flex flex-col items-center justify-center animate-in fade-in">
-            <div className="flex items-center gap-1.5 mb-2.5">
-              <Contrast className="w-4 h-4" style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }} />
-              <span
-                className="font-headline text-[10px] sm:text-[11px] uppercase tracking-[0.22em] font-bold"
-                style={{ color: textBody }}
-              >
-                Invert Colors / Ambiance
-              </span>
-            </div>
-            <ThemeSwitcher variant="segmented" />
-          </div>
         </div>
       </section>
 
@@ -371,20 +355,6 @@ export const CustomerMenu: React.FC = () => {
                 ? 'Single-origin Ethiopian roasts, precision espresso extractions, slow-steeped cold brews, and seasonal refreshers.'
                 : 'Pure French butter croissants, artisan pastries, decadent cakes, and freshly prepared savory toasts.'}
             </p>
-          </div>
-
-          {/* Ambiance & Color Inversion Selector */}
-          <div className="flex flex-col items-center justify-center mb-8">
-            <div className="flex items-center gap-2 mb-2.5">
-              <Contrast className="w-3.5 h-3.5" style={{ color: isCream ? '#0E2F2C' : '#E5CFAF' }} />
-              <span
-                className="font-headline text-[11px] uppercase tracking-[0.2em] font-bold"
-                style={{ color: textBody }}
-              >
-                Ambiance &amp; Color Inversion
-              </span>
-            </div>
-            <ThemeSwitcher variant="segmented" />
           </div>
 
           {/* Department and Category Switcher */}
@@ -1241,9 +1211,6 @@ export const CustomerMenu: React.FC = () => {
           <ArrowUp className="w-5 h-5" />
         </button>
       )}
-
-      {/* Floating Theme Switcher Button for Instant Inversion Anywhere */}
-      <ThemeSwitcher variant="floating" />
     </div>
   );
 };
