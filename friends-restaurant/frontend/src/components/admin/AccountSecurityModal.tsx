@@ -104,33 +104,33 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
         <div className="space-y-3">
           <Input
             label="Display Name"
-            placeholder="e.g. Friends Manager"
+            placeholder="e.g. Kabun Manager"
             value={name}
             onChange={(e) => setName(e.target.value)}
             required
-            leftIcon={<User className="w-4 h-4 text-[#A1A1AA]" />}
+            leftIcon={<User className="w-4 h-4 text-[#C5D5D3]" />}
           />
 
           <Input
             label="Admin Email Address"
             type="email"
-            placeholder="admin@friends.com"
+            placeholder="admin@kabuncoffee.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
-            leftIcon={<Mail className="w-4 h-4 text-[#A1A1AA]" />}
+            leftIcon={<Mail className="w-4 h-4 text-[#C5D5D3]" />}
           />
         </div>
 
         {/* Password Change Section */}
-        <div className="pt-3 border-t border-[#222222] space-y-3">
+        <div className="pt-3 border-t border-[#1D4D47] space-y-3">
           <div className="flex items-center gap-2">
-            <KeyRound className="w-4 h-4 text-[#FFBD18]" />
+            <KeyRound className="w-4 h-4 text-[#E5CFAF]" />
             <span className="font-headline text-xs uppercase tracking-wider text-white font-bold">
               Change Password (Optional)
             </span>
           </div>
-          <p className="text-[11px] text-[#A1A1AA]">
+          <p className="text-[11px] text-[#C5D5D3]">
             Leave password fields blank if you only want to change your name or email.
           </p>
 
@@ -161,7 +161,7 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-2.5 pt-3 border-t border-[#222222]">
+        <div className="flex justify-end gap-2.5 pt-3 border-t border-[#1D4D47]">
           <Button variant="secondary" type="button" onClick={onClose}>
             Cancel
           </Button>
@@ -169,7 +169,7 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
             variant="yellow"
             type="submit"
             isLoading={updateProfileMutation.isPending}
-            leftIcon={<Shield className="w-4 h-4 text-black" />}
+            leftIcon={<Shield className="w-4 h-4 text-[#0E2F2C]" />}
           >
             Save Account
           </Button>

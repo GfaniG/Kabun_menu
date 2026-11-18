@@ -15,6 +15,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
   const { data: settings } = useSiteSettings();
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
   const [copiedLink, setCopiedLink] = useState(false);
+  const [standTheme, setStandTheme] = useState<'cream' | 'teal'>('cream');
   const printCardRef = useRef<HTMLDivElement>(null);
 
   // Single unified URL for all dining tables and guest scans
@@ -28,8 +29,8 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
       width: 512,
       margin: 2,
       color: {
-        dark: '#0E2F2C',
-        light: '#FFFFFF',
+        dark: '#0E2F2C', // Teal QR pattern
+        light: '#E5CFAF', // Warm Roasted Oat Cream background
       },
       errorCorrectionLevel: 'H',
     })
@@ -66,6 +67,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
 
     const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
     const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
+    const isCream = standTheme === 'cream';
 
     printWindow.document.write(`
       <!DOCTYPE html>
@@ -83,19 +85,19 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               min-height: 100vh;
               margin: 0;
               background: #ffffff;
-              color: #0E2F2C;
+              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
             }
             .acrylic-card {
               width: 330px;
-              background-color: #0E2F2C !important;
-              color: #FAF7F2 !important;
-              border: 3px solid #E5CFAF;
+              background-color: ${isCream ? '#FAF6F0' : '#0E2F2C'} !important;
+              color: ${isCream ? '#0E2F2C' : '#FAF7F2'} !important;
+              border: 3px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
               border-radius: 28px;
               padding: 28px 24px;
               text-align: center;
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
-              box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+              box-shadow: 0 10px 40px ${isCream ? 'rgba(14,47,44,0.15)' : 'rgba(0,0,0,0.3)'};
             }
             .emblem-wrapper {
               width: 64px;
@@ -103,8 +105,8 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               margin: 0 auto 8px;
               border-radius: 50%;
               overflow: hidden;
-              border: 2px solid #E5CFAF;
-              background: #0E2F2C;
+              border: 2px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
+              background: ${isCream ? '#FAF6F0' : '#0E2F2C'};
             }
             .emblem-wrapper img {
               width: 100%;
@@ -114,7 +116,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
             .geez-title {
               font-size: 26px;
               font-weight: 900;
-              color: #FAF7F2;
+              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
               line-height: 1.1;
               letter-spacing: 2px;
               margin: 0;
@@ -124,21 +126,21 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               font-weight: 800;
               letter-spacing: 3px;
               text-transform: uppercase;
-              color: #E5CFAF;
+              color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
               margin: 2px 0 1px;
             }
             .brand-sub {
               font-size: 9px;
-              font-weight: 600;
+              font-weight: ${isCream ? '700' : '600'};
               letter-spacing: 2px;
-              color: #C5D5D3;
+              color: ${isCream ? '#3D524F' : '#C5D5D3'};
               text-transform: uppercase;
               margin-bottom: 12px;
             }
             .badge {
               display: inline-block;
-              background-color: #E5CFAF !important;
-              color: #0E2F2C !important;
+              background-color: ${isCream ? '#0E2F2C' : '#E5CFAF'} !important;
+              color: ${isCream ? '#E5CFAF' : '#0E2F2C'} !important;
               font-size: 9.5px;
               font-weight: 900;
               letter-spacing: 1.5px;
@@ -148,12 +150,12 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               margin-bottom: 14px;
             }
             .qr-wrapper {
-              background: #ffffff !important;
+              background: #E5CFAF !important;
               padding: 12px;
               border-radius: 20px;
               display: inline-block;
               margin-bottom: 12px;
-              border: 2px solid #E5CFAF;
+              border: 2px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
             }
             .qr-wrapper img {
               width: 175px;
@@ -165,27 +167,27 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               font-weight: 800;
               text-transform: uppercase;
               letter-spacing: 1px;
-              color: #FAF7F2;
+              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
               margin: 0 0 3px;
             }
             .sub-instructions {
               font-size: 9px;
-              color: #C5D5D3;
+              color: ${isCream ? '#3D524F' : '#C5D5D3'};
               margin: 0 0 14px;
               font-style: italic;
             }
             .wifi-box {
-              background-color: #133834 !important;
-              border: 1px solid #1D4D47;
+              background-color: ${isCream ? '#EFE2CE' : '#133834'} !important;
+              border: 1px solid ${isCream ? '#DFC9AA' : '#1D4D47'};
               border-radius: 14px;
               padding: 10px 12px;
               font-size: 10px;
-              color: #C5D5D3;
+              color: ${isCream ? '#0E2F2C' : '#C5D5D3'};
               text-align: center;
             }
             .wifi-header {
               font-weight: 800;
-              color: #FAF7F2;
+              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
               margin-bottom: 3px;
               text-transform: uppercase;
               font-size: 9px;
@@ -196,13 +198,13 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               font-size: 10px;
               margin: 2px 0;
             }
-            .highlight { color: #E5CFAF; font-weight: bold; }
+            .highlight { color: ${isCream ? '#0E2F2C' : '#E5CFAF'}; font-weight: bold; }
           </style>
         </head>
         <body>
           <div class="acrylic-card">
             <div class="emblem-wrapper">
-              <img src="/assets/kabun/kabun-emblem-dark.png" alt="Kabun Logo" />
+              <img src="${isCream ? '/assets/kabun/kabun-emblem-cream.png' : '/assets/kabun/kabun-emblem-dark.png'}" alt="Kabun Logo" />
             </div>
             <div class="geez-title">ካቡን</div>
             <div class="brand-name">KABUN COFFEE + ROASTERY</div>
@@ -247,35 +249,75 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
       subtitle="Print this single master QR card for tables, counters, and roastery stands"
       maxWidth="md"
     >
-      <div className="space-y-5">
+      <div className="space-y-4">
+        {/* Style Selector */}
+        <div className="flex items-center justify-center gap-2 bg-[#0B2523] p-1.5 rounded-2xl border border-[#1D4D47] w-fit mx-auto">
+          <button
+            type="button"
+            onClick={() => setStandTheme('cream')}
+            className={`px-3 py-1.5 rounded-xl font-headline text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              standTheme === 'cream'
+                ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-md font-extrabold'
+                : 'text-[#C5D5D3] hover:text-white'
+            }`}
+          >
+            ☀️ Roastery Cream Stand
+          </button>
+          <button
+            type="button"
+            onClick={() => setStandTheme('teal')}
+            className={`px-3 py-1.5 rounded-xl font-headline text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
+              standTheme === 'teal'
+                ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-md font-extrabold'
+                : 'text-[#C5D5D3] hover:text-white'
+            }`}
+          >
+            🌙 Midnight Teal Stand
+          </button>
+        </div>
+
         {/* Printable Table Tent Preview Card */}
         <div className="flex justify-center">
           <div
             ref={printCardRef}
-            className="w-full max-w-xs bg-[#0E2F2C] text-[#FAF7F2] p-6 rounded-3xl shadow-2xl border-2 border-[#E5CFAF] text-center space-y-3.5"
+            className={`w-full max-w-xs p-6 rounded-3xl shadow-2xl border-2 text-center space-y-3.5 transition-colors ${
+              standTheme === 'cream'
+                ? 'bg-[#FAF6F0] text-[#0E2F2C] border-[#0E2F2C]'
+                : 'bg-[#0E2F2C] text-[#FAF7F2] border-[#E5CFAF]'
+            }`}
           >
             {/* Kabun Circular Emblem */}
             <div className="flex justify-center pt-1">
-              <KabunLogo variant="emblem" className="w-16 h-16 mx-auto" />
+              <KabunLogo variant="emblem" lightMode={standTheme === 'cream'} className="w-16 h-16 mx-auto" />
             </div>
 
             <div>
-              <h2 className="font-headline font-black text-2xl text-[#FAF7F2] tracking-wider leading-none">
+              <h2 className={`font-headline font-black text-2xl tracking-wider leading-none ${
+                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
+              }`}>
                 ካቡን
               </h2>
-              <p className="font-headline font-extrabold text-xs text-[#E5CFAF] tracking-[0.25em] uppercase mt-0.5">
+              <p className={`font-headline font-extrabold text-xs tracking-[0.25em] uppercase mt-0.5 ${
+                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'
+              }`}>
                 KABUN COFFEE + ROASTERY
               </p>
             </div>
 
             <div className="py-0.5">
-              <span className="inline-block px-3.5 py-1 rounded-full bg-[#E5CFAF] text-[#0E2F2C] text-[10px] font-headline font-black tracking-wider uppercase shadow-[0_0_12px_rgba(229,207,175,0.4)]">
+              <span className={`inline-block px-3.5 py-1 rounded-full text-[10px] font-headline font-black tracking-wider uppercase ${
+                standTheme === 'cream'
+                  ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_2px_8px_rgba(14,47,44,0.2)]'
+                  : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.4)]'
+              }`}>
                 Crafted from coffee &bull; Scan for Menu &amp; Wi-Fi
               </span>
             </div>
 
-            {/* High-Resolution QR Code */}
-            <div className="p-3 bg-white rounded-2xl inline-block shadow-lg border-2 border-[#E5CFAF]">
+            {/* High-Resolution QR Code: Cream Background with Teal Pattern */}
+            <div className={`p-3 bg-[#E5CFAF] rounded-2xl inline-block shadow-lg border-2 ${
+              standTheme === 'cream' ? 'border-[#0E2F2C]' : 'border-[#E5CFAF]'
+            }`}>
               {qrDataUrl ? (
                 <img
                   src={qrDataUrl}
@@ -290,25 +332,35 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
             </div>
 
             <div className="space-y-0.5">
-              <p className="font-headline text-xs font-extrabold text-[#FAF7F2] uppercase tracking-wider">
+              <p className={`font-headline text-xs font-extrabold uppercase tracking-wider ${
+                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
+              }`}>
                 Scan with any Smartphone Camera
               </p>
-              <p className="text-[10px] text-[#C5D5D3] italic">
+              <p className={`text-[10px] italic ${
+                standTheme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'
+              }`}>
                 Single-Origin Roasts &bull; Cold Brew &bull; Fresh Viennoiserie
               </p>
             </div>
 
             {/* Dynamic Wi-Fi callout at bottom of table card */}
-            <div className="pt-2.5 border-t border-[#1D4D47] text-[10px] text-[#C5D5D3] space-y-1 bg-[#133834] rounded-xl p-2.5">
-              <div className="flex items-center justify-center gap-1.5 text-[#FAF7F2] font-semibold">
-                <Wifi className="w-3.5 h-3.5 text-[#E5CFAF]" />
+            <div className={`pt-2.5 border-t text-[10px] space-y-1 rounded-xl p-2.5 ${
+              standTheme === 'cream'
+                ? 'border-[#DFC9AA] text-[#3D524F] bg-[#EFE2CE]'
+                : 'border-[#1D4D47] text-[#C5D5D3] bg-[#133834]'
+            }`}>
+              <div className={`flex items-center justify-center gap-1.5 font-bold ${
+                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
+              }`}>
+                <Wifi className={`w-3.5 h-3.5 ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
                 <span>Complimentary Guest Wi-Fi</span>
               </div>
-              <p className="font-mono text-[#FAF7F2]">
-                Network: <span className="text-white font-bold">{settings?.wifiSsid || 'Kabun_Guest_WiFi'}</span>
+              <p className="font-mono">
+                Network: <span className={`font-bold ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>{settings?.wifiSsid || 'Kabun_Guest_WiFi'}</span>
               </p>
-              <p className="font-mono text-[#FAF7F2]">
-                Password: <span className="text-[#E5CFAF] font-bold">{settings?.wifiPassword || 'craftedfromcoffee'}</span>
+              <p className="font-mono">
+                Password: <span className={`font-bold ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`}>{settings?.wifiPassword || 'craftedfromcoffee'}</span>
               </p>
             </div>
           </div>
@@ -345,8 +397,8 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
           <Button variant="secondary" onClick={handleDownload} leftIcon={<Download className="w-4 h-4" />}>
             Download High-Res PNG
           </Button>
-          <Button variant="yellow" onClick={handlePrint} leftIcon={<Printer className="w-4 h-4" />}>
-            Print Stand Card
+          <Button variant="yellow" onClick={handlePrint} leftIcon={<Printer className="w-4 h-4 text-[#0E2F2C]" />}>
+            Print {standTheme === 'cream' ? 'Cream' : 'Teal'} Stand Card
           </Button>
         </div>
       </div>

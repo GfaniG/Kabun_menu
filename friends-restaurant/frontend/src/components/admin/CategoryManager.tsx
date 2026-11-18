@@ -126,38 +126,38 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
   }).length;
 
   return (
-    <div className="bg-[#121212] border border-[#222222] rounded-2xl p-6 space-y-5 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+    <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-6 space-y-5 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#222222]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#1D4D47]">
         <div>
-          <h3 className="font-headline text-lg font-bold text-white flex items-center gap-2">
-            <Folder className="w-5 h-5 text-white" />
+          <h3 className="font-headline text-lg font-bold text-[#FAF7F2] flex items-center gap-2">
+            <Folder className="w-5 h-5 text-[#E5CFAF]" />
             <span>Menu Categories &amp; Main Departments</span>
           </h3>
-          <p className="font-body text-xs text-[#A1A1AA] mt-1">
+          <p className="font-body text-xs text-[#C5D5D3] mt-1">
             Organize main departments (COFFEE vs BAKERY) and their categories (Espresso, Cold Brew, Pour-Over, Pastries).
           </p>
         </div>
 
         <Button
-          variant="yellow"
+          variant="primary"
           size="sm"
           onClick={handleOpenAdd}
-          leftIcon={<Plus className="w-4 h-4 text-black font-extrabold" />}
+          leftIcon={<Plus className="w-4 h-4 text-[#0E2F2C] font-extrabold" />}
         >
           Add Category
         </Button>
       </div>
 
       {/* Main Section Filter Tabs */}
-      <div className="flex items-center gap-2 border-b border-[#1c1c1c] pb-3">
+      <div className="flex items-center gap-2 border-b border-[#1D4D47] pb-3">
         <button
           type="button"
           onClick={() => setFilterParent('ALL')}
           className={`px-3.5 py-1.5 rounded-xl text-xs font-headline font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             filterParent === 'ALL'
-              ? 'bg-white text-black'
-              : 'bg-[#181818] text-[#A1A1AA] hover:text-white border border-[#262626]'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_0_12px_rgba(229,207,175,0.4)]'
+              : 'bg-[#0B2523] text-[#C5D5D3] hover:text-white border border-[#1D4D47]'
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
@@ -170,7 +170,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
           className={`px-3.5 py-1.5 rounded-xl text-xs font-headline font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             filterParent === 'COFFEE'
               ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_0_12px_rgba(229,207,175,0.4)]'
-              : 'bg-[#181818] text-[#A1A1AA] hover:text-white border border-[#262626]'
+              : 'bg-[#0B2523] text-[#C5D5D3] hover:text-white border border-[#1D4D47]'
           }`}
         >
           <Coffee className="w-3.5 h-3.5" />
@@ -183,7 +183,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
           className={`px-3.5 py-1.5 rounded-xl text-xs font-headline font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer ${
             filterParent === 'BAKERY'
               ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_0_12px_rgba(229,207,175,0.4)]'
-              : 'bg-[#181818] text-[#A1A1AA] hover:text-white border border-[#262626]'
+              : 'bg-[#0B2523] text-[#C5D5D3] hover:text-white border border-[#1D4D47]'
           }`}
         >
           <Croissant className="w-3.5 h-3.5" />
@@ -192,7 +192,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
       </div>
 
       {/* Category List */}
-      <div className="divide-y divide-[#1c1c1c] border border-[#222222] rounded-2xl overflow-hidden bg-[#0a0a0a]">
+      <div className="divide-y divide-[#1D4D47] border border-[#1D4D47] rounded-2xl overflow-hidden bg-[#0B2523]">
         {filteredCategories.map((cat, index) => {
           const itemCount = cat.items ? cat.items.length : cat._count?.items ?? 0;
           const p = (cat.parentCategory || 'COFFEE').toUpperCase();
@@ -201,7 +201,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
           return (
             <div
               key={cat.id}
-              className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#141414] transition-colors"
+              className="p-4 sm:p-5 flex items-center justify-between gap-4 hover:bg-[#18423D] transition-colors"
             >
               <div className="flex items-center gap-4 min-w-0">
                 {/* Reorder Up/Down */}
@@ -210,7 +210,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                     type="button"
                     disabled={index === 0 || reorderMutation.isPending}
                     onClick={() => handleMove(index, 'up')}
-                    className="p-1.5 rounded-lg bg-[#181818] hover:bg-[#222222] text-[#A1A1AA] hover:text-white disabled:opacity-20 cursor-pointer transition-colors"
+                    className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#C5D5D3] hover:text-white border border-[#1D4D47] disabled:opacity-20 cursor-pointer transition-colors"
                     title="Move Section Up"
                   >
                     <ArrowUp className="w-3.5 h-3.5" />
@@ -219,7 +219,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                     type="button"
                     disabled={index === categories.length - 1 || reorderMutation.isPending}
                     onClick={() => handleMove(index, 'down')}
-                    className="p-1.5 rounded-lg bg-[#181818] hover:bg-[#222222] text-[#A1A1AA] hover:text-white disabled:opacity-20 cursor-pointer transition-colors"
+                    className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#C5D5D3] hover:text-white border border-[#1D4D47] disabled:opacity-20 cursor-pointer transition-colors"
                     title="Move Section Down"
                   >
                     <ArrowDown className="w-3.5 h-3.5" />
@@ -229,28 +229,24 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 {/* Name, Badge & Count */}
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2.5">
-                    <span className="font-headline text-base font-bold text-white tracking-wide truncate">
+                    <span className="font-headline text-base font-bold text-[#FAF7F2] tracking-wide truncate">
                       {cat.name}
                     </span>
 
                     {/* Main Parent Section Badge */}
                     <span
-                      className={`text-[10px] px-2 py-0.5 rounded-full font-headline font-bold uppercase tracking-wider border ${
-                        isBakery
-                          ? 'bg-[#E5CFAF]/10 text-[#E5CFAF] border-[#E5CFAF]/30'
-                          : 'bg-[#348B82]/10 text-[#348B82] border-[#348B82]/30'
-                      }`}
+                      className="text-[10px] px-2 py-0.5 rounded-full font-headline font-bold uppercase tracking-wider border bg-[#0E2F2C] text-[#E5CFAF] border-[#1D4D47]"
                     >
                       {isBakery ? '🥐 Bakery & Bites' : '☕ Coffee & Drinks'}
                     </span>
 
-                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-white/5 text-[#d4d4d8] border border-white/10 font-headline font-semibold">
+                    <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-[#133834] text-[#C5D5D3] border border-[#1D4D47] font-headline font-semibold">
                       {itemCount} {itemCount === 1 ? 'item' : 'items'}
                     </span>
                   </div>
 
                   {cat.description && (
-                    <p className="font-body text-xs text-[#A1A1AA] mt-1 line-clamp-1">
+                    <p className="font-body text-xs text-[#C5D5D3] mt-1 line-clamp-1">
                       {cat.description}
                     </p>
                   )}
@@ -262,7 +258,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 <button
                   type="button"
                   onClick={() => handleOpenEdit(cat)}
-                  className="p-2 rounded-xl bg-[#141414] hover:bg-[#222222] text-[#A1A1AA] hover:text-white border border-[#222222] hover:border-[#333333] transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-[#133834] hover:bg-[#18423D] text-[#C5D5D3] hover:text-white border border-[#1D4D47] hover:border-[#E5CFAF] transition-colors cursor-pointer"
                   title="Edit Category"
                 >
                   <Edit2 className="w-4 h-4" />
@@ -270,7 +266,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 <button
                   type="button"
                   onClick={() => setDeleteCandidate(cat)}
-                  className="p-2 rounded-xl bg-[#141414] hover:bg-red-950/40 text-[#71717A] hover:text-red-400 border border-[#222222] hover:border-red-900/50 transition-colors cursor-pointer"
+                  className="p-2 rounded-xl bg-red-950/20 hover:bg-red-950/40 text-red-400 border border-red-500/20 hover:border-red-500/40 transition-colors cursor-pointer"
                   title="Delete Category"
                 >
                   <Trash2 className="w-4 h-4" />
@@ -301,7 +297,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 className={`py-3 px-4 rounded-xl border font-headline text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   parentCategory === 'COFFEE'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.4)]'
-                    : 'bg-[#181818] text-[#A1A1AA] border-[#262626] hover:text-white'
+                    : 'bg-[#0B2523] text-[#C5D5D3] border-[#1D4D47] hover:text-white'
                 }`}
               >
                 <Coffee className="w-4 h-4" />
@@ -314,7 +310,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 className={`py-3 px-4 rounded-xl border font-headline text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   parentCategory === 'BAKERY'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.4)]'
-                    : 'bg-[#181818] text-[#A1A1AA] border-[#262626] hover:text-white'
+                    : 'bg-[#0B2523] text-[#C5D5D3] border-[#1D4D47] hover:text-white'
                 }`}
               >
                 <Croissant className="w-4 h-4" />
@@ -370,7 +366,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 className={`py-3 px-4 rounded-xl border font-headline text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   parentCategory === 'COFFEE'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.4)]'
-                    : 'bg-[#181818] text-[#A1A1AA] border-[#262626] hover:text-white'
+                    : 'bg-[#0B2523] text-[#C5D5D3] border-[#1D4D47] hover:text-white'
                 }`}
               >
                 <Coffee className="w-4 h-4" />
@@ -383,7 +379,7 @@ export const CategoryManager: React.FC<CategoryManagerProps> = ({ categories }) 
                 className={`py-3 px-4 rounded-xl border font-headline text-xs uppercase tracking-wider font-bold flex items-center justify-center gap-2 transition-all cursor-pointer ${
                   parentCategory === 'BAKERY'
                     ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.4)]'
-                    : 'bg-[#181818] text-[#A1A1AA] border-[#262626] hover:text-white'
+                    : 'bg-[#0B2523] text-[#C5D5D3] border-[#1D4D47] hover:text-white'
                 }`}
               >
                 <Croissant className="w-4 h-4" />

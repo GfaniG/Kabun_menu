@@ -40,8 +40,8 @@ export const AdminDashboard: React.FC = () => {
 
   if (isAuthLoading) {
     return (
-      <div className="min-h-screen bg-[#050505] flex items-center justify-center text-white">
-        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#FFBD18] animate-spin" />
+      <div className="min-h-screen bg-[#0E2F2C] flex items-center justify-center text-[#FAF7F2]">
+        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#E5CFAF] animate-spin" />
       </div>
     );
   }
@@ -194,7 +194,7 @@ export const AdminDashboard: React.FC = () => {
             onClick={() => setActiveTab('analytics')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
               activeTab === 'analytics'
-                ? 'border-[#348B82] text-[#348B82] bg-white/5 font-extrabold'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
                 : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
             }`}
           >

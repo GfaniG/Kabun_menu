@@ -54,23 +54,23 @@ export const SiteSettingsCMS: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="py-20 text-center text-[#A1A1AA]">
-        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#FFBD18] animate-spin mx-auto mb-2" />
+      <div className="py-20 text-center text-[#C5D5D3]">
+        <div className="w-8 h-8 rounded-full border-2 border-white/20 border-t-[#E5CFAF] animate-spin mx-auto mb-2" />
         <p className="font-headline text-xs uppercase tracking-wider">Loading Site Settings...</p>
       </div>
     );
   }
 
   return (
-    <div className="bg-[#121212] border border-[#222222] rounded-2xl p-4 sm:p-6 sm:p-8 space-y-6 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+    <div className="bg-[#133834] border border-[#1D4D47] rounded-2xl p-4 sm:p-6 sm:p-8 space-y-6 shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
       {/* CMS Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#222222]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-[#1D4D47]">
         <div>
           <h3 className="font-headline text-lg sm:text-xl font-bold text-white flex items-center gap-2">
-            <Sparkles className="w-5 h-5 text-[#FFBD18]" />
+            <Sparkles className="w-5 h-5 text-[#E5CFAF]" />
             <span>Customer Menu CMS &amp; Live Customization</span>
           </h3>
-          <p className="font-body text-xs text-[#A1A1AA] mt-1">
+          <p className="font-body text-xs text-[#C5D5D3] mt-1">
             Edit all texts, hero titles, Wi-Fi passwords, brand colors, fonts, and topics live on the customer page.
           </p>
         </div>
@@ -80,7 +80,7 @@ export const SiteSettingsCMS: React.FC = () => {
             variant="secondary"
             size="sm"
             onClick={() => setIsResetConfirmOpen(true)}
-            leftIcon={<RotateCcw className="w-3.5 h-3.5 text-[#A1A1AA]" />}
+            leftIcon={<RotateCcw className="w-3.5 h-3.5 text-[#C5D5D3]" />}
             disabled={resetMutation.isPending}
             className="flex-1 sm:flex-none justify-center"
           >
@@ -92,7 +92,7 @@ export const SiteSettingsCMS: React.FC = () => {
             size="sm"
             onClick={handleSave}
             isLoading={updateMutation.isPending}
-            leftIcon={saveSuccess ? <Check className="w-4 h-4 text-black" /> : <Save className="w-4 h-4 text-black font-bold" />}
+            leftIcon={saveSuccess ? <Check className="w-4 h-4 text-[#0E2F2C]" /> : <Save className="w-4 h-4 text-[#0E2F2C] font-bold" />}
             className="flex-1 sm:flex-none justify-center font-extrabold"
           >
             {saveSuccess ? 'Saved Live!' : 'Save Live Changes'}
@@ -101,14 +101,14 @@ export const SiteSettingsCMS: React.FC = () => {
       </div>
 
       {/* Settings Navigation Tabs */}
-      <div className="flex overflow-x-auto gap-2 border-b border-[#222222] pb-1 no-scrollbar">
+      <div className="flex overflow-x-auto gap-2 border-b border-[#1D4D47] pb-1 no-scrollbar">
         <button
           type="button"
           onClick={() => setActiveTab('branding')}
           className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 ${
             activeTab === 'branding'
-              ? 'bg-white text-black font-extrabold'
-              : 'text-[#A1A1AA] hover:text-white hover:bg-white/5'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
           }`}
         >
           Hero &amp; Headlines
@@ -119,8 +119,8 @@ export const SiteSettingsCMS: React.FC = () => {
           onClick={() => setActiveTab('wifi')}
           className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 flex items-center gap-1.5 ${
             activeTab === 'wifi'
-              ? 'bg-white text-black font-extrabold'
-              : 'text-[#A1A1AA] hover:text-white hover:bg-white/5'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
           }`}
         >
           <Wifi className="w-3.5 h-3.5" />
@@ -132,8 +132,8 @@ export const SiteSettingsCMS: React.FC = () => {
           onClick={() => setActiveTab('story')}
           className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 ${
             activeTab === 'story'
-              ? 'bg-white text-black font-extrabold'
-              : 'text-[#A1A1AA] hover:text-white hover:bg-white/5'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
           }`}
         >
           Story &amp; Quotes
@@ -144,8 +144,8 @@ export const SiteSettingsCMS: React.FC = () => {
           onClick={() => setActiveTab('contact')}
           className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 ${
             activeTab === 'contact'
-              ? 'bg-white text-black font-extrabold'
-              : 'text-[#A1A1AA] hover:text-white hover:bg-white/5'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
           }`}
         >
           Contact, Hours &amp; Social
@@ -156,8 +156,8 @@ export const SiteSettingsCMS: React.FC = () => {
           onClick={() => setActiveTab('appearance')}
           className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 flex items-center gap-1.5 ${
             activeTab === 'appearance'
-              ? 'bg-white text-black font-extrabold'
-              : 'text-[#A1A1AA] hover:text-white hover:bg-white/5'
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
           }`}
         >
           <Palette className="w-3.5 h-3.5" />
@@ -226,7 +226,7 @@ export const SiteSettingsCMS: React.FC = () => {
         {/* Tab 2: Wi-Fi Settings */}
         {activeTab === 'wifi' && (
           <div className="space-y-4 animate-in fade-in max-w-xl">
-            <p className="text-xs text-[#A1A1AA]">
+            <p className="text-xs text-[#C5D5D3]">
               Customers can tap &quot;Guest Wi-Fi&quot; in the navigation header or scan table cards to view and copy this password.
             </p>
 
@@ -235,7 +235,7 @@ export const SiteSettingsCMS: React.FC = () => {
               value={formData.wifiSsid || ''}
               onChange={(e) => handleChange('wifiSsid', e.target.value)}
               placeholder="Kabun_Guest_WiFi"
-              leftIcon={<Wifi className="w-4 h-4 text-[#71717A]" />}
+              leftIcon={<Wifi className="w-4 h-4 text-[#A0B8B5]" />}
             />
 
             <Input
@@ -278,7 +278,7 @@ export const SiteSettingsCMS: React.FC = () => {
                 value={formData.manifestoQuote || ''}
                 onChange={(e) => handleChange('manifestoQuote', e.target.value)}
                 placeholder="Every great conversation begins with an exceptional roast."
-                leftIcon={<MessageSquareQuote className="w-4 h-4 text-[#71717A]" />}
+                leftIcon={<MessageSquareQuote className="w-4 h-4 text-[#A0B8B5]" />}
               />
               <Input
                 label="Quote Attribution / Author"
@@ -314,7 +314,7 @@ export const SiteSettingsCMS: React.FC = () => {
                 value={formData.addressLine1 || ''}
                 onChange={(e) => handleChange('addressLine1', e.target.value)}
                 placeholder="Mekelle, Tigray, Ethiopia"
-                leftIcon={<MapPin className="w-4 h-4 text-[#71717A]" />}
+                leftIcon={<MapPin className="w-4 h-4 text-[#A0B8B5]" />}
               />
               <Input
                 label="Address Line 2 / Landmark"
@@ -330,21 +330,21 @@ export const SiteSettingsCMS: React.FC = () => {
                 value={formData.openingHours || ''}
                 onChange={(e) => handleChange('openingHours', e.target.value)}
                 placeholder="7:00 AM – 10:30 PM"
-                leftIcon={<Clock className="w-4 h-4 text-[#71717A]" />}
+                leftIcon={<Clock className="w-4 h-4 text-[#A0B8B5]" />}
               />
               <Input
                 label="Primary Phone Number"
                 value={formData.phone1 || ''}
                 onChange={(e) => handleChange('phone1', e.target.value)}
                 placeholder="0914000000"
-                leftIcon={<Phone className="w-4 h-4 text-[#71717A]" />}
+                leftIcon={<Phone className="w-4 h-4 text-[#A0B8B5]" />}
               />
               <Input
                 label="Secondary Phone Number"
                 value={formData.phone2 || ''}
                 onChange={(e) => handleChange('phone2', e.target.value)}
                 placeholder="0920000000"
-                leftIcon={<Phone className="w-4 h-4 text-[#71717A]" />}
+                leftIcon={<Phone className="w-4 h-4 text-[#A0B8B5]" />}
               />
             </div>
 
@@ -353,13 +353,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Instagram Handle"
                 value={formData.instagramHandle || ''}
                 onChange={(e) => handleChange('instagramHandle', e.target.value)}
-                placeholder="@MEREBA_FRIENDS_GARDEN"
+                placeholder="@KABUN_COFFEE"
               />
               <Input
                 label="Instagram Profile Link"
                 value={formData.instagramUrl || ''}
                 onChange={(e) => handleChange('instagramUrl', e.target.value)}
-                placeholder="https://www.instagram.com/mereba_friends_garden/"
+                placeholder="https://www.instagram.com/kabun_coffee/"
               />
             </div>
 
@@ -368,13 +368,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="TikTok Handle"
                 value={formData.tiktokHandle || ''}
                 onChange={(e) => handleChange('tiktokHandle', e.target.value)}
-                placeholder="@FRIENDS_GARDEN"
+                placeholder="@KABUN_COFFEE"
               />
               <Input
                 label="TikTok Profile Link"
                 value={formData.tiktokUrl || ''}
                 onChange={(e) => handleChange('tiktokUrl', e.target.value)}
-                placeholder="https://www.tiktok.com/@friends_garden"
+                placeholder="https://www.tiktok.com/@kabun_coffee"
               />
             </div>
 
@@ -383,13 +383,13 @@ export const SiteSettingsCMS: React.FC = () => {
                 label="Facebook Title"
                 value={formData.facebookHandle || ''}
                 onChange={(e) => handleChange('facebookHandle', e.target.value)}
-                placeholder="FB: FRIENDS GARDEN - መረባ ፍሬንድስ"
+                placeholder="FB: KABUN COFFEE + ROASTERY - ካቡን"
               />
               <Input
                 label="Facebook Page Link"
                 value={formData.facebookUrl || ''}
                 onChange={(e) => handleChange('facebookUrl', e.target.value)}
-                placeholder="https://www.facebook.com/..."
+                placeholder="https://www.facebook.com/kabuncoffee"
               />
             </div>
           </div>
@@ -399,13 +399,13 @@ export const SiteSettingsCMS: React.FC = () => {
         {activeTab === 'appearance' && (
           <div className="space-y-6 animate-in fade-in">
             {/* Default QR Scanner Theme */}
-            <div className="bg-[#0a0a0a] border border-[#222222] p-5 rounded-xl space-y-3">
+            <div className="bg-[#0B2523] border border-[#1D4D47] p-5 rounded-xl space-y-3">
               <div>
                 <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white flex items-center gap-2">
                   <Sparkles className="w-4 h-4 text-[#E5CFAF]" />
                   <span>Default Ambiance for First-Time QR Scanners</span>
                 </label>
-                <p className="text-[11px] text-[#A1A1AA] mt-0.5">
+                <p className="text-[11px] text-[#C5D5D3] mt-0.5">
                   Choose which visual theme loads by default when guests scan your table QR tents. Guests can toggle anytime.
                 </p>
               </div>
@@ -418,7 +418,7 @@ export const SiteSettingsCMS: React.FC = () => {
                   className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
                     (formData.defaultTheme || 'dark') === 'dark'
                       ? 'bg-[#0E2F2C] border-[#E5CFAF] shadow-[0_0_15px_rgba(229,207,175,0.25)]'
-                      : 'bg-[#121212] border-[#222222] hover:border-[#333333]'
+                      : 'bg-[#133834] border-[#1D4D47] hover:border-[#2A655E]'
                   }`}
                 >
                   <div className="w-8 h-8 rounded-lg bg-[#081E1C] border border-[#1D4D47] flex items-center justify-center shrink-0 text-[#E5CFAF] text-sm">
@@ -441,7 +441,7 @@ export const SiteSettingsCMS: React.FC = () => {
                   className={`p-4 rounded-xl border text-left transition-all flex items-start gap-3 cursor-pointer ${
                     formData.defaultTheme === 'cream'
                       ? 'bg-[#F5EBDD] border-[#0E2F2C] text-[#0E2F2C] shadow-[0_0_15px_rgba(14,47,44,0.2)]'
-                      : 'bg-[#121212] border-[#222222] hover:border-[#333333]'
+                      : 'bg-[#133834] border-[#1D4D47] hover:border-[#2A655E]'
                   }`}
                 >
                   <div className="w-8 h-8 rounded-lg bg-[#EADAC3] border border-[#DFC9AA] flex items-center justify-center shrink-0 text-[#0E2F2C] text-sm">
@@ -451,7 +451,7 @@ export const SiteSettingsCMS: React.FC = () => {
                     <p className={`font-headline text-xs font-bold uppercase tracking-wider ${formData.defaultTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>
                       Roastery Cream (Warm Light)
                     </p>
-                    <p className={`text-[11px] mt-0.5 leading-relaxed ${formData.defaultTheme === 'cream' ? 'text-[#3D524F]' : 'text-[#A1A1AA]'}`}>
+                    <p className={`text-[11px] mt-0.5 leading-relaxed ${formData.defaultTheme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'}`}>
                       Warm Roasted Oat parchment background with deep forest teal typography and crisp ivory cards. Perfect for sunlit morning café dining.
                     </p>
                   </div>
@@ -461,7 +461,7 @@ export const SiteSettingsCMS: React.FC = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {/* Accent Color */}
-              <div className="bg-[#0a0a0a] border border-[#222222] p-4 rounded-xl space-y-2">
+              <div className="bg-[#0B2523] border border-[#1D4D47] p-4 rounded-xl space-y-2">
                 <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white">
                   Accent Color
                 </label>
@@ -476,16 +476,16 @@ export const SiteSettingsCMS: React.FC = () => {
                     type="text"
                     value={formData.accentColor || '#E5CFAF'}
                     onChange={(e) => handleChange('accentColor', e.target.value)}
-                    className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
+                    className="bg-[#081E1C] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#1D4D47] flex-1"
                   />
                 </div>
-                <p className="text-[10px] text-[#A1A1AA]">
+                <p className="text-[10px] text-[#C5D5D3]">
                   Warm Roasted Oat / Parchment Cream accent (#E5CFAF).
                 </p>
               </div>
 
               {/* Background Color */}
-              <div className="bg-[#0a0a0a] border border-[#222222] p-4 rounded-xl space-y-2">
+              <div className="bg-[#0B2523] border border-[#1D4D47] p-4 rounded-xl space-y-2">
                 <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white">
                   Page Background
                 </label>
@@ -500,16 +500,16 @@ export const SiteSettingsCMS: React.FC = () => {
                     type="text"
                     value={formData.backgroundColor || '#0E2F2C'}
                     onChange={(e) => handleChange('backgroundColor', e.target.value)}
-                    className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
+                    className="bg-[#081E1C] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#1D4D47] flex-1"
                   />
                 </div>
-                <p className="text-[10px] text-[#A1A1AA]">
+                <p className="text-[10px] text-[#C5D5D3]">
                   Deep Roastery Forest Teal canvas background (#0E2F2C).
                 </p>
               </div>
 
               {/* Card Color */}
-              <div className="bg-[#0a0a0a] border border-[#222222] p-4 rounded-xl space-y-2">
+              <div className="bg-[#0B2523] border border-[#1D4D47] p-4 rounded-xl space-y-2">
                 <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white">
                   Menu Card Surface
                 </label>
@@ -524,19 +524,19 @@ export const SiteSettingsCMS: React.FC = () => {
                     type="text"
                     value={formData.cardColor || '#143834'}
                     onChange={(e) => handleChange('cardColor', e.target.value)}
-                    className="bg-[#121212] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#222222] flex-1"
+                    className="bg-[#081E1C] text-white text-xs font-mono px-3 py-2 rounded-lg border border-[#1D4D47] flex-1"
                   />
                 </div>
-                <p className="text-[10px] text-[#A1A1AA]">
+                <p className="text-[10px] text-[#C5D5D3]">
                   Surface tint for coffee and bakery cards (#143834).
                 </p>
               </div>
             </div>
 
             {/* Typography Selection */}
-            <div className="bg-[#0a0a0a] border border-[#222222] p-5 rounded-xl space-y-3">
+            <div className="bg-[#0B2523] border border-[#1D4D47] p-5 rounded-xl space-y-3">
               <label className="block text-xs font-headline uppercase tracking-wider font-bold text-white flex items-center gap-2">
-                <Type className="w-4 h-4 text-white" />
+                <Type className="w-4 h-4 text-[#E5CFAF]" />
                 <span>Primary Headline Font Family</span>
               </label>
 
@@ -550,10 +550,10 @@ export const SiteSettingsCMS: React.FC = () => {
                     key={f.name}
                     type="button"
                     onClick={() => handleChange('fontFamily', f.name)}
-                    className={`p-3.5 rounded-xl text-left border transition-all ${
+                    className={`p-3.5 rounded-xl text-left border transition-all cursor-pointer ${
                       formData.fontFamily === f.name
-                        ? 'bg-white text-black font-extrabold border-white'
-                        : 'bg-[#121212] text-[#A1A1AA] hover:text-white border-[#222222]'
+                        ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold border-[#E5CFAF] shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
+                        : 'bg-[#133834] text-[#C5D5D3] hover:text-white border-[#1D4D47]'
                     }`}
                   >
                     <p className="text-sm font-bold">{f.name}</p>
@@ -566,8 +566,8 @@ export const SiteSettingsCMS: React.FC = () => {
         )}
 
         {/* Bottom Save Bar */}
-        <div className="flex items-center justify-between pt-4 border-t border-[#222222]">
-          <p className="text-xs text-[#A1A1AA]">
+        <div className="flex items-center justify-between pt-4 border-t border-[#1D4D47]">
+          <p className="text-xs text-[#C5D5D3]">
             Changes apply instantly to the digital customer menu.
           </p>
 
@@ -576,7 +576,7 @@ export const SiteSettingsCMS: React.FC = () => {
             type="submit"
             size="md"
             isLoading={updateMutation.isPending}
-            leftIcon={saveSuccess ? <Check className="w-4 h-4 text-black" /> : <Save className="w-4 h-4 text-black font-bold" />}
+            leftIcon={saveSuccess ? <Check className="w-4 h-4 text-[#0E2F2C]" /> : <Save className="w-4 h-4 text-[#0E2F2C] font-bold" />}
           >
             {saveSuccess ? 'Saved Live!' : 'Save Live Changes'}
           </Button>
@@ -591,7 +591,7 @@ export const SiteSettingsCMS: React.FC = () => {
         subtitle="This will reset all custom texts, topics, colors, and Wi-Fi credentials back to Kabun Coffee defaults"
       >
         <div className="space-y-4">
-          <p className="text-sm text-[#A1A1AA]">
+          <p className="text-sm text-[#C5D5D3]">
             Are you sure you want to revert all site customizations back to Kabun Coffee + Roastery defaults? Menu items and sections will be preserved.
           </p>
 
@@ -603,7 +603,7 @@ export const SiteSettingsCMS: React.FC = () => {
               variant="yellow"
               onClick={handleReset}
               isLoading={resetMutation.isPending}
-              leftIcon={<RotateCcw className="w-4 h-4 text-black" />}
+              leftIcon={<RotateCcw className="w-4 h-4 text-[#0E2F2C]" />}
             >
               Restore to Default
             </Button>

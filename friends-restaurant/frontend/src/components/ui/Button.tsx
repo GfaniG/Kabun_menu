@@ -31,23 +31,23 @@ export const Button: React.FC<ButtonProps> = ({
 
   const variantClasses = {
     primary:
-      'bg-[#FFBD18] text-black font-extrabold hover:brightness-110 shadow-[0_0_15px_rgba(255,189,24,0.3)]',
+      'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold hover:brightness-105 shadow-[0_4px_16px_rgba(229,207,175,0.35)] rounded-xl',
     yellow:
-      'bg-[#FFBD18] text-black font-extrabold hover:brightness-110 shadow-[0_0_15px_rgba(255,189,24,0.3)]',
+      'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold hover:brightness-105 shadow-[0_4px_16px_rgba(229,207,175,0.35)] rounded-xl',
     accent:
-      'bg-[#121212] text-white border border-[#222222] hover:border-[#333333] hover:bg-[#181818]',
+      'bg-[#0B2523] text-[#FAF7F2] border border-[#1D4D47] hover:border-[#E5CFAF] rounded-xl',
     secondary:
-      'bg-[#181818] text-white hover:bg-[#202020] border border-[#222222]',
+      'bg-[#133834] text-[#FAF7F2] hover:bg-[#18423D] border border-[#1D4D47] hover:border-[#E5CFAF]/40 rounded-xl',
     outline:
-      'bg-transparent hover:bg-white/5 text-white border border-[#222222] hover:border-[#333333]',
+      'bg-transparent hover:bg-[#133834] text-[#FAF7F2] border border-[#1D4D47] hover:border-[#E5CFAF] rounded-xl',
     danger:
-      'bg-[#181818] hover:bg-[#222222] text-[#FFA4AB] border border-[#2c2c2c]',
+      'bg-[#133834] hover:bg-red-950/40 text-red-300 border border-red-900/40 rounded-xl',
     red:
-      'bg-[#F32636] text-white hover:brightness-110 font-bold',
+      'bg-red-600 text-white hover:brightness-110 font-bold rounded-xl',
     blue:
-      'bg-[#16B9E8] text-black hover:brightness-110 font-bold',
+      'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 font-bold rounded-xl',
     ghost:
-      'bg-transparent hover:bg-white/5 text-[#A1A1AA] hover:text-white',
+      'bg-transparent hover:bg-white/5 text-[#C5D5D3] hover:text-[#FAF7F2] rounded-xl',
   };
 
   return (

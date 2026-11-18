@@ -15,32 +15,32 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block font-headline text-[11px] uppercase tracking-wider font-bold text-white">
+          <label htmlFor={inputId} className="block font-headline text-[11px] uppercase tracking-wider font-bold text-[#FAF7F2]">
             {label}
           </label>
         )}
         <div className="relative flex items-center">
           {leftIcon && (
-            <div className="absolute left-3.5 flex items-center pointer-events-none text-[#71717A]">
+            <div className="absolute left-3.5 flex items-center pointer-events-none text-[#C5D5D3]">
               {leftIcon}
             </div>
           )}
           <input
             ref={ref}
             id={inputId}
-            className={`w-full bg-[#121212] text-white placeholder:text-[#71717A] text-sm rounded-xl border border-[#222222] px-3.5 py-2.5 transition-all duration-200 focus:outline-none focus:border-[#FFBD18] disabled:opacity-50 disabled:cursor-not-allowed ${
+            className={`w-full bg-[#0B2523] text-[#FAF7F2] placeholder:text-[#C5D5D3]/50 text-sm rounded-xl border border-[#1D4D47] px-3.5 py-2.5 transition-all duration-200 focus:outline-none focus:border-[#E5CFAF] disabled:opacity-50 disabled:cursor-not-allowed ${
               leftIcon ? 'pl-10' : ''
-            } ${rightIcon ? 'pr-10' : ''} ${error ? 'border-[#F32636] focus:border-[#F32636]' : ''} ${className}`}
+            } ${rightIcon ? 'pr-10' : ''} ${error ? 'border-red-500/50 focus:border-red-400' : ''} ${className}`}
             {...props}
           />
           {rightIcon && (
-            <div className="absolute right-3.5 flex items-center pointer-events-none text-[#71717A]">
+            <div className="absolute right-3.5 flex items-center pointer-events-none text-[#C5D5D3]">
               {rightIcon}
             </div>
           )}
         </div>
-        {error && <p className="text-xs text-[#FFA4AB] font-medium">{error}</p>}
-        {!error && helperText && <p className="text-xs text-[#A1A1AA]">{helperText}</p>}
+        {error && <p className="text-xs text-red-300 font-medium">{error}</p>}
+        {!error && helperText && <p className="text-xs text-[#C5D5D3]">{helperText}</p>}
       </div>
     );
   }
@@ -61,21 +61,21 @@ export const TextArea = React.forwardRef<HTMLTextAreaElement, TextAreaProps>(
     return (
       <div className="w-full space-y-1.5">
         {label && (
-          <label htmlFor={inputId} className="block font-headline text-[11px] uppercase tracking-wider font-bold text-white">
+          <label htmlFor={inputId} className="block font-headline text-[11px] uppercase tracking-wider font-bold text-[#FAF7F2]">
             {label}
           </label>
         )}
         <textarea
           ref={ref}
           id={inputId}
-          className={`w-full bg-[#121212] text-white placeholder:text-[#71717A] text-sm rounded-xl border border-[#222222] px-3.5 py-2.5 transition-all duration-200 focus:outline-none focus:border-[#FFBD18] disabled:opacity-50 disabled:cursor-not-allowed ${
-            error ? 'border-[#F32636] focus:border-[#F32636]' : ''
+          className={`w-full bg-[#0B2523] text-[#FAF7F2] placeholder:text-[#C5D5D3]/50 text-sm rounded-xl border border-[#1D4D47] px-3.5 py-2.5 transition-all duration-200 focus:outline-none focus:border-[#E5CFAF] disabled:opacity-50 disabled:cursor-not-allowed ${
+            error ? 'border-red-500/50 focus:border-red-400' : ''
           } ${className}`}
           rows={3}
           {...props}
         />
-        {error && <p className="text-xs text-[#FFA4AB] font-medium">{error}</p>}
-        {!error && helperText && <p className="text-xs text-[#A1A1AA]">{helperText}</p>}
+        {error && <p className="text-xs text-red-300 font-medium">{error}</p>}
+        {!error && helperText && <p className="text-xs text-[#C5D5D3]">{helperText}</p>}
       </div>
     );
   }
