@@ -19,6 +19,6 @@ jobs:
 
       - name: Build and Package Docker Image
         run: |
-          docker build -t friends-menu-app:${{ github.sha }} -f friends-restaurant/Dockerfile friends-restaurant
+          docker build -t kabun-menu-app:${{ github.sha }} -f Dockerfile .
           echo "Docker image built successfully!"
 

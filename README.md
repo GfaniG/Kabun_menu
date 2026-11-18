@@ -15,10 +15,7 @@ This suite replaces traditional physical paper menus with an interactive, instan
 - **Two-Tier Craft Hierarchy**:
   - **☕ COFFEE & BEVERAGES (ቡንን መስተታትን / ቡና እና መጠጦች)**: Espresso & Hot Classics, Roastery Pour-Over (V60, Chemex, Jebena Buna), Signature Cold Brews, Iced Spanish Lattes, Frappes & Shakes, Artisanal Teas & Fresh Juices.
   - **🥐 BAKERY, PASTRIES & BITES (መቁርስን ፓስትሪን / ቁርስ እና ፔስትሪ)**: Fresh Viennoiserie (Butter Croissant, Pain au Chocolat), Artisan Cakes (Tiramisu, Cheesecake), and Light Savory Breakfast Bites (Avocado Toast, Paninis).
-- **3-Language Instant Switcher**: Full trilingual support switchable with 1 tap:
-  - **English (`EN`)**
-  - **ትግርኛ / Tigrinya (`ትግ`)**
-  - **አማርኛ / Amharic (`አማ`)**
+- **Seamless Dual-Ambiance Switcher**: Instant 1-tap contrast toggle between **Midnight Roastery** (Deep Roastery Forest Teal) and **Roastery Cream** (Warm Roasted Oat parchment with inverted logo).
 - **Single Master QR Code**: No confusing per-table QR printing or fragile hardware dependencies. One master QR code prints on acrylic table tents, counter displays, and roastery tables.
 - **Zero Waiter Tablet Burden**: Waiters and baristas do not need expensive dedicated tablets; customers browse effortlessly on their own smartphones, allowing staff to provide warm, artisanal hospitality.
 - **Complimentary Guest Wi-Fi**: 1-tap SSID and password copy (`Kabun_Guest_WiFi`) with live credentials pulled directly from the manager dashboard.

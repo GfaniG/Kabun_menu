@@ -1,0 +1,123 @@
+import Fastify from 'fastify';
+import cors from '@fastify/cors';
+import jwt from '@fastify/jwt';
+import multipart from '@fastify/multipart';
+import fastifyStatic from '@fastify/static';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
+import { env } from './config/env.js';
+import { ensureDatabaseReady } from './config/autoInit.js';
+import { authRoutes } from './routes/auth.routes.js';
+import { menuRoutes } from './routes/menu.routes.js';
+import { settingsRoutes } from './routes/settings.routes.js';
+import { analyticsRoutes } from './routes/analytics.routes.js';
+import { syncRoutes } from './routes/sync.routes.js';
+
+const app = Fastify({
+  logger: {
+    level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  },
+});
+
+async function main() {
+  // Ensure uploads directory exists
+  const uploadsPath = path.resolve(process.cwd(), env.UPLOAD_DIR);
+  if (!fs.existsSync(uploadsPath)) {
+    fs.mkdirSync(uploadsPath, { recursive: true });
+  }
+
+  // Register plugins
+  await app.register(cors, {
+    origin: true,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  });
+
+  await app.register(jwt, {
+    secret: env.JWT_SECRET,
+  });
+
+  await app.register(multipart, {
+    limits: {
+      fileSize: 10 * 1024 * 1024, // 10MB
+    },
+  });
+
+  await app.register(fastifyStatic, {
+    root: uploadsPath,
+    prefix: '/uploads/',
+  });
+
+  // Healthcheck
+  app.get('/api/health', async () => {
+    return {
+      status: 'ok',
+      restaurant: 'Kabun Coffee + Roastery (ካቡን)',
+      tagline: 'Crafted from coffee.',
+      timestamp: new Date().toISOString(),
+    };
+  });
+
+  // Register Routes
+  await app.register(authRoutes, { prefix: '/api/auth' });
+  await app.register(menuRoutes, { prefix: '/api' });
+  await app.register(settingsRoutes, { prefix: '/api' });
+  await app.register(analyticsRoutes, { prefix: '/api/analytics' });
+  await app.register(syncRoutes, { prefix: '/api' });
+
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
+  // Serve production frontend single-page application if built
+  const possiblePaths = [
+    process.env.FRONTEND_DIST,
+    path.resolve(__dirname, '../../frontend/dist'),
+    path.resolve(process.cwd(), '../frontend/dist'),
+    path.resolve(process.cwd(), 'kabun/frontend/dist'),
+    path.resolve(process.cwd(), './frontend-dist'),
+    path.resolve(process.cwd(), './public'),
+  ].filter(Boolean) as string[];
+
+  const frontendDistPath = possiblePaths.find((p) => fs.existsSync(p));
+
+  if (frontendDistPath) {
+    await app.register(fastifyStatic, {
+      root: frontendDistPath,
+      prefix: '/',
+      decorateReply: false,
+    });
+
+    app.setNotFoundHandler((req, reply) => {
+      if (req.raw.url && req.raw.url.startsWith('/api')) {
+        return reply.status(404).send({ error: 'API endpoint not found' });
+      }
+      return reply.sendFile('index.html', frontendDistPath);
+    });
+    console.log(`🌐 Serving production frontend UI from ${frontendDistPath}`);
+  }
+
+  // Listen immediately to pass Render port scan detection in <1s
+  const port = parseInt(process.env.PORT || String(env.PORT || 5000), 10);
+  const host = '0.0.0.0';
+
+  try {
+    await app.listen({ port, host });
+    console.log(`☕ KABUN COFFEE + ROASTERY Server running at http://${host}:${port}`);
+    console.log(`📋 API Health: http://${host}:${port}/api/health`);
+    console.log(`🍽️ Menu API: http://${host}:${port}/api/menu`);
+
+    // Initialize & seed PostgreSQL database in the background without blocking port scan
+    ensureDatabaseReady().catch((err) => {
+      console.warn('⚠️ Automated database setup warning:', err);
+    });
+  } catch (err) {
+    app.log.error(err);
+    process.exit(1);
+  }
+}
+
+main();
+
+export default app;
+

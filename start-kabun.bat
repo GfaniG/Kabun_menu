@@ -30,7 +30,7 @@ echo Keep this window open during roastery operating hours.
 echo ========================================================
 echo.
 
-cd /d "%~dp0friends-restaurant\backend"
+cd /d "%~dp0kabun\backend"
 start "" http://localhost:5000
 
 node dist/app.js

@@ -9,10 +9,10 @@
 FROM node:20-alpine AS frontend-builder
 WORKDIR /app/frontend
 
-COPY friends-restaurant/frontend/package*.json ./
+COPY kabun/frontend/package*.json ./
 RUN npm ci
 
-COPY friends-restaurant/frontend/ ./
+COPY kabun/frontend/ ./
 RUN npm run build
 
 # --------------------------------------------------------
@@ -23,12 +23,12 @@ WORKDIR /app/backend
 
 RUN apk add --no-cache openssl libc6-compat
 
-COPY friends-restaurant/backend/package*.json ./
-COPY friends-restaurant/backend/prisma ./prisma/
+COPY kabun/backend/package*.json ./
+COPY kabun/backend/prisma ./prisma/
 RUN npm ci
 RUN npx prisma generate
 
-COPY friends-restaurant/backend/ ./
+COPY kabun/backend/ ./
 RUN npm run build
 
 # --------------------------------------------------------
