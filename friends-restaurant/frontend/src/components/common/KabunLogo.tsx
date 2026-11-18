@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTheme } from '../../context/ThemeContext';
 
 export interface KabunLogoProps {
   /**
@@ -20,14 +21,15 @@ export const KabunLogo: React.FC<KabunLogoProps> = ({
   alt = "Kabun Coffee + Roastery (ካቡን)",
   lightMode = false,
 }) => {
-  const emblemSrc = lightMode
-    ? '/assets/kabun/kabun-emblem-light.png'
-    : '/assets/kabun/kabun-emblem-dark.png';
+  const { theme } = useTheme();
+  const isCream = lightMode || theme === 'cream';
+
+  const emblemSrc = '/assets/kabun/kabun-emblem-dark.png';
 
   if (variant === 'emblem') {
     return (
       <div className={`relative inline-flex items-center justify-center select-none ${className}`}>
-        {glow && (
+        {glow && !isCream && (
           <div
             className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,207,175,0.25)_0%,transparent_70%)] blur-xl pointer-events-none scale-125"
             aria-hidden="true"
@@ -78,7 +80,7 @@ export const KabunLogo: React.FC<KabunLogoProps> = ({
   // 'full' variant
   return (
     <div className={`relative inline-flex flex-col items-center justify-center select-none text-center ${className}`}>
-      {glow && (
+      {glow && !isCream && (
         <div
           className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(229,207,175,0.22)_0%,rgba(14,47,44,0.4)_50%,transparent_75%)] blur-2xl pointer-events-none scale-150"
           aria-hidden="true"
@@ -90,23 +92,45 @@ export const KabunLogo: React.FC<KabunLogoProps> = ({
         <img
           src={emblemSrc}
           alt={alt}
-          className="w-full h-full object-contain rounded-full drop-shadow-[0_12px_32px_rgba(0,0,0,0.85)] drop-shadow-[0_0_20px_rgba(229,207,175,0.3)] transition-transform duration-300 hover:scale-105"
+          className={`w-full h-full object-contain rounded-full transition-transform duration-300 hover:scale-105 ${
+            isCream
+              ? 'drop-shadow-[0_8px_20px_rgba(14,47,44,0.2)]'
+              : 'drop-shadow-[0_12px_32px_rgba(0,0,0,0.85)] drop-shadow-[0_0_20px_rgba(229,207,175,0.3)]'
+          }`}
           loading="eager"
         />
       </div>
 
-      {/* Ge'ez Script */}
-      <h2 className="relative z-10 font-headline font-black text-3xl sm:text-4xl text-[#FAF7F2] tracking-wider leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+      {/* Ge'ez Script: ካቡን */}
+      <h2
+        className={`relative z-10 font-headline font-black text-3xl sm:text-4xl tracking-wider leading-none transition-colors duration-200 ${
+          isCream
+            ? 'text-[#0E2F2C]'
+            : 'text-[#FAF7F2] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]'
+        }`}
+      >
         ካቡን
       </h2>
 
-      {/* English Title */}
-      <div className="relative z-10 font-headline font-extrabold text-sm sm:text-base text-[#E5CFAF] tracking-[0.3em] uppercase mt-1 leading-none">
+      {/* English Title: COFFEE + ROASTERY -> Green Teal in Cream mode */}
+      <div
+        className={`relative z-10 font-headline font-extrabold text-sm sm:text-base tracking-[0.3em] uppercase mt-1 leading-none transition-colors duration-200 ${
+          isCream
+            ? 'text-[#0E2F2C]'
+            : 'text-[#E5CFAF]'
+        }`}
+      >
         COFFEE + ROASTERY
       </div>
 
-      {/* Tagline */}
-      <div className="relative z-10 font-headline text-[11px] sm:text-xs text-[#C5D5D3] tracking-[0.25em] lowercase italic mt-2 font-medium">
+      {/* Tagline: crafted from coffee. -> Pure Black in Cream mode */}
+      <div
+        className={`relative z-10 font-headline text-[11px] sm:text-xs tracking-[0.25em] lowercase italic mt-2 font-semibold transition-colors duration-200 ${
+          isCream
+            ? 'text-black'
+            : 'text-[#C5D5D3] font-medium'
+        }`}
+      >
         crafted from coffee.
       </div>
     </div>
