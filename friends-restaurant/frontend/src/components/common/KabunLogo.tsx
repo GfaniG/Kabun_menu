@@ -24,7 +24,9 @@ export const KabunLogo: React.FC<KabunLogoProps> = ({
   const { theme } = useTheme();
   const isCream = lightMode || theme === 'cream';
 
-  const emblemSrc = '/assets/kabun/kabun-emblem-dark.png';
+  const emblemSrc = isCream
+    ? '/assets/kabun/kabun-emblem-cream.png'
+    : '/assets/kabun/kabun-emblem-dark.png';
 
   if (variant === 'emblem') {
     return (
@@ -55,7 +57,7 @@ export const KabunLogo: React.FC<KabunLogoProps> = ({
           />
         )}
         <img
-          src={emblemSrc}
+          src="/assets/kabun/kabun-emblem-dark.png"
           alt={alt}
           className="relative z-10 w-10 h-10 sm:w-11 sm:h-11 object-contain rounded-full drop-shadow-[0_4px_16px_rgba(0,0,0,0.6)]"
           loading="eager"

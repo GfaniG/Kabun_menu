@@ -1,8 +1,9 @@
-const CACHE_NAME = 'kabun-menu-cache-v4';
+const CACHE_NAME = 'kabun-menu-cache-v5';
 
 const STATIC_ASSETS = [
   '/manifest.json',
   '/assets/kabun/kabun-emblem-dark.png',
+  '/assets/kabun/kabun-emblem-cream.png',
   '/assets/kabun/kabun-emblem-light.png',
   '/assets/kabun/kabun-storefront-facade.jpg',
   '/assets/kabun/kabun-interior-lounge.jpg',
