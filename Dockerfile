@@ -1,6 +1,6 @@
 # ========================================================
-# MEREBA FRIENDS GARDEN (መረባ ፍሬንድስ)
-# Multi-Stage Production Docker Container for Azure
+# KABUN COFFEE + ROASTERY (ካቡን)
+# Multi-Stage Production Docker Container
 # ========================================================
 
 # --------------------------------------------------------

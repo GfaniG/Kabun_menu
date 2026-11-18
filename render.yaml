@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: kabun-coffee
+    runtime: node
+    plan: free
+    buildCommand: npm run build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        value: file:./prisma/dev.db
+      - key: UPLOAD_DIR
+        value: ./uploads

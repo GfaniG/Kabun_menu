@@ -5,6 +5,7 @@ import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import { env } from './config/env.js';
 import { ensureDatabaseReady } from './config/autoInit.js';
 import { authRoutes } from './routes/auth.routes.js';
@@ -65,10 +66,15 @@ async function main() {
   await app.register(analyticsRoutes, { prefix: '/api/analytics' });
   await app.register(syncRoutes, { prefix: '/api' });
 
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = path.dirname(__filename);
+
   // Serve production frontend single-page application if built
   const possiblePaths = [
     process.env.FRONTEND_DIST,
+    path.resolve(__dirname, '../../frontend/dist'),
     path.resolve(process.cwd(), '../frontend/dist'),
+    path.resolve(process.cwd(), 'friends-restaurant/frontend/dist'),
     path.resolve(process.cwd(), './frontend-dist'),
     path.resolve(process.cwd(), './public'),
   ].filter(Boolean) as string[];
