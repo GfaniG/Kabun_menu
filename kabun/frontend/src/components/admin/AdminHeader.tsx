@@ -84,12 +84,12 @@ export const AdminHeader: React.FC = () => {
               <div className="text-left">
                 <div className="flex items-center gap-1.5">
                   <span className="font-headline text-xs font-bold text-white block leading-tight">
-                    {user?.name || 'Manager'}
+                    {user?.name || 'Kabun Manager'}
                   </span>
                   <KeyRound className="w-2.5 h-2.5 text-[#C5D5D3] group-hover:text-[#E5CFAF]" />
                 </div>
                 <span className="text-[10px] text-[#C5D5D3] block leading-tight font-mono">
-                  {user?.email || 'admin@kabuncoffee.com'}
+                  {user?.username ? `@${user.username}` : user?.email || 'admin'}
                 </span>
               </div>
             </button>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Shield, KeyRound, Mail, User, Check, AlertCircle } from 'lucide-react';
+import { Shield, KeyRound, Mail, User, Check, AlertCircle, AtSign } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUpdateAdminProfile } from '../../hooks/useMenu';
 import { Modal } from '../ui/Modal';
@@ -15,10 +15,11 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
   const updateProfileMutation = useUpdateAdminProfile();
 
   const [name, setName] = useState(user?.name || '');
+  const [username, setUsername] = useState(user?.username || 'admin');
   const [email, setEmail] = useState(user?.email || '');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -31,6 +32,7 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
   React.useEffect(() => {
     if (isOpen && user) {
       setName(user.name || '');
+      setUsername(user.username || 'admin');
       setEmail(user.email || '');
       setCurrentPassword('');
       setNewPassword('');
@@ -45,6 +47,11 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
     setErrorMessage(null);
     setSuccessMessage(null);
 
+    if (!username.trim()) {
+      setErrorMessage('Admin username is required.');
+      return;
+    }
+
     if (newPassword && newPassword !== confirmPassword) {
       setErrorMessage('New password and confirm password do not match.');
       return;
@@ -56,14 +63,19 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
     }
 
     try {
-      await updateProfileMutation.mutateAsync({
+      const res = await updateProfileMutation.mutateAsync({
         name: name.trim(),
+        username: username.trim(),
         email: email.trim(),
         currentPassword: currentPassword || undefined,
         newPassword: newPassword || undefined,
       });
 
-      setSuccessMessage('Account details updated successfully!');
+      if (res?.admin) {
+        updateUser(res.admin, res.token);
+      }
+
+      setSuccessMessage('Account credentials updated! New login details are now active.');
       setCurrentPassword('');
       setNewPassword('');
       setConfirmPassword('');
@@ -82,7 +94,7 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
       isOpen={isOpen}
       onClose={onClose}
       title="Admin Account & Security"
-      subtitle="Update your administrator email address and change login password"
+      subtitle="Update your administrator credentials, username, and login password"
       maxWidth="md"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
@@ -100,7 +112,7 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
           </div>
         )}
 
-        {/* Name & Email */}
+        {/* Name, Username & Email */}
         <div className="space-y-3">
           <Input
             label="Display Name"
@@ -110,6 +122,20 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
             required
             leftIcon={<User className="w-4 h-4 text-[#C5D5D3]" />}
           />
+
+          <div>
+            <Input
+              label="Admin Username (Login ID)"
+              placeholder="e.g. admin or kabun"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              leftIcon={<AtSign className="w-4 h-4 text-[#C5D5D3]" />}
+            />
+            <p className="mt-1 text-[11px] text-[#A2B8B5]">
+              You can log in at <span className="text-[#E5CFAF] font-mono">/admin/login</span> using this username.
+            </p>
+          </div>
 
           <Input
             label="Admin Email Address"
@@ -130,9 +156,9 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
               Change Password (Optional)
             </span>
           </div>
-          <p className="text-[11px] text-[#C5D5D3]">
-            Leave password fields blank if you only want to change your name or email.
-          </p>
+          <div className="p-2.5 rounded-lg bg-[#0B2523] border border-[#1D4D47] text-[11px] text-[#C5D5D3] leading-relaxed">
+            Leave blank if keeping current password. Whenever you save a new password, your <span className="text-[#FAF7F2] font-semibold">old password is permanently removed</span> and cannot be used to log in.
+          </div>
 
           <Input
             label="Current Password"

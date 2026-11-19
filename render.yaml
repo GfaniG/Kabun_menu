@@ -1,3 +1,9 @@
+databases:
+  - name: kabun-db
+    databaseName: kabundb
+    user: kabun
+    plan: free
+
 services:
   - type: web
     name: kabun-coffee
@@ -13,6 +19,8 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: DATABASE_URL
-        value: file:./prisma/dev.db
+        fromDatabase:
+          name: kabun-db
+          property: connectionString
       - key: UPLOAD_DIR
         value: ./uploads

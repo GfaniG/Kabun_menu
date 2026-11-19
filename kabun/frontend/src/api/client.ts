@@ -54,11 +54,12 @@ class ApiClient {
   }
 
   async updateProfile(data: {
+    username?: string;
     email?: string;
     name?: string;
     currentPassword?: string;
     newPassword?: string;
-  }): Promise<{ success: boolean; message: string; admin: AdminUser }> {
+  }): Promise<{ success: boolean; message: string; token?: string; admin: AdminUser }> {
     return this.request('/api/auth/profile', {
       method: 'PUT',
       body: JSON.stringify(data),

@@ -11,13 +11,15 @@ async function main() {
   const admin = await prisma.admin.upsert({
     where: { email: 'admin@kabuncoffee.com' },
     update: {
+      username: 'admin',
       password: adminPassword,
-      name: 'Manager',
+      name: 'Kabun Manager',
     },
     create: {
+      username: 'admin',
       email: 'admin@kabuncoffee.com',
       password: adminPassword,
-      name: 'Manager',
+      name: 'Kabun Manager',
     },
   });
   console.log(`👤 Admin ready: ${admin.email}`);

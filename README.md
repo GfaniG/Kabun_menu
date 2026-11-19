@@ -75,4 +75,4 @@ This suite replaces traditional physical paper menus with an interactive, instan
 2. The server will detect your local network IP (e.g. `192.168.1.100`) and boot the unified port on `5000`.
 3. Open in your browser:
    - **Customer Menu:** `http://localhost:5000` (or `http://<YOUR_LOCAL_IP>:5000`)
-   - **Admin Management:** `http://localhost:5000/admin/login` (Default username: `admin`, password: `adminpassword123`)
+   - **Admin Management:** `http://localhost:5000/admin/login` (Default username: `admin`, password: `admin123`)

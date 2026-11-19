@@ -74,6 +74,7 @@ export interface SiteSettings {
 
 export interface AdminUser {
   id: string;
+  username?: string | null;
   email: string;
   name: string;
 }

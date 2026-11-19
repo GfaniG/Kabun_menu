@@ -220,11 +220,14 @@ export function useResetSiteSettings() {
 // 10. Admin Account Credentials Hook
 export function useUpdateAdminProfile() {
   return useMutation({
-    mutationFn: (data: { email?: string; name?: string; currentPassword?: string; newPassword?: string }) =>
+    mutationFn: (data: { username?: string; email?: string; name?: string; currentPassword?: string; newPassword?: string }) =>
       api.updateProfile(data),
     onSuccess: (res) => {
       if (res.admin) {
         sessionStorage.setItem('kabun_admin_user', JSON.stringify(res.admin));
+      }
+      if (res.token) {
+        sessionStorage.setItem('kabun_admin_token', res.token);
       }
     },
   });

@@ -5,7 +5,7 @@
   "description": "Kabun Coffee + Roastery (ካቡን) - Commercial Digital QR Menu & Admin Suite",
   "scripts": {
     "build:frontend": "cd kabun/frontend && npm install --include=dev && npm run build",
-    "build:backend": "cd kabun/backend && npm install --include=dev && npx prisma generate && npm run build",
+    "build:backend": "cd kabun/backend && npm install --include=dev && node scripts/prepare-prisma.js && npx prisma generate && npm run build",
     "build": "npm run build:frontend && npm run build:backend",
     "start": "cd kabun/backend && node dist/app.js"
   },
