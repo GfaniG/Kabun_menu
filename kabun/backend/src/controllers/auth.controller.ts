@@ -32,31 +32,29 @@ export class AuthController {
 
       const lowerId = identifier.toLowerCase();
 
-      // Find admin by username, exact email, admin name, or prefix match (e.g. "admin" for "admin@kabuncoffee.com")
+      // Find admin with exact match on username or email (Fix 5: No permissive prefix matching)
       const admin = await prisma.admin.findFirst({
         where: {
           OR: [
             { username: identifier },
             { username: lowerId },
             { email: lowerId },
-            { name: identifier },
-            { email: { startsWith: lowerId + '@' } },
           ],
         },
       });
 
-      if (!admin) {
+      // Constant-time check: compare with dummy hash if account not found to prevent timing analysis & user enumeration (Fix 2)
+      let isPasswordValid = false;
+      if (admin) {
+        isPasswordValid = await bcrypt.compare(password, admin.password);
+      } else {
+        await bcrypt.compare(password, '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy');
+      }
+
+      if (!admin || !isPasswordValid) {
         return reply.status(401).send({
           success: false,
           error: 'Invalid username or password. Access denied.',
-        });
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, admin.password);
-      if (!isPasswordValid) {
-        return reply.status(401).send({
-          success: false,
-          error: 'Incorrect password. Access denied.',
         });
       }
 

@@ -1,5 +1,7 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
+import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import jwt from '@fastify/jwt';
 import multipart from '@fastify/multipart';
 import fastifyStatic from '@fastify/static';
@@ -32,10 +34,55 @@ async function main() {
   }
 
   // Register plugins
+  // Fix 4: Helmet for clickjacking, MIME sniffing, and CSP protection
+  await app.register(helmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'"],
+        styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'],
+        fontSrc: ["'self'", 'https://fonts.gstatic.com', 'data:'],
+        imgSrc: ["'self'", 'data:', 'blob:', 'https:'],
+        connectSrc: ["'self'", 'https://kabun-coffee.onrender.com', 'https://*.onrender.com', 'http://localhost:*', 'ws:', 'wss:'],
+      },
+    },
+    crossOriginEmbedderPolicy: false,
+  });
+
+  // Fix 1: Explicit CORS whitelist preventing credential hijacking
+  const allowedOrigins = [
+    'https://kabun-coffee.onrender.com',
+    'http://localhost:5173',
+    'http://localhost:3000',
+    'http://localhost:5000',
+    'http://127.0.0.1:5173',
+    process.env.CLIENT_URL,
+    process.env.RENDER_EXTERNAL_URL,
+  ].filter(Boolean) as string[];
+
   await app.register(cors, {
-    origin: true,
+    origin: (origin, cb) => {
+      // Allow requests with no origin (e.g. mobile apps, curl, server-to-server)
+      if (!origin) return cb(null, true);
+
+      const isAllowed =
+        allowedOrigins.includes(origin) ||
+        /^https:\/\/[\w-]+\.onrender\.com$/.test(origin) ||
+        (process.env.NODE_ENV !== 'production' && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin));
+
+      if (isAllowed) {
+        return cb(null, true);
+      }
+      return cb(new Error('CORS origin denied'), false);
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  });
+
+  // Fix 3: Global baseline rate limiter
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: '1 minute',
   });
 
   await app.register(jwt, {
