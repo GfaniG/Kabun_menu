@@ -113,3 +113,23 @@ Under the **Environment Variables** section of your new Web Service, add the fol
 1. In the `/admin` portal, click **Master QR & Table Stands**.
 2. Notice the URL automatically points to your live Render domain (`https://kabun-coffee.onrender.com`).
 3. Download or print the high-resolution table stand cards formatted in luxury Roastery Cream (`#F5EBDD`) and Deep Teal (`#0E2F2C`) with the Kabun roastery emblem!
+
+---
+
+## ⚡ Part 6: 24/7 Keep-Alive (Zero Sleep / No Spin-Down)
+
+Render free tier web services spin down ("sleep") after 15 minutes of inactivity. When a customer scans a QR code while the service is asleep, the cold start takes 50+ seconds.
+
+To guarantee **instant response times 24/7**, Kabun is equipped with a 3-layer anti-sleep system:
+
+1. **Automatic Self-Ping Service (Built-in)**:
+   - When running on Render, the backend automatically reads `RENDER_EXTERNAL_URL` (or `KEEP_ALIVE_URL`) and pings `/api/health` every 10 minutes.
+   - Because 10 minutes is well under the 15-minute threshold, Render's inactivity timer is continuously reset.
+
+2. **GitHub Actions 24/7 Cloud Ping (Included in repo)**:
+   - The workflow file [`.github/workflows/keep-alive.yml`](../.github/workflows/keep-alive.yml) runs a cron job on GitHub servers every 10 minutes (`*/10 * * * *`).
+   - GitHub Actions is 100% free with unlimited minutes on public repositories.
+   - To customize the target URL, go to your GitHub Repo &rarr; **Settings** &rarr; **Secrets and variables** &rarr; **Actions** &rarr; Add repository secret `RENDER_URL` with your full URL (e.g. `https://kabun-coffee.onrender.com`). If not set, it defaults to `https://kabun-coffee.onrender.com`.
+
+3. **External Free Uptime Monitor (Optional Backup)**:
+   - You can also set up a free monitor at [Cron-Job.org](https://cron-job.org) or [UptimeRobot](https://uptimerobot.com) to ping `https://kabun-coffee.onrender.com/api/health` every 5-10 minutes. This gives you email notifications if Render ever undergoes maintenance.

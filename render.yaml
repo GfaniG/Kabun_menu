@@ -24,3 +24,5 @@ services:
           property: connectionString
       - key: UPLOAD_DIR
         value: ./uploads
+      - key: KEEP_ALIVE_URL
+        value: https://kabun-coffee.onrender.com

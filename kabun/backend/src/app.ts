@@ -16,6 +16,7 @@ import { syncRoutes } from './routes/sync.routes.js';
 import { tableRoutes } from './routes/table.routes.js';
 import { orderRoutes } from './routes/order.routes.js';
 import { serviceRoutes } from './routes/service.routes.js';
+import { initKeepAlive } from './services/keepAlive.service.js';
 
 const app = Fastify({
   logger: {
@@ -117,6 +118,9 @@ async function main() {
     ensureDatabaseReady().catch((err) => {
       console.warn('⚠️ Automated database setup warning:', err);
     });
+
+    // Start 24/7 keep-alive background worker (prevents Render 15-minute idle sleep)
+    initKeepAlive();
   } catch (err) {
     app.log.error(err);
     process.exit(1);

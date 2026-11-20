@@ -1,0 +1,34 @@
+name: 24/7 Server Keep-Alive
+
+on:
+  schedule:
+    # Run every 10 minutes to stay well under Render's 15-minute idle sleep threshold
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger anytime from GitHub Actions tab
+
+jobs:
+  keep-alive:
+    name: Ping Render Server
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Health Endpoint
+        run: |
+          # Use secret RENDER_URL or fallback to the standard service URL
+          URL="${{ secrets.RENDER_URL }}"
+          if [ -z "$URL" ]; then
+            URL="https://kabun-coffee.onrender.com"
+          fi
+          
+          # Clean trailing slash if present
+          URL="${URL%/}"
+          HEALTH_URL="$URL/api/health"
+          
+          echo "Pinging: $HEALTH_URL at $(date -u)"
+          HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" --max-time 60 "$HEALTH_URL" || true)
+          
+          echo "Response HTTP Status: $HTTP_STATUS"
+          if [ "$HTTP_STATUS" -eq 200 ]; then
+            echo "✅ Server is awake and responding (200 OK)."
+          else
+            echo "⚠️ Notice: Server returned status $HTTP_STATUS or timed out. If cold-starting, this request wakes it up for subsequent runs."
+          fi
