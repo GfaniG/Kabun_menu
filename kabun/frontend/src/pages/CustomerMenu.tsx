@@ -1297,31 +1297,53 @@ export const CustomerMenu: React.FC = () => {
         </span>
       </button>
 
-      {/* 2. Big Eye-Catching Tray Pill Button in the Bottom-Center (Appears when customer adds dishes) */}
+      {/* 2. Big Luxury Cream Tray Pill Button in the Bottom-Center (Appears when customer adds dishes) */}
       {trayCount > 0 && (
         <button
           onClick={() => setIsTrayModalOpen(true)}
           type="button"
           aria-label="View Order Tray"
           title={`View Order Tray (${trayCount} items • ${trayTotal.toLocaleString()} ETB)`}
-          className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] sm:w-auto sm:min-w-[360px] max-w-md h-14 sm:h-16 px-5 sm:px-6 rounded-full flex items-center justify-between transition-all duration-300 bg-[#16A34A] hover:bg-[#15803D] active:scale-95 cursor-pointer border border-[#22C55E]/40 shadow-[0_12px_36px_rgba(22,163,74,0.45)] hover:shadow-[0_16px_40px_rgba(22,163,74,0.6)] animate-in fade-in zoom-in-95 slide-in-from-bottom-5 text-white"
+          className={`fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] sm:w-auto sm:min-w-[360px] max-w-md h-14 sm:h-16 px-5 sm:px-6 rounded-full flex items-center justify-between transition-all duration-300 active:scale-95 cursor-pointer border-2 shadow-[0_14px_40px_rgba(0,0,0,0.55)] animate-in fade-in zoom-in-95 slide-in-from-bottom-5 ${
+            isCream
+              ? 'bg-[#0E2F2C] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#18423D]'
+              : 'bg-[#E5CFAF] border-[#DFC9AA] text-[#0E2F2C] hover:brightness-105 shadow-[0_12px_36px_rgba(229,207,175,0.35)]'
+          }`}
         >
           {/* Left: Bag Icon with Red Count Badge + Count & Price */}
           <div className="flex items-center gap-3">
             <div className="relative flex items-center justify-center">
-              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white shrink-0" />
+              <ShoppingBag
+                className={`w-5 h-5 sm:w-6 sm:h-6 shrink-0 ${
+                  isCream ? 'text-[#E5CFAF]' : 'text-[#0E2F2C]'
+                }`}
+              />
               {/* Dynamic Red Number Badge */}
-              <span className="absolute -top-1.5 -right-2 bg-red-600 text-white font-mono font-black text-[10px] sm:text-[11px] min-w-[19px] h-[19px] px-1 rounded-full flex items-center justify-center border-2 border-[#16A34A] shadow-md animate-pulse">
+              <span
+                className={`absolute -top-1.5 -right-2 bg-red-600 text-white font-mono font-black text-[10px] sm:text-[11px] min-w-[19px] h-[19px] px-1 rounded-full flex items-center justify-center border-2 shadow-md animate-pulse ${
+                  isCream ? 'border-[#0E2F2C]' : 'border-[#E5CFAF]'
+                }`}
+              >
                 {trayCount}
               </span>
             </div>
-            <span className="font-headline font-extrabold text-sm sm:text-base tracking-wide text-white">
+            <span
+              className={`font-headline font-extrabold text-sm sm:text-base tracking-wide ${
+                isCream ? 'text-[#E5CFAF]' : 'text-[#0E2F2C]'
+              }`}
+            >
               {trayCount} {trayCount === 1 ? 'Item' : 'Items'} &bull; {trayTotal.toLocaleString()} ETB
             </span>
           </div>
 
           {/* Right: View Tray Pill */}
-          <div className="flex items-center gap-1.5 font-headline text-[11px] sm:text-xs uppercase tracking-wider font-extrabold text-white bg-black/20 hover:bg-black/30 px-3.5 py-1.5 rounded-full transition-colors">
+          <div
+            className={`flex items-center gap-1.5 font-headline text-[11px] sm:text-xs uppercase tracking-wider font-extrabold px-3.5 py-1.5 rounded-full transition-colors ${
+              isCream
+                ? 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
+                : 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
+            }`}
+          >
             <span>View Tray</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>

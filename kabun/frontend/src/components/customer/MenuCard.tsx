@@ -206,7 +206,11 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                       <button
                         type="button"
                         onClick={() => onUpdateQuantity && onUpdateQuantity(item.id, 1)}
-                        className="w-6 h-6 rounded-lg flex items-center justify-center transition-colors bg-[#16A34A] hover:bg-[#15803D] text-white cursor-pointer active:scale-95 shadow-sm"
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors cursor-pointer active:scale-95 ${
+                          isCream
+                            ? 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
+                            : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
+                        }`}
                         title="Increase quantity"
                       >
                         <Plus className="w-3.5 h-3.5" />
@@ -216,7 +220,11 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                     <button
                       type="button"
                       onClick={() => onAddToTray(item)}
-                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-headline text-xs font-extrabold uppercase tracking-wider transition-all shadow-[0_2px_12px_rgba(22,163,74,0.35)] bg-[#16A34A] hover:bg-[#15803D] active:scale-95 text-white cursor-pointer"
+                      className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-headline text-xs font-extrabold uppercase tracking-wider transition-all shadow-sm active:scale-95 cursor-pointer ${
+                        isCream
+                          ? 'bg-[#0E2F2C] text-[#E5CFAF] border border-[#164640] hover:bg-[#18423D]'
+                          : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 shadow-[0_2px_10px_rgba(229,207,175,0.25)]'
+                      }`}
                     >
                       <Plus className="w-3.5 h-3.5" />
                       <span>Order</span>
