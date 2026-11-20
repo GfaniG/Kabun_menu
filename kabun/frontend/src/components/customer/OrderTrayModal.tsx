@@ -29,7 +29,6 @@ interface OrderTrayModalProps {
   tray: TrayItem[];
   onUpdateQuantity: (itemId: string, delta: number) => void;
   onClearTray: () => void;
-  onSelectTablePrompt: () => void;
 }
 
 export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
@@ -39,7 +38,6 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
   tray,
   onUpdateQuantity,
   onClearTray,
-  onSelectTablePrompt,
 }) => {
   const createOrderMutation = useCreateOrder();
   const [customerNotes, setCustomerNotes] = useState('');
@@ -56,7 +54,7 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
     setErrorMessage(null);
 
     if (!tableNumber) {
-      onSelectTablePrompt();
+      setErrorMessage('Please scan your table QR card to place an order.');
       return;
     }
 
@@ -174,18 +172,14 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
           {/* Table Indicator Banner */}
           <div className="p-3 rounded-xl bg-[#0B2523] border border-[#1D4D47] flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping" />
+              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
               <span className="font-headline text-xs uppercase tracking-wider text-white font-bold">
                 Seated at: <span className="text-[#E5CFAF]">Table {tableNumber || '(Not Set)'}</span>
               </span>
             </div>
-            <button
-              type="button"
-              onClick={onSelectTablePrompt}
-              className="text-[11px] font-headline uppercase font-bold text-[#E5CFAF] hover:underline"
-            >
-              Change Table
-            </button>
+            <span className="text-[10px] text-[#A2B8B5] font-mono hidden sm:inline">
+              (Scan table QR to switch)
+            </span>
           </div>
 
           {/* Items List */}

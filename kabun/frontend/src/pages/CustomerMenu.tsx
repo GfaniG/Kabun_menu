@@ -25,7 +25,6 @@ import { INITIAL_CATEGORIES } from '../data/initialMenu';
 import { useTheme } from '../context/ThemeContext';
 import { CallWaiterModal } from '../components/customer/CallWaiterModal';
 import { OrderTrayModal, TrayItem } from '../components/customer/OrderTrayModal';
-import { TableSelectorModal } from '../components/customer/TableSelectorModal';
 
 export const CustomerMenu: React.FC = () => {
   const { data: categories = [], isLoading, error, refetch } = useMenu();
@@ -59,7 +58,6 @@ export const CustomerMenu: React.FC = () => {
   // Customer Modals state
   const [isTrayModalOpen, setIsTrayModalOpen] = useState(false);
   const [isWaiterModalOpen, setIsWaiterModalOpen] = useState(false);
-  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
 
   // Tray / Cart State
   const [tray, setTray] = useState<TrayItem[]>(() => {
@@ -1250,17 +1248,17 @@ export const CustomerMenu: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating Scroll To Top Button */}
+      {/* Floating Scroll To Top Button (positioned cleanly above Order Tray circle) */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
           type="button"
           aria-label="Scroll back to top"
-          className="fixed bottom-20 right-4 z-30 w-10 h-10 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
+          className="fixed bottom-24 right-5 sm:right-8 z-30 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
           style={{
             backgroundColor: isCream ? '#0E2F2C' : `${cardColor}E6`,
             color: isCream ? '#E5CFAF' : '#FAF7F2',
-            borderColor: isCream ? '#E5CFAF' : borderColor,
+            borderColor: isCream ? '#DFC9AA' : borderColor,
           }}
           title="Back to Top"
         >
@@ -1268,44 +1266,51 @@ export const CustomerMenu: React.FC = () => {
         </button>
       )}
 
-      {/* Persistent Customer Action Bar: Seated Table, Call Waiter & Order Tray */}
-      <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:w-auto z-40 flex items-center justify-between sm:justify-end gap-2 p-2 rounded-2xl bg-[#0E2F2C]/95 backdrop-blur-xl border border-[#E5CFAF]/30 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
-        {/* Table Selector Pill */}
-        <button
-          onClick={() => setIsTableModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#143B37] hover:bg-[#1A4B46] border border-[#1D4D47] text-[#FAF7F2] text-xs font-headline font-bold uppercase tracking-wider transition-all"
-          title="Click to view or change your seated table"
-        >
-          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-          <span>Table {activeTable}</span>
-        </button>
+      {/* 1. Left Floating Circular Button: Call Staff */}
+      <button
+        onClick={() => setIsWaiterModalOpen(true)}
+        type="button"
+        aria-label="Call Staff"
+        title="Call Staff / Waiter or Request Bill"
+        className={`fixed bottom-6 left-5 sm:left-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:scale-110 active:scale-95 cursor-pointer border-2 ${
+          isCream
+            ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D]'
+            : 'bg-[#133834] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#1A4B46] hover:border-[#E5CFAF]'
+        }`}
+      >
+        <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 animate-pulse" />
+        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tighter mt-0.5 leading-none">
+          Staff
+        </span>
+      </button>
 
-        {/* Call Waiter Bell Button */}
-        <button
-          onClick={() => setIsWaiterModalOpen(true)}
-          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#143B37] hover:bg-[#1A4B46] border border-[#1D4D47] text-[#E5CFAF] hover:text-white text-xs font-headline font-bold uppercase tracking-wider transition-all"
-          title="Call Waiter or Request Bill"
-        >
-          <Bell className="w-4 h-4 text-amber-400 shrink-0" />
-          <span>Call Staff</span>
-        </button>
-
-        {/* Order Tray Pill */}
-        <button
-          onClick={() => setIsTrayModalOpen(true)}
-          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-headline font-black uppercase tracking-wider transition-all shadow-md ${
-            trayCount > 0
-              ? 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 shadow-[0_0_20px_rgba(229,207,175,0.4)] animate-pulse'
-              : 'bg-[#143B37] text-[#C5D5D3] border border-[#1D4D47] hover:text-white'
-          }`}
-          title="View Your Order Tray"
-        >
-          <ShoppingBag className={`w-4 h-4 ${trayCount > 0 ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
-          <span>
-            {trayCount > 0 ? `${trayCount} Item${trayCount > 1 ? 's' : ''} • ${trayTotal.toLocaleString()} ETB` : 'Order Tray'}
+      {/* 2. Right Floating Circular Button: Order Tray */}
+      <button
+        onClick={() => setIsTrayModalOpen(true)}
+        type="button"
+        aria-label="View Order Tray"
+        title="View Order Tray"
+        className={`fixed bottom-6 right-5 sm:right-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:scale-110 active:scale-95 cursor-pointer border-2 relative ${
+          trayCount > 0
+            ? isCream
+              ? 'bg-[#0E2F2C] border-[#E5CFAF] text-[#E5CFAF] hover:bg-[#18423D] shadow-[0_0_25px_rgba(229,207,175,0.4)] animate-pulse'
+              : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 shadow-[0_0_25px_rgba(229,207,175,0.5)] animate-pulse'
+            : isCream
+            ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D]'
+            : 'bg-[#133834] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#1A4B46] hover:border-[#E5CFAF]'
+        }`}
+      >
+        {/* Count badge on top right */}
+        {trayCount > 0 && (
+          <span className="absolute -top-1 -right-1 min-w-[22px] h-[22px] px-1 rounded-full bg-amber-400 text-[#0E2F2C] text-[11px] font-black flex items-center justify-center font-mono shadow-md border-2 border-[#0E2F2C]">
+            {trayCount}
           </span>
-        </button>
-      </div>
+        )}
+        <ShoppingBag className={`w-5 h-5 sm:w-6 sm:h-6 ${trayCount > 0 && !isCream ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
+        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tighter mt-0.5 leading-none">
+          Tray
+        </span>
+      </button>
 
       {/* Customer Modals */}
       <OrderTrayModal
@@ -1315,23 +1320,12 @@ export const CustomerMenu: React.FC = () => {
         tray={tray}
         onUpdateQuantity={handleUpdateQuantity}
         onClearTray={handleClearTray}
-        onSelectTablePrompt={() => setIsTableModalOpen(true)}
       />
 
       <CallWaiterModal
         isOpen={isWaiterModalOpen}
         onClose={() => setIsWaiterModalOpen(false)}
         tableNumber={activeTable}
-      />
-
-      <TableSelectorModal
-        isOpen={isTableModalOpen}
-        onClose={() => setIsTableModalOpen(false)}
-        activeTable={activeTable}
-        onSelectTable={(num) => {
-          setActiveTable(num);
-          localStorage.setItem('kabun_table_number', num);
-        }}
       />
     </div>
   );

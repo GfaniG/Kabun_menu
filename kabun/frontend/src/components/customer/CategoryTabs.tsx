@@ -95,7 +95,7 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
       </div>
 
       {/* 2. Subcategory Pill Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto max-w-full pb-1 pt-1 no-scrollbar select-none justify-start sm:justify-center w-full px-2">
+      <div className="w-full max-w-5xl mx-auto px-2 sm:px-4 flex items-center gap-2 overflow-x-auto md:flex-wrap md:justify-center justify-start pb-2 pt-1 no-scrollbar select-none">
         {/* 'All' in this department */}
         <button
           onClick={() => onSelectCategory('all')}

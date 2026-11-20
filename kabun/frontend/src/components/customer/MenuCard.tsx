@@ -167,7 +167,9 @@ export const MenuCard: React.FC<MenuCardProps> = ({
               {/* Quick Add To Tray Bar */}
               {item.isAvailable && !isMarketPrice && onAddToTray && (
                 <div
-                  className="mt-3 pt-2.5 border-t border-dashed border-[#1D4D47]/40 flex items-center justify-between"
+                  className={`mt-3 pt-2.5 border-t border-dashed flex items-center justify-between ${
+                    isCream ? 'border-[#DFC9AA]' : 'border-[#1D4D47]/60'
+                  }`}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <span className={`text-[11px] font-mono font-bold ${isCream ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`}>
@@ -175,22 +177,32 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                   </span>
 
                   {quantityInTray && quantityInTray > 0 ? (
-                    <div className="inline-flex items-center gap-2 px-2 py-1 rounded-xl bg-[#0B2523] border border-[#1D4D47] shadow-sm">
+                    <div className={`inline-flex items-center gap-2 px-2 py-1 rounded-xl border shadow-sm ${
+                      isCream ? 'bg-[#EADAC3] border-[#DFC9AA]' : 'bg-[#0B2523] border-[#1D4D47]'
+                    }`}>
                       <button
                         type="button"
                         onClick={() => onUpdateQuantity && onUpdateQuantity(item.id, -1)}
-                        className="w-5 h-5 rounded-md bg-[#133834] text-white flex items-center justify-center hover:bg-[#18423D] transition-colors"
+                        className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
+                          isCream
+                            ? 'bg-[#DFC9AA] text-[#0E2F2C] hover:bg-[#D4BC9B]'
+                            : 'bg-[#133834] text-white hover:bg-[#18423D]'
+                        }`}
                         title="Reduce quantity"
                       >
                         <Minus className="w-3 h-3" />
                       </button>
-                      <span className="font-mono text-xs font-bold text-white px-1">
+                      <span className={`font-mono text-xs font-bold px-1 ${isCream ? 'text-[#0E2F2C]' : 'text-white'}`}>
                         {quantityInTray}
                       </span>
                       <button
                         type="button"
                         onClick={() => onUpdateQuantity && onUpdateQuantity(item.id, 1)}
-                        className="w-5 h-5 rounded-md bg-[#E5CFAF] text-[#0E2F2C] flex items-center justify-center hover:brightness-110 transition-colors"
+                        className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
+                          isCream
+                            ? 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
+                            : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
+                        }`}
                         title="Increase quantity"
                       >
                         <Plus className="w-3 h-3" />
@@ -202,7 +214,7 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                       onClick={() => onAddToTray(item)}
                       className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl font-headline text-[11px] font-bold uppercase tracking-wider transition-all shadow-sm ${
                         isCream
-                          ? 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
+                          ? 'bg-[#0E2F2C] text-[#E5CFAF] border border-[#164640] hover:bg-[#18423D]'
                           : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
                       }`}
                     >

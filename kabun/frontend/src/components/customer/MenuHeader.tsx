@@ -70,8 +70,21 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             </a>
           </nav>
 
-          {/* Right Actions: Dedicated Theme Toggle & Mobile Menu */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Right Actions: Table Indicator, Dedicated Theme Toggle & Mobile Menu */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+            {/* Top Table Indicator (Read-Only) */}
+            {tableNumber && (
+              <div
+                className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#133834] border border-[#2A655E] text-[#FAF7F2] shadow-sm select-none"
+                title={`Seated at Table ${tableNumber} (QR Verified)`}
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+                <span className="font-headline font-bold text-[11px] sm:text-xs uppercase tracking-wider text-[#FAF7F2]">
+                  Table <span className="text-[#E5CFAF] font-black">{tableNumber}</span>
+                </span>
+              </div>
+            )}
+
             {/* Dedicated Color Inversion Theme Switcher (Contrast Icon 🌓) */}
             <ThemeSwitcher variant="compact" />
 
@@ -124,6 +137,13 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             >
               {t.locationHours}
             </a>
+
+            {tableNumber && (
+              <div className="pt-2 border-t border-[#1D4D47] flex items-center justify-between text-xs">
+                <span className="text-[#A2B8B5] font-headline uppercase tracking-wider">Seated Table:</span>
+                <span className="font-headline font-bold text-[#E5CFAF] uppercase tracking-wider">Table {tableNumber}</span>
+              </div>
+            )}
           </div>
         )}
       </header>
