@@ -1248,69 +1248,72 @@ export const CustomerMenu: React.FC = () => {
         </div>
       </footer>
 
-      {/* Floating Scroll To Top Button (positioned cleanly above Order Tray circle) */}
+      {/* Floating Scroll To Top Button */}
       {showScrollTop && (
         <button
           onClick={scrollToTop}
           type="button"
           aria-label="Scroll back to top"
-          className="fixed bottom-24 right-5 sm:right-8 z-30 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
-          style={{
-            backgroundColor: isCream ? '#0E2F2C' : `${cardColor}E6`,
-            color: isCream ? '#E5CFAF' : '#FAF7F2',
-            borderColor: isCream ? '#DFC9AA' : borderColor,
-          }}
+          className={`fixed right-5 sm:right-8 z-30 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in ${
+            trayCount > 0 ? 'bottom-24' : 'bottom-6'
+          } ${
+            isCream
+              ? 'bg-[#0E2F2C] text-[#E5CFAF] border-[#DFC9AA] hover:bg-[#18423D]'
+              : 'bg-[#E5CFAF] text-[#0E2F2C] border-[#E5CFAF] hover:brightness-105'
+          }`}
           title="Back to Top"
         >
           <ArrowUp className="w-4 h-4" />
         </button>
       )}
 
-      {/* 1. Left Floating Circular Button: Call Staff */}
+      {/* 1. Left Floating Circular Button: Call Staff (Always floating on bottom-left) */}
       <button
         onClick={() => setIsWaiterModalOpen(true)}
         type="button"
         aria-label="Call Staff"
         title="Call Staff / Waiter or Request Bill"
-        className={`fixed bottom-6 left-5 sm:left-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:scale-110 active:scale-95 cursor-pointer border-2 ${
+        className={`fixed bottom-6 left-5 sm:left-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_10px_32px_rgba(0,0,0,0.45)] hover:scale-110 active:scale-95 cursor-pointer border-2 ${
           isCream
             ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D]'
-            : 'bg-[#133834] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#1A4B46] hover:border-[#E5CFAF]'
+            : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-105'
         }`}
       >
-        <Bell className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400 animate-pulse" />
-        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tighter mt-0.5 leading-none">
+        <Bell className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tight mt-0.5 leading-none">
           Staff
         </span>
       </button>
 
-      {/* 2. Right Floating Circular Button: Order Tray */}
-      <button
-        onClick={() => setIsTrayModalOpen(true)}
-        type="button"
-        aria-label="View Order Tray"
-        title="View Order Tray"
-        className={`fixed bottom-6 right-5 sm:right-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_8px_30px_rgba(0,0,0,0.35)] hover:scale-110 active:scale-95 cursor-pointer border-2 relative ${
-          trayCount > 0
-            ? isCream
-              ? 'bg-[#0E2F2C] border-[#E5CFAF] text-[#E5CFAF] hover:bg-[#18423D] shadow-[0_0_25px_rgba(229,207,175,0.4)] animate-pulse'
-              : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 shadow-[0_0_25px_rgba(229,207,175,0.5)] animate-pulse'
-            : isCream
-            ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D]'
-            : 'bg-[#133834] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#1A4B46] hover:border-[#E5CFAF]'
-        }`}
-      >
-        {/* Count badge on top right */}
-        {trayCount > 0 && (
-          <span className="absolute -top-1 -right-1 min-w-[22px] h-[22px] px-1 rounded-full bg-amber-400 text-[#0E2F2C] text-[11px] font-black flex items-center justify-center font-mono shadow-md border-2 border-[#0E2F2C]">
+      {/* 2. Right Floating Circular Button: Order Tray (Appears on bottom-right ONLY when customer adds items) */}
+      {trayCount > 0 && (
+        <button
+          onClick={() => setIsTrayModalOpen(true)}
+          type="button"
+          aria-label="View Order Tray"
+          title={`View Order Tray (${trayCount} items • ${trayTotal.toLocaleString()} ETB)`}
+          className={`fixed bottom-6 right-5 sm:right-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_10px_32px_rgba(0,0,0,0.45)] hover:scale-110 active:scale-95 cursor-pointer border-2 animate-in fade-in zoom-in-90 slide-in-from-bottom-4 ${
+            isCream
+              ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D] shadow-[0_0_25px_rgba(14,47,44,0.3)]'
+              : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-105 shadow-[0_0_25px_rgba(229,207,175,0.4)]'
+          }`}
+        >
+          {/* Notification count badge on top right of the circle */}
+          <span
+            className={`absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1 rounded-full text-[11px] font-black flex items-center justify-center font-mono shadow-md border-2 animate-pulse ${
+              isCream
+                ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#0E2F2C]'
+                : 'bg-[#0E2F2C] text-[#E5CFAF] border-[#E5CFAF]'
+            }`}
+          >
             {trayCount}
           </span>
-        )}
-        <ShoppingBag className={`w-5 h-5 sm:w-6 sm:h-6 ${trayCount > 0 && !isCream ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
-        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tighter mt-0.5 leading-none">
-          Tray
-        </span>
-      </button>
+          <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
+          <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tight mt-0.5 leading-none">
+            Tray
+          </span>
+        </button>
+      )}
 
       {/* Customer Modals */}
       <OrderTrayModal

@@ -75,12 +75,12 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             {/* Top Table Indicator (Read-Only) */}
             {tableNumber && (
               <div
-                className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#133834] border border-[#2A655E] text-[#FAF7F2] shadow-sm select-none"
+                className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#E5CFAF] border border-[#E5CFAF] text-[#0E2F2C] shadow-sm select-none"
                 title={`Seated at Table ${tableNumber} (QR Verified)`}
               >
-                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
-                <span className="font-headline font-bold text-[11px] sm:text-xs uppercase tracking-wider text-[#FAF7F2]">
-                  Table <span className="text-[#E5CFAF] font-black">{tableNumber}</span>
+                <span className="w-2 h-2 rounded-full bg-[#0E2F2C] animate-pulse shrink-0" />
+                <span className="font-headline font-bold text-[11px] sm:text-xs uppercase tracking-wider text-[#0E2F2C]">
+                  Table <span className="font-black text-[#0E2F2C]">{tableNumber}</span>
                 </span>
               </div>
             )}
