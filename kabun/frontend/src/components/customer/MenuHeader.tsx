@@ -93,8 +93,10 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               )}
             </button>
 
-            {/* Dedicated Color Inversion Theme Switcher (Contrast Icon 🌓) */}
-            <ThemeSwitcher variant="compact" />
+            {/* Dedicated Color Inversion Theme Switcher (Visible on desktop; on mobile it lives inside the sidebar menu) */}
+            <div className="hidden lg:flex items-center">
+              <ThemeSwitcher variant="compact" />
+            </div>
 
             {/* Mobile Hamburger Menu Toggle */}
             <button
@@ -122,7 +124,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               onClick={() => setMobileMenuOpen(false)}
               className="block py-2 text-[#C5D5D3] hover:text-[#FAF7F2]"
             >
-              {t.ourMenu} ({t.coffee} &amp; {t.bakery})
+              {t.ourMenu} ({t.coffee})
             </a>
             <a
               href="#about-section"
@@ -146,6 +148,12 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               {t.locationHours}
             </a>
 
+            {/* Invert Color Theme Toggle inside Mobile Sidebar Menu */}
+            <div className="pt-3 pb-1 border-t border-[#1D4D47] flex items-center justify-between text-xs font-headline uppercase tracking-wider text-[#FAF7F2]">
+              <span className="text-[#A2B8B5] font-semibold">Theme & Color</span>
+              <ThemeSwitcher variant="segmented" />
+            </div>
+
             <button
               type="button"
               onClick={() => {
@@ -155,7 +163,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               className="w-full pt-3 pb-2 border-t border-[#1D4D47] flex items-center justify-between text-xs cursor-pointer font-headline uppercase tracking-wider text-[#FAF7F2] hover:text-[#E5CFAF]"
             >
               <span className="flex items-center gap-2">
-                <ShoppingCart className="w-4 h-4 text-[#10B981]" />
+                <ShoppingCart className="w-4 h-4 text-[#E5CFAF]" />
                 <span>Order Tray</span>
               </span>
               {trayCount > 0 && (

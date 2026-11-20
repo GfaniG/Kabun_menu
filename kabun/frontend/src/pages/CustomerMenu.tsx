@@ -209,9 +209,9 @@ export const CustomerMenu: React.FC = () => {
     return `THE ROASTERY SELECTION • ${upper}`;
   };
 
-  // Compile items for active parent and active subcategory
+  // Compile items for coffee and drinks subcategories (drinks only)
   const displayedItems = useMemo(() => {
-    const currentCategories = activeParent === 'COFFEE' ? coffeeCategories : bakeryCategories;
+    const currentCategories = coffeeCategories;
     const q = (searchQuery || '').toLowerCase().trim();
 
     let itemsToFilter: MenuItem[] = [];
@@ -234,7 +234,7 @@ export const CustomerMenu: React.FC = () => {
       const matchCat = item.category?.name?.toLowerCase().includes(q) || false;
       return matchName || matchDesc || matchTags || matchCat;
     });
-  }, [activeParent, coffeeCategories, bakeryCategories, activeCategory, searchQuery]);
+  }, [coffeeCategories, activeCategory, searchQuery]);
 
   return (
     <div
@@ -350,7 +350,7 @@ export const CustomerMenu: React.FC = () => {
             style={{ color: textBody }}
           >
             {settings?.heroDescription ||
-              'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and freshly baked viennoiserie.'}
+              'Upscale specialty coffee roastery in Mekelle. Experience single-origin Ethiopian beans roasted with precision, slow-steeped cold brews, artisanal espresso creations, and handcrafted signature beverages.'}
           </p>
 
           {/* Call-to-Action Buttons */}
@@ -405,9 +405,7 @@ export const CustomerMenu: React.FC = () => {
             >
               {getSectionTitle(
                 activeCategory === 'all'
-                  ? activeParent === 'COFFEE'
-                    ? 'COFFEE & BEVERAGES'
-                    : 'BAKERY & BITES'
+                  ? 'COFFEE & BEVERAGES'
                   : safeCategories.find((c) => c.id === activeCategory)?.name
               )}
             </h2>
@@ -415,21 +413,16 @@ export const CustomerMenu: React.FC = () => {
               className="font-body text-xs sm:text-sm mt-2 max-w-xl mx-auto"
               style={{ color: textBody }}
             >
-              {activeParent === 'COFFEE'
-                ? 'Single-origin Ethiopian roasts, precision espresso extractions, slow-steeped cold brews, and seasonal refreshers.'
-                : 'Pure French butter croissants, artisan pastries, decadent cakes, and freshly prepared savory toasts.'}
+              Single-origin Ethiopian roasts, precision espresso extractions, slow-steeped cold brews, and handcrafted seasonal refreshers.
             </p>
           </div>
 
-          {/* Department and Category Switcher */}
+          {/* Drinks Subcategories Bar */}
           <div className="mb-8">
             <CategoryTabs
               categories={safeCategories}
-              activeParent={activeParent}
-              onSelectParent={handleSelectParent}
               activeCategory={activeCategory}
               onSelectCategory={handleSelectCategory}
-              totalFoodCount={totalBakeryCount}
               totalDrinkCount={totalCoffeeCount}
               currentLang={currentLang}
             />
@@ -448,7 +441,7 @@ export const CustomerMenu: React.FC = () => {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder={activeParent === 'COFFEE' ? t.searchPlaceholderCoffee : t.searchPlaceholderBakery}
+                placeholder="Search espresso, pour-over, cold brew, frappes, tea..."
                 className="w-full bg-transparent text-xs sm:text-sm outline-none pr-8 font-body transition-colors"
                 style={{
                   color: isCream ? '#0E2F2C' : '#FAF7F2',
@@ -538,7 +531,7 @@ export const CustomerMenu: React.FC = () => {
                 className="mt-5 px-6 py-2.5 text-[#0E2F2C] text-xs font-headline uppercase font-extrabold rounded-full hover:brightness-110 transition-all cursor-pointer shadow-md"
                 style={{ backgroundColor: accentColor }}
               >
-                {t.showAll} {activeParent === 'COFFEE' ? t.coffee : t.bakery}
+                {t.showAll} {t.coffee}
               </button>
             </div>
           )}
@@ -699,20 +692,20 @@ export const CustomerMenu: React.FC = () => {
                     color: isCream ? '#0E2F2C' : '#E5CFAF',
                   }}
                 >
-                  <span className="material-symbols-outlined text-[26px]">bakery_dining</span>
+                  <span className="material-symbols-outlined text-[26px]">water_drop</span>
                 </div>
                 <div>
                   <h3
                     className="font-headline text-lg mb-1 font-bold"
                     style={{ color: textHeading }}
                   >
-                    Daily French Viennoiserie
+                    Signature Cold Extractions
                   </h3>
                   <p
                     className="font-body text-xs leading-relaxed"
                     style={{ color: textBody }}
                   >
-                    Pure French butter croissants, pain au chocolat, artisan brioche, and espresso-soaked Italian tiramisu baked fresh daily.
+                    18-hour slow-steeped cold brews, nitro extractions, and artisanal chilled botanicals crafted with highland spring water.
                   </p>
                 </div>
               </div>
@@ -1123,7 +1116,7 @@ export const CustomerMenu: React.FC = () => {
               className="font-body text-xs max-w-md mb-8"
               style={{ color: textBody }}
             >
-              Bespoke specialty coffee roastery, artisanal pour-over bar, and fresh viennoiserie.
+              Bespoke specialty coffee roastery, artisanal pour-over bar, and handcrafted beverages.
             </p>
 
             {/* Clickable Social Bar in Footer */}
