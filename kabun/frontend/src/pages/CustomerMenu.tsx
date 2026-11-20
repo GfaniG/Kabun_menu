@@ -1290,13 +1290,13 @@ export const CustomerMenu: React.FC = () => {
         </span>
       </button>
 
-      {/* 2. Big Luxury Cream Tray Pill Button in the Bottom-Center (Appears when customer adds dishes) */}
+      {/* 2. Big Luxury Cream Order Pill Button in the Bottom-Center (Appears when customer adds dishes) */}
       {trayCount > 0 && (
         <button
           onClick={() => setIsTrayModalOpen(true)}
           type="button"
-          aria-label="View Order Tray"
-          title={`View Order Tray (${trayCount} items • ${trayTotal.toLocaleString()} ETB)`}
+          aria-label="View Order"
+          title={`View Order (${trayCount} items • ${trayTotal.toLocaleString()} ETB)`}
           className={`fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] sm:w-auto sm:min-w-[360px] max-w-md h-14 sm:h-16 px-5 sm:px-6 rounded-full flex items-center justify-between transition-all duration-300 active:scale-95 cursor-pointer border-2 shadow-[0_14px_40px_rgba(0,0,0,0.55)] animate-in fade-in zoom-in-95 slide-in-from-bottom-5 ${
             isCream
               ? 'bg-[#0E2F2C] border-[#1D4D47] text-[#E5CFAF] hover:bg-[#18423D]'
@@ -1329,7 +1329,7 @@ export const CustomerMenu: React.FC = () => {
             </span>
           </div>
 
-          {/* Right: View Tray Pill */}
+          {/* Right: View Order Pill */}
           <div
             className={`flex items-center gap-1.5 font-headline text-[11px] sm:text-xs uppercase tracking-wider font-extrabold px-3.5 py-1.5 rounded-full transition-colors ${
               isCream
@@ -1337,7 +1337,7 @@ export const CustomerMenu: React.FC = () => {
                 : 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
             }`}
           >
-            <span>View Tray</span>
+            <span>View Order</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </div>
         </button>

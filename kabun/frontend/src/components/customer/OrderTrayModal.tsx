@@ -98,7 +98,7 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={handleCloseAndReset}
-      title={confirmedOrder ? 'Order Confirmed!' : 'Your Roastery Order Tray'}
+      title={confirmedOrder ? 'Order Confirmed!' : 'Your Roastery Order'}
       subtitle={
         confirmedOrder
           ? `Order #${confirmedOrder.orderNumber} is now brewing for Table ${tableNumber}`
@@ -157,10 +157,10 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
             <ShoppingBag className="w-6 h-6 opacity-60" />
           </div>
           <h4 className="font-headline text-sm font-bold text-white uppercase tracking-wider">
-            Your tray is empty
+            Your order is empty
           </h4>
           <p className="text-xs text-[#C5D5D3] max-w-xs mx-auto">
-            Browse our single-origin coffees, cold brews, and fresh viennoiserie, then tap <strong>"+ Add"</strong> to build your order!
+            Browse our single-origin coffees, cold brews, and handcrafted beverages, then tap <strong>"+ Order"</strong> to build your order!
           </p>
           <Button variant="secondary" onClick={onClose} className="mt-2 text-xs">
             Explore Menu

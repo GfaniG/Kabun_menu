@@ -82,8 +82,8 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               type="button"
               onClick={onOpenTray}
               className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] hover:bg-[#18423D] hover:text-[#E5CFAF] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-md group shrink-0"
-              title={trayCount > 0 ? `View Order Tray (${trayCount} items)` : 'View Order Tray'}
-              aria-label="View Order Tray"
+              title={trayCount > 0 ? `View Order (${trayCount} items)` : 'View Order'}
+              aria-label="View Order"
             >
               <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform text-[#FAF7F2]" />
               {trayCount > 0 && (
@@ -164,7 +164,7 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
             >
               <span className="flex items-center gap-2">
                 <ShoppingCart className="w-4 h-4 text-[#E5CFAF]" />
-                <span>Order Tray</span>
+                <span>View Order</span>
               </span>
               {trayCount > 0 && (
                 <span className="px-2 py-0.5 rounded-full bg-red-600 text-white text-[11px] font-bold font-mono">
