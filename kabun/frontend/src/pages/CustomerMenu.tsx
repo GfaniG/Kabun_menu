@@ -4,12 +4,12 @@ import {
   AlertCircle,
   ArrowUp,
   ExternalLink,
-  Wifi,
   Check,
   Copy,
   Lock,
   Bell,
   ShoppingBag,
+  QrCode,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMenu, useSiteSettings } from '../hooks/useMenu';
@@ -40,7 +40,6 @@ export const CustomerMenu: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showScrollTop, setShowScrollTop] = useState<boolean>(false);
-  const [copiedWifi, setCopiedWifi] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -152,15 +151,6 @@ export const CustomerMenu: React.FC = () => {
   const textHeading = isCream ? '#0E2F2C' : '#FAF7F2';
   const textBody = isCream ? '#3D524F' : '#C5D5D3';
   const badgeColor = isCream ? '#0E2F2C' : '#E5CFAF';
-
-  const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
-  const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
-
-  const handleCopyWifi = () => {
-    navigator.clipboard.writeText(wifiPassword);
-    setCopiedWifi(true);
-    setTimeout(() => setCopiedWifi(false), 2500);
-  };
 
   // Safe categories fallback prevents black screen if data is loading or malformed
   const safeCategories = useMemo(() => {
@@ -734,7 +724,7 @@ export const CustomerMenu: React.FC = () => {
                     color: isCream ? '#0E2F2C' : '#E5CFAF',
                   }}
                 >
-                  <span className="material-symbols-outlined text-[26px]">wifi</span>
+                  <span className="material-symbols-outlined text-[26px]">coffee</span>
                 </div>
                 <div>
                   <h3
@@ -747,7 +737,7 @@ export const CustomerMenu: React.FC = () => {
                     className="font-body text-xs leading-relaxed"
                     style={{ color: textBody }}
                   >
-                    Two-story illuminated modern glass facade, warm architectural wood interiors, high-speed Wi-Fi, and cozy conversation nooks.
+                    Two-story illuminated modern glass facade, warm architectural wood interiors, and cozy conversation nooks.
                   </p>
                 </div>
               </div>
@@ -964,7 +954,7 @@ export const CustomerMenu: React.FC = () => {
               </p>
             </div>
 
-            {/* Free Guest Wi-Fi Card */}
+            {/* Table Service & QR Stand Card */}
             <div
               className="border rounded-2xl p-6 text-center space-y-3 transition-colors"
               style={{
@@ -980,41 +970,30 @@ export const CustomerMenu: React.FC = () => {
                   color: isCream ? '#0E2F2C' : '#E5CFAF',
                 }}
               >
-                <Wifi className="w-5 h-5" />
+                <QrCode className="w-5 h-5" />
               </div>
               <h3
                 className="font-headline text-base font-bold"
                 style={{ color: textHeading }}
               >
-                {t.freeWifi}
+                Table QR Service
               </h3>
               <p
-                className="font-mono text-xs truncate"
+                className="font-body text-xs line-clamp-2"
                 style={{ color: textBody }}
               >
-                {wifiSsid}
+                Scan your table&apos;s ID card to browse, order, or call a waiter directly.
               </p>
-              <button
-                type="button"
-                onClick={handleCopyWifi}
+              <a
+                href="#menu-section"
                 className="w-full py-2 px-3 rounded-lg font-headline text-[11px] uppercase font-bold tracking-wider flex items-center justify-center gap-1.5 transition-all cursor-pointer shadow-sm hover:brightness-110"
                 style={{
                   backgroundColor: isCream ? '#0E2F2C' : accentColor,
                   color: isCream ? '#E5CFAF' : '#0E2F2C',
                 }}
               >
-                {copiedWifi ? (
-                  <>
-                    <Check className="w-3.5 h-3.5" />
-                    <span>{t.passwordCopied}</span>
-                  </>
-                ) : (
-                  <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>{t.copyPassword}</span>
-                  </>
-                )}
-              </button>
+                Explore Menu
+              </a>
             </div>
 
             {/* Phone Lines & Socials */}

@@ -3,7 +3,6 @@ import {
   Sparkles,
   RotateCcw,
   Save,
-  Wifi,
   Type,
   Palette,
   MapPin,
@@ -24,7 +23,7 @@ export const SiteSettingsCMS: React.FC = () => {
   const resetMutation = useResetSiteSettings();
 
   const [formData, setFormData] = useState<Partial<SiteSettings>>({});
-  const [activeTab, setActiveTab] = useState<'branding' | 'wifi' | 'story' | 'contact' | 'appearance'>('branding');
+  const [activeTab, setActiveTab] = useState<'branding' | 'story' | 'contact' | 'appearance'>('branding');
   const [isResetConfirmOpen, setIsResetConfirmOpen] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
 
@@ -112,19 +111,6 @@ export const SiteSettingsCMS: React.FC = () => {
           }`}
         >
           Hero &amp; Headlines
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setActiveTab('wifi')}
-          className={`px-4 py-2 rounded-xl text-xs font-headline uppercase tracking-wider font-bold transition-all shrink-0 flex items-center gap-1.5 ${
-            activeTab === 'wifi'
-              ? 'bg-[#E5CFAF] text-[#0E2F2C] font-extrabold shadow-[0_2px_10px_rgba(229,207,175,0.3)]'
-              : 'text-[#C5D5D3] hover:text-white hover:bg-white/5'
-          }`}
-        >
-          <Wifi className="w-3.5 h-3.5" />
-          <span>Wi-Fi Network</span>
         </button>
 
         <button
@@ -223,31 +209,7 @@ export const SiteSettingsCMS: React.FC = () => {
           </div>
         )}
 
-        {/* Tab 2: Wi-Fi Settings */}
-        {activeTab === 'wifi' && (
-          <div className="space-y-4 animate-in fade-in max-w-xl">
-            <p className="text-xs text-[#C5D5D3]">
-              Customers can tap &quot;Guest Wi-Fi&quot; in the navigation header or scan table cards to view and copy this password.
-            </p>
-
-            <Input
-              label="Wi-Fi Network Name (SSID)"
-              value={formData.wifiSsid || ''}
-              onChange={(e) => handleChange('wifiSsid', e.target.value)}
-              placeholder="Kabun_Guest_WiFi"
-              leftIcon={<Wifi className="w-4 h-4 text-[#A0B8B5]" />}
-            />
-
-            <Input
-              label="Wi-Fi Password"
-              value={formData.wifiPassword || ''}
-              onChange={(e) => handleChange('wifiPassword', e.target.value)}
-              placeholder="craftedfromcoffee"
-            />
-          </div>
-        )}
-
-        {/* Tab 3: Story & Quotes */}
+        {/* Tab 2: Story & Quotes */}
         {activeTab === 'story' && (
           <div className="space-y-4 animate-in fade-in">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

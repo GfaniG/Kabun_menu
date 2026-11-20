@@ -154,7 +154,7 @@ export const TableManagerView: React.FC = () => {
             leftIcon={<Printer className="w-4 h-4 text-[#E5CFAF]" />}
             className="text-xs font-bold"
           >
-            Batch Print All ({tables.length})
+            Print All ID Cards ({tables.length})
           </Button>
 
           <Button
@@ -237,7 +237,7 @@ export const TableManagerView: React.FC = () => {
                     className="flex-1 text-[11px] py-1 !h-8 font-bold"
                     leftIcon={<Printer className="w-3.5 h-3.5 text-[#0E2F2C]" />}
                   >
-                    Stand QR
+                    ID Card QR
                   </Button>
 
                   <button

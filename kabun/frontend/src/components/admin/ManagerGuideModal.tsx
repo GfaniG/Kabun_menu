@@ -4,7 +4,7 @@ import {
   Printer,
   DollarSign,
   Eye,
-  Wifi,
+  Bell,
   QrCode,
   Sparkles,
   Layers,
@@ -81,25 +81,25 @@ export const ManagerGuideModal: React.FC<ManagerGuideModalProps> = ({ isOpen, on
             </p>
           </div>
 
-          {/* Step 3: Wi-Fi Password Update */}
+          {/* Step 3: Cashier & Waiter Calls */}
           <div className="p-4 rounded-xl bg-[#0B2523] border border-[#1D4D47] space-y-2">
             <div className="flex items-center gap-2 text-[#E5CFAF] font-headline font-bold uppercase tracking-wider">
-              <Wifi className="w-4 h-4" />
-              <span>3. Change Guest Wi-Fi Password</span>
+              <Bell className="w-4 h-4" />
+              <span>3. Live Cashier &amp; Waiter Calls</span>
             </div>
             <p className="text-[#C5D5D3] leading-relaxed">
-              Click <strong className="text-white">Customize Menu &amp; Live CMS</strong> &rarr; <strong className="text-white">Guest Wi-Fi</strong> tab. Type your new network name or password and click &ldquo;Save Live Changes&rdquo;.
+              Open the <strong className="text-white">Cashier &amp; Orders</strong> tab on the cashier desktop. When customers order or ring the bell for a waiter, an audio counter chime rings automatically. Click order status buttons to advance from Pending &rarr; Preparing &rarr; Served.
             </p>
           </div>
 
-          {/* Step 4: Table QR Codes */}
+          {/* Step 4: Table QR ID Cards */}
           <div className="p-4 rounded-xl bg-[#0B2523] border border-[#1D4D47] space-y-2">
             <div className="flex items-center gap-2 text-[#348B82] font-headline font-bold uppercase tracking-wider">
               <QrCode className="w-4 h-4" />
-              <span>4. Master Table QR Acrylic Stand</span>
+              <span>4. Table QR ID Cards (CR80 85.6 &times; 54mm)</span>
             </div>
             <p className="text-[#C5D5D3] leading-relaxed">
-              Click the gold <strong className="text-white">&ldquo;Master QR&rdquo;</strong> button in the top navigation. You can print the 4x6&quot; acrylic table tent directly or download the high-res PNG for professional printing.
+              In <strong className="text-white">Tables &amp; QR</strong>, click <strong className="text-white">&ldquo;Print All 15 ID Cards&rdquo;</strong> to print standard ID card size badges on A4 sheets with dashed scissor-cut guides, or click any table to download high-res PNGs for PVC card printers. Click <strong className="text-white">&ldquo;+ Add Table&rdquo;</strong> to create more tables at any time.
             </p>
           </div>
 
