@@ -90,6 +90,11 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                   onError={() => setImgError(true)}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
+                {Boolean(quantityInTray && quantityInTray > 0) && (
+                  <span className="absolute top-1.5 left-1.5 z-10 px-1.5 py-0.5 rounded-full bg-red-600 text-white font-mono font-black text-[10px] shadow-md border border-white/20 animate-in zoom-in-75">
+                    {quantityInTray}
+                  </span>
+                )}
               </div>
             )}
 
@@ -177,48 +182,43 @@ export const MenuCard: React.FC<MenuCardProps> = ({
                   </span>
 
                   {quantityInTray && quantityInTray > 0 ? (
-                    <div className={`inline-flex items-center gap-2 px-2 py-1 rounded-xl border shadow-sm ${
+                    <div className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-xl border shadow-sm ${
                       isCream ? 'bg-[#EADAC3] border-[#DFC9AA]' : 'bg-[#0B2523] border-[#1D4D47]'
                     }`}>
                       <button
                         type="button"
                         onClick={() => onUpdateQuantity && onUpdateQuantity(item.id, -1)}
-                        className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center transition-colors cursor-pointer ${
                           isCream
                             ? 'bg-[#DFC9AA] text-[#0E2F2C] hover:bg-[#D4BC9B]'
                             : 'bg-[#133834] text-white hover:bg-[#18423D]'
                         }`}
                         title="Reduce quantity"
                       >
-                        <Minus className="w-3 h-3" />
+                        <Minus className="w-3.5 h-3.5" />
                       </button>
-                      <span className={`font-mono text-xs font-bold px-1 ${isCream ? 'text-[#0E2F2C]' : 'text-white'}`}>
+
+                      {/* Prominent Red Number Adding Whenever You Add a Dish */}
+                      <span className="font-mono text-xs font-black min-w-[20px] px-2 py-0.5 rounded-full bg-red-600 text-white text-center shadow-sm animate-in zoom-in-75">
                         {quantityInTray}
                       </span>
+
                       <button
                         type="button"
                         onClick={() => onUpdateQuantity && onUpdateQuantity(item.id, 1)}
-                        className={`w-5 h-5 rounded-md flex items-center justify-center transition-colors ${
-                          isCream
-                            ? 'bg-[#0E2F2C] text-[#E5CFAF] hover:bg-[#18423D]'
-                            : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
-                        }`}
+                        className="w-6 h-6 rounded-lg flex items-center justify-center transition-colors bg-[#16A34A] hover:bg-[#15803D] text-white cursor-pointer active:scale-95 shadow-sm"
                         title="Increase quantity"
                       >
-                        <Plus className="w-3 h-3" />
+                        <Plus className="w-3.5 h-3.5" />
                       </button>
                     </div>
                   ) : (
                     <button
                       type="button"
                       onClick={() => onAddToTray(item)}
-                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl font-headline text-[11px] font-bold uppercase tracking-wider transition-all shadow-sm ${
-                        isCream
-                          ? 'bg-[#0E2F2C] text-[#E5CFAF] border border-[#164640] hover:bg-[#18423D]'
-                          : 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110'
-                      }`}
+                      className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-headline text-xs font-extrabold uppercase tracking-wider transition-all shadow-[0_2px_12px_rgba(22,163,74,0.35)] bg-[#16A34A] hover:bg-[#15803D] active:scale-95 text-white cursor-pointer"
                     >
-                      <Plus className="w-3 h-3" />
+                      <Plus className="w-3.5 h-3.5" />
                       <span>Order</span>
                     </button>
                   )}

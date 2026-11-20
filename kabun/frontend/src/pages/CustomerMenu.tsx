@@ -10,6 +10,7 @@ import {
   Bell,
   ShoppingBag,
   QrCode,
+  ArrowRight,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMenu, useSiteSettings } from '../hooks/useMenu';
@@ -247,8 +248,11 @@ export const CustomerMenu: React.FC = () => {
         fontFamily,
       }}
     >
-      {/* 1. FIXED TOP NAVIGATION BAR */}
-      <MenuHeader />
+      {/* 1. FIXED TOP NAVIGATION BAR WITH CART ICON & RED NOTIFICATION BADGE */}
+      <MenuHeader
+        trayCount={trayCount}
+        onOpenTray={() => setIsTrayModalOpen(true)}
+      />
 
       {/* 2. CINEMATIC HERO SECTION */}
       <section
@@ -1260,8 +1264,8 @@ export const CustomerMenu: React.FC = () => {
           onClick={scrollToTop}
           type="button"
           aria-label="Scroll back to top"
-          className={`fixed right-5 sm:right-8 z-30 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in ${
-            trayCount > 0 ? 'bottom-24' : 'bottom-6'
+          className={`fixed right-4 sm:right-6 z-30 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_8px_25px_rgba(0,0,0,0.4)] hover:scale-110 active:scale-95 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in ${
+            trayCount > 0 ? 'bottom-24 sm:bottom-24' : 'bottom-5 sm:bottom-6'
           } ${
             isCream
               ? 'bg-[#0E2F2C] text-[#E5CFAF] border-[#DFC9AA] hover:bg-[#18423D]'
@@ -1273,51 +1277,54 @@ export const CustomerMenu: React.FC = () => {
         </button>
       )}
 
-      {/* 1. Left Floating Circular Button: Call Staff (Always floating on bottom-left) */}
+      {/* 1. Floating Circular Button: Call Staff (Floats on bottom-left, smoothly moves up when Tray is active so they never collide) */}
       <button
         onClick={() => setIsWaiterModalOpen(true)}
         type="button"
         aria-label="Call Staff"
         title="Call Staff / Waiter or Request Bill"
-        className={`fixed bottom-6 left-5 sm:left-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_10px_32px_rgba(0,0,0,0.45)] hover:scale-110 active:scale-95 cursor-pointer border-2 ${
+        className={`fixed left-4 sm:left-6 z-40 w-12 h-12 sm:w-14 sm:h-14 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_10px_32px_rgba(0,0,0,0.45)] hover:scale-110 active:scale-95 cursor-pointer border-2 ${
+          trayCount > 0 ? 'bottom-24 sm:bottom-24' : 'bottom-5 sm:bottom-6'
+        } ${
           isCream
             ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D]'
             : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-105'
         }`}
       >
-        <Bell className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-        <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tight mt-0.5 leading-none">
+        <Bell className="w-5 h-5 shrink-0" />
+        <span className="text-[9px] font-headline font-bold uppercase tracking-tight mt-0.5 leading-none">
           Staff
         </span>
       </button>
 
-      {/* 2. Right Floating Circular Button: Order Tray (Appears on bottom-right ONLY when customer adds items) */}
+      {/* 2. Big Eye-Catching Tray Pill Button in the Bottom-Center (Appears when customer adds dishes) */}
       {trayCount > 0 && (
         <button
           onClick={() => setIsTrayModalOpen(true)}
           type="button"
           aria-label="View Order Tray"
           title={`View Order Tray (${trayCount} items • ${trayTotal.toLocaleString()} ETB)`}
-          className={`fixed bottom-6 right-5 sm:right-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full flex flex-col items-center justify-center transition-all duration-300 shadow-[0_10px_32px_rgba(0,0,0,0.45)] hover:scale-110 active:scale-95 cursor-pointer border-2 animate-in fade-in zoom-in-90 slide-in-from-bottom-4 ${
-            isCream
-              ? 'bg-[#0E2F2C] border-[#DFC9AA] text-[#E5CFAF] hover:bg-[#18423D] shadow-[0_0_25px_rgba(14,47,44,0.3)]'
-              : 'bg-[#E5CFAF] border-[#E5CFAF] text-[#0E2F2C] hover:brightness-105 shadow-[0_0_25px_rgba(229,207,175,0.4)]'
-          }`}
+          className="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-40 w-[92%] sm:w-auto sm:min-w-[360px] max-w-md h-14 sm:h-16 px-5 sm:px-6 rounded-full flex items-center justify-between transition-all duration-300 bg-[#16A34A] hover:bg-[#15803D] active:scale-95 cursor-pointer border border-[#22C55E]/40 shadow-[0_12px_36px_rgba(22,163,74,0.45)] hover:shadow-[0_16px_40px_rgba(22,163,74,0.6)] animate-in fade-in zoom-in-95 slide-in-from-bottom-5 text-white"
         >
-          {/* Notification count badge on top right of the circle */}
-          <span
-            className={`absolute -top-1.5 -right-1.5 min-w-[22px] h-[22px] px-1 rounded-full text-[11px] font-black flex items-center justify-center font-mono shadow-md border-2 animate-pulse ${
-              isCream
-                ? 'bg-[#E5CFAF] text-[#0E2F2C] border-[#0E2F2C]'
-                : 'bg-[#0E2F2C] text-[#E5CFAF] border-[#E5CFAF]'
-            }`}
-          >
-            {trayCount}
-          </span>
-          <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 shrink-0" />
-          <span className="text-[9px] sm:text-[10px] font-headline font-bold uppercase tracking-tight mt-0.5 leading-none">
-            Tray
-          </span>
+          {/* Left: Bag Icon with Red Count Badge + Count & Price */}
+          <div className="flex items-center gap-3">
+            <div className="relative flex items-center justify-center">
+              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 text-white shrink-0" />
+              {/* Dynamic Red Number Badge */}
+              <span className="absolute -top-1.5 -right-2 bg-red-600 text-white font-mono font-black text-[10px] sm:text-[11px] min-w-[19px] h-[19px] px-1 rounded-full flex items-center justify-center border-2 border-[#16A34A] shadow-md animate-pulse">
+                {trayCount}
+              </span>
+            </div>
+            <span className="font-headline font-extrabold text-sm sm:text-base tracking-wide text-white">
+              {trayCount} {trayCount === 1 ? 'Item' : 'Items'} &bull; {trayTotal.toLocaleString()} ETB
+            </span>
+          </div>
+
+          {/* Right: View Tray Pill */}
+          <div className="flex items-center gap-1.5 font-headline text-[11px] sm:text-xs uppercase tracking-wider font-extrabold text-white bg-black/20 hover:bg-black/30 px-3.5 py-1.5 rounded-full transition-colors">
+            <span>View Tray</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </div>
         </button>
       )}
 

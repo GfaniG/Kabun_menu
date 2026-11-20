@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import {
   Menu as MenuIcon,
   X,
+  ShoppingCart,
 } from 'lucide-react';
 import { KabunLogo } from '../common/KabunLogo';
 import { ThemeSwitcher } from '../common/ThemeSwitcher';
@@ -13,11 +14,15 @@ import { useTheme } from '../../context/ThemeContext';
 interface MenuHeaderProps {
   currentLang?: Language;
   onLanguageChange?: (lang: Language) => void;
+  trayCount?: number;
+  onOpenTray?: () => void;
 }
 
 export const MenuHeader: React.FC<MenuHeaderProps> = ({
   currentLang = 'en',
   onLanguageChange,
+  trayCount = 0,
+  onOpenTray,
 }) => {
   const [searchParams] = useSearchParams();
   const urlTable = searchParams.get('table');
@@ -72,18 +77,21 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
 
           {/* Right Actions: Table Indicator, Dedicated Theme Toggle & Mobile Menu */}
           <div className="flex items-center gap-2 sm:gap-3 shrink-0">
-            {/* Top Table Indicator (Read-Only) */}
-            {tableNumber && (
-              <div
-                className="flex items-center gap-1.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-[#E5CFAF] border border-[#E5CFAF] text-[#0E2F2C] shadow-sm select-none"
-                title={`Seated at Table ${tableNumber} (QR Verified)`}
-              >
-                <span className="w-2 h-2 rounded-full bg-[#0E2F2C] animate-pulse shrink-0" />
-                <span className="font-headline font-bold text-[11px] sm:text-xs uppercase tracking-wider text-[#0E2F2C]">
-                  Table <span className="font-black text-[#0E2F2C]">{tableNumber}</span>
+            {/* Top Cart Icon Button (Opens Tray Modal with Dynamic Red Counter Badge) */}
+            <button
+              type="button"
+              onClick={onOpenTray}
+              className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-full flex items-center justify-center bg-[#133834] border border-[#1D4D47] text-[#FAF7F2] hover:bg-[#18423D] hover:text-[#E5CFAF] hover:scale-105 active:scale-95 transition-all cursor-pointer shadow-md group shrink-0"
+              title={trayCount > 0 ? `View Order Tray (${trayCount} items)` : 'View Order Tray'}
+              aria-label="View Order Tray"
+            >
+              <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform text-[#FAF7F2]" />
+              {trayCount > 0 && (
+                <span className="absolute -top-1.5 -right-1.5 min-w-[20px] h-[20px] px-1 bg-red-600 text-white text-[11px] font-black rounded-full flex items-center justify-center shadow-lg border-2 border-[#0E2F2C] animate-pulse">
+                  {trayCount}
                 </span>
-              </div>
-            )}
+              )}
+            </button>
 
             {/* Dedicated Color Inversion Theme Switcher (Contrast Icon 🌓) */}
             <ThemeSwitcher variant="compact" />
@@ -138,12 +146,24 @@ export const MenuHeader: React.FC<MenuHeaderProps> = ({
               {t.locationHours}
             </a>
 
-            {tableNumber && (
-              <div className="pt-2 border-t border-[#1D4D47] flex items-center justify-between text-xs">
-                <span className="text-[#A2B8B5] font-headline uppercase tracking-wider">Seated Table:</span>
-                <span className="font-headline font-bold text-[#E5CFAF] uppercase tracking-wider">Table {tableNumber}</span>
-              </div>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onOpenTray?.();
+              }}
+              className="w-full pt-3 pb-2 border-t border-[#1D4D47] flex items-center justify-between text-xs cursor-pointer font-headline uppercase tracking-wider text-[#FAF7F2] hover:text-[#E5CFAF]"
+            >
+              <span className="flex items-center gap-2">
+                <ShoppingCart className="w-4 h-4 text-[#10B981]" />
+                <span>Order Tray</span>
+              </span>
+              {trayCount > 0 && (
+                <span className="px-2 py-0.5 rounded-full bg-red-600 text-white text-[11px] font-bold font-mono">
+                  {trayCount} {trayCount === 1 ? 'item' : 'items'}
+                </span>
+              )}
+            </button>
           </div>
         )}
       </header>
