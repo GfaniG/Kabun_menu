@@ -41,6 +41,10 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
   const printCardRef = useRef<HTMLDivElement>(null);
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
+  const emblemSrc =
+    standTheme === 'cream'
+      ? '/assets/kabun/kabun-emblem-cream.png'
+      : '/assets/kabun/kabun-emblem-dark.png';
 
   // Sync state when modal opens
   useEffect(() => {
@@ -125,6 +129,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
   const handlePrint = () => {
     const isCream = standTheme === 'cream';
     const isPortrait = orientation === 'portrait';
+    const emblemUrl = `${baseUrl}/assets/kabun/${isCream ? 'kabun-emblem-cream.png' : 'kabun-emblem-dark.png'}`;
 
     const printWindow = window.open('', '_blank', 'width=900,height=1100');
     if (!printWindow) {
@@ -145,6 +150,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               <div class="id-card-wrapper">
                 <div class="id-card ${isCream ? 'theme-cream' : 'theme-teal'}">
                   <div class="card-header">
+                    <img src="${emblemUrl}" alt="Kabun" class="card-logo" />
                     <span class="geez-brand">ካቡን &bull; KABUN</span>
                     <span class="sub-brand">COFFEE + ROASTERY</span>
                   </div>
@@ -169,6 +175,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                 <div class="id-card id-card-landscape ${isCream ? 'theme-cream' : 'theme-teal'}">
                   <div class="left-col">
                     <div class="card-header">
+                      <img src="${emblemUrl}" alt="Kabun" class="card-logo card-logo-landscape" />
                       <span class="geez-brand">ካቡን &bull; KABUN</span>
                       <span class="sub-brand">COFFEE + ROASTERY</span>
                     </div>
@@ -246,6 +253,19 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                 background: #0E2F2C !important;
                 color: #FAF7F2 !important;
                 border: 1.5px solid #E5CFAF;
+              }
+              .card-logo {
+                width: 9mm;
+                height: 9mm;
+                object-fit: contain;
+                display: block;
+                margin: 0 auto 0.6mm auto;
+                border-radius: 50%;
+              }
+              .card-logo-landscape {
+                width: 7.5mm;
+                height: 7.5mm;
+                margin: 0 0 0.6mm 0;
               }
               .geez-brand {
                 font-size: 8.5pt;
@@ -411,6 +431,19 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               color: #FAF7F2 !important;
               border: 2px solid #E5CFAF;
             }
+            .card-logo {
+              width: 10.5mm;
+              height: 10.5mm;
+              object-fit: contain;
+              display: block;
+              margin: 0 auto 1mm auto;
+              border-radius: 50%;
+            }
+            .card-logo-landscape {
+              width: 8.5mm;
+              height: 8.5mm;
+              margin: 0 0 0.8mm 0;
+            }
             .geez-brand {
               font-size: 9.5pt;
               font-weight: 900;
@@ -509,6 +542,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                 ? `
               <div class="id-card ${isCream ? 'theme-cream' : 'theme-teal'}">
                 <div class="card-header">
+                  <img src="${emblemUrl}" alt="Kabun Logo" class="card-logo" />
                   <span class="geez-brand">ካቡን &bull; KABUN</span>
                   <span class="sub-brand">COFFEE + ROASTERY</span>
                 </div>
@@ -530,6 +564,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               <div class="id-card id-card-landscape ${isCream ? 'theme-cream' : 'theme-teal'}">
                 <div class="left-col">
                   <div class="card-header">
+                    <img src="${emblemUrl}" alt="Kabun Logo" class="card-logo card-logo-landscape" />
                     <span class="geez-brand">ካቡን &bull; KABUN</span>
                     <span class="sub-brand">COFFEE + ROASTERY</span>
                   </div>
@@ -674,6 +709,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                   }`}
                   style={{ minHeight: '140px' }}
                 >
+                  <img src={emblemSrc} alt="Kabun" className="w-5 h-5 object-contain rounded-full mx-auto mb-0.5" />
                   <span className="text-[9px] font-black uppercase tracking-wider block">
                     KABUN &bull; ROASTERY
                   </span>
@@ -712,7 +748,8 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               >
                 {orientation === 'portrait' ? (
                   <>
-                    <div className="space-y-0.5">
+                    <div className="space-y-0.5 flex flex-col items-center">
+                      <img src={emblemSrc} alt="Kabun Logo" className="w-8 h-8 object-contain rounded-full mb-0.5" />
                       <span className="font-headline text-[10.5px] font-black uppercase tracking-wider block leading-tight">
                         ካቡን &bull; KABUN
                       </span>
@@ -744,7 +781,8 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                 ) : (
                   <div className="flex items-center justify-between w-full h-full gap-2 text-left">
                     <div className="flex flex-col justify-between h-full py-1">
-                      <div className="space-y-0.5">
+                      <div className="space-y-0.5 flex flex-col items-start">
+                        <img src={emblemSrc} alt="Kabun Logo" className="w-7 h-7 object-contain rounded-full mb-0.5" />
                         <span className="font-headline text-[10px] font-black uppercase tracking-wider block leading-tight">
                           ካቡን &bull; KABUN
                         </span>
