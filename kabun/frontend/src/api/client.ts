@@ -1,4 +1,14 @@
-import { MenuItem, Category, AdminUser, SiteSettings } from '../types/menu';
+import {
+  MenuItem,
+  Category,
+  AdminUser,
+  SiteSettings,
+  DiningTable,
+  CustomerOrder,
+  OrderItemInput,
+  ServiceRequest,
+  CashierSummary,
+} from '../types/menu';
 
 // In production, always use relative paths (same origin). In development, fallback to proxy or env.
 const API_BASE = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || '');
@@ -175,6 +185,102 @@ class ApiClient {
   }
 
 
+
+  // --- Tables ---
+  async getTables(): Promise<{ success: boolean; data: DiningTable[] }> {
+    return this.request('/api/tables');
+  }
+
+  async createTable(data: {
+    tableNumber: string;
+    label?: string;
+    capacity?: number;
+    sortOrder?: number;
+  }): Promise<{ success: boolean; message: string; data: DiningTable }> {
+    return this.request('/api/tables', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async updateTable(
+    id: string,
+    data: Partial<DiningTable>
+  ): Promise<{ success: boolean; message: string; data: DiningTable }> {
+    return this.request(`/api/tables/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async deleteTable(id: string): Promise<{ success: boolean; message: string }> {
+    return this.request(`/api/tables/${id}`, {
+      method: 'DELETE',
+    });
+  }
+
+  // --- Orders ---
+  async createOrder(data: {
+    tableNumber: string;
+    items: OrderItemInput[];
+    customerNotes?: string;
+  }): Promise<{ success: boolean; message: string; data: CustomerOrder }> {
+    return this.request('/api/orders', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getOrders(status?: string): Promise<{ success: boolean; data: CustomerOrder[] }> {
+    const q = status ? `?status=${encodeURIComponent(status)}` : '';
+    return this.request(`/api/orders${q}`);
+  }
+
+  async updateOrderStatus(
+    id: string,
+    status: string
+  ): Promise<{ success: boolean; message: string; data: CustomerOrder }> {
+    return this.request(`/api/orders/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  async getTableOrders(tableNumber: string): Promise<{ success: boolean; data: CustomerOrder[] }> {
+    return this.request(`/api/orders/table/${encodeURIComponent(tableNumber)}`);
+  }
+
+  // --- Service Requests / Waiter Call ---
+  async createServiceRequest(data: {
+    tableNumber: string;
+    type: 'CALL_WAITER' | 'REQUEST_BILL' | 'WATER_REFILL' | string;
+    paymentMethod?: string;
+    notes?: string;
+  }): Promise<{ success: boolean; message: string; data: ServiceRequest }> {
+    return this.request('/api/service-requests', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
+  }
+
+  async getServiceRequests(status?: string): Promise<{ success: boolean; data: ServiceRequest[] }> {
+    const q = status ? `?status=${encodeURIComponent(status)}` : '';
+    return this.request(`/api/service-requests${q}`);
+  }
+
+  async updateServiceRequestStatus(
+    id: string,
+    status: string
+  ): Promise<{ success: boolean; message: string; data: ServiceRequest }> {
+    return this.request(`/api/service-requests/${id}/status`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    });
+  }
+
+  async getCashierSummary(): Promise<{ success: boolean; data: CashierSummary }> {
+    return this.request('/api/cashier/summary');
+  }
 
   // --- Menu Analytics ---
   async trackEvent(data: {

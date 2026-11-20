@@ -115,6 +115,28 @@ async function main() {
   });
   console.log('⚙️ Default Kabun Site Settings seeded.');
 
+  // 3. Seed 15 Roastery Dining Tables
+  for (let i = 1; i <= 15; i++) {
+    const tableNum = String(i);
+    await prisma.table.upsert({
+      where: { tableNumber: tableNum },
+      update: {
+        label: `Table ${tableNum}`,
+        sortOrder: i,
+        capacity: i <= 4 ? 2 : i <= 12 ? 4 : 6,
+        isActive: true,
+      },
+      create: {
+        tableNumber: tableNum,
+        label: `Table ${tableNum}`,
+        sortOrder: i,
+        capacity: i <= 4 ? 2 : i <= 12 ? 4 : 6,
+        isActive: true,
+      },
+    });
+  }
+  console.log('🪑 Seeded 15 Roastery Tables (Table 1 - Table 15)');
+
   // 3. Clear previous items and categories for a clean slate
   await prisma.menuItem.deleteMany({});
   await prisma.category.deleteMany({});

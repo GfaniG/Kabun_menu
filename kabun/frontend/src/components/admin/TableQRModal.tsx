@@ -1,29 +1,59 @@
 import React, { useState, useEffect, useRef } from 'react';
 import QRCode from 'qrcode';
-import { QrCode, Download, Printer, Copy, Check, ExternalLink, Wifi } from 'lucide-react';
+import { QrCode, Download, Printer, Copy, Check, ExternalLink, Wifi, Layers } from 'lucide-react';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { KabunLogo } from '../common/KabunLogo';
-import { useSiteSettings } from '../../hooks/useMenu';
+import { useSiteSettings, useTables } from '../../hooks/useMenu';
 
 interface TableQRModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialTableNumber?: string | null;
+  batchMode?: boolean;
 }
 
-export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) => {
+export const TableQRModal: React.FC<TableQRModalProps> = ({
+  isOpen,
+  onClose,
+  initialTableNumber,
+  batchMode = false,
+}) => {
   const { data: settings } = useSiteSettings();
+  const { data: tables = [] } = useTables();
+
+  const [selectedTable, setSelectedTable] = useState<string>('1');
+  const [isBatch, setIsBatch] = useState<boolean>(batchMode);
   const [qrDataUrl, setQrDataUrl] = useState<string>('');
+  const [batchQRs, setBatchQRs] = useState<Array<{ tableNumber: string; label: string; qrUrl: string }>>([]);
   const [copiedLink, setCopiedLink] = useState(false);
   const [standTheme, setStandTheme] = useState<'cream' | 'teal'>('cream');
   const printCardRef = useRef<HTMLDivElement>(null);
 
-  // Single unified URL for all dining tables and guest scans
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
-  const targetUrl = `${baseUrl}/?scan=qr`;
 
+  // Sync state when modal opens
   useEffect(() => {
-    if (!isOpen) return;
+    if (isOpen) {
+      if (initialTableNumber) {
+        setSelectedTable(initialTableNumber);
+        setIsBatch(false);
+      } else if (batchMode) {
+        setIsBatch(true);
+      } else if (tables.length > 0) {
+        setSelectedTable(tables[0].tableNumber);
+      }
+    }
+  }, [isOpen, initialTableNumber, batchMode, tables]);
+
+  // Target URL for single table
+  const targetUrl = selectedTable === 'master'
+    ? `${baseUrl}/?scan=qr`
+    : `${baseUrl}/?table=${encodeURIComponent(selectedTable)}`;
+
+  // Generate QR for single selected table
+  useEffect(() => {
+    if (!isOpen || isBatch) return;
 
     QRCode.toDataURL(targetUrl, {
       width: 512,
@@ -36,13 +66,42 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
     })
       .then((url) => setQrDataUrl(url))
       .catch((err) => console.error('Failed to generate QR:', err));
-  }, [isOpen, targetUrl]);
+  }, [isOpen, targetUrl, isBatch]);
+
+  // Generate batch QRs for all tables
+  useEffect(() => {
+    if (!isOpen || !isBatch || tables.length === 0) return;
+
+    const generateAll = async () => {
+      const results: Array<{ tableNumber: string; label: string; qrUrl: string }> = [];
+      for (const t of tables) {
+        const url = `${baseUrl}/?table=${encodeURIComponent(t.tableNumber)}`;
+        const qr = await QRCode.toDataURL(url, {
+          width: 384,
+          margin: 2,
+          color: {
+            dark: '#0E2F2C',
+            light: '#E5CFAF',
+          },
+          errorCorrectionLevel: 'H',
+        });
+        results.push({
+          tableNumber: t.tableNumber,
+          label: t.label || `Table ${t.tableNumber}`,
+          qrUrl: qr,
+        });
+      }
+      setBatchQRs(results);
+    };
+
+    generateAll().catch(console.error);
+  }, [isOpen, isBatch, tables, baseUrl]);
 
   const handleDownload = () => {
     if (!qrDataUrl) return;
     const a = document.createElement('a');
     a.href = qrDataUrl;
-    a.download = `Kabun-Coffee-Official-Menu-QR.png`;
+    a.download = `Kabun-Coffee-Table-${selectedTable}-QR.png`;
     a.click();
   };
 
@@ -53,27 +112,171 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
   };
 
   const handlePrint = () => {
-    const cardEl = printCardRef.current;
-    if (!cardEl) {
-      window.print();
-      return;
-    }
+    const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
+    const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
+    const isCream = standTheme === 'cream';
 
-    const printWindow = window.open('', '_blank', 'width=700,height=950');
+    const printWindow = window.open('', '_blank', 'width=850,height=1100');
     if (!printWindow) {
       window.print();
       return;
     }
 
-    const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
-    const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
-    const isCream = standTheme === 'cream';
+    if (isBatch) {
+      // Print all tables in a 2-up grid per page
+      const cardsHtml = batchQRs
+        .map(
+          (item) => `
+        <div class="acrylic-card">
+          <div class="brand-top">
+            <span class="brand-name">KABUN COFFEE + ROASTERY</span>
+            <span class="brand-tagline">CRAFTED FROM COFFEE</span>
+          </div>
+
+          <div class="table-badge">
+            TABLE ${item.tableNumber}
+          </div>
+
+          <div class="qr-box">
+            <img src="${item.qrUrl}" alt="Table ${item.tableNumber} QR" />
+          </div>
+
+          <div class="instruction">
+            <strong>SCAN WITH PHONE</strong><br>
+            <span>To Order Drinks, Pastries & Call Barista</span>
+          </div>
+
+          <div class="wifi-pill">
+            <span class="wifi-label">GUEST WI-FI</span>
+            <span class="wifi-value">${wifiSsid}</span>
+            <span class="wifi-pass">PW: ${wifiPassword}</span>
+          </div>
+        </div>
+      `
+        )
+        .join('');
+
+      printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+          <head>
+            <title>Kabun Coffee - Batch Table QR Stands</title>
+            <style>
+              @page { size: A4; margin: 8mm; }
+              * { box-sizing: border-box; }
+              body {
+                font-family: 'Outfit', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+                margin: 0;
+                background: #ffffff;
+                color: #0E2F2C;
+              }
+              .grid-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+                padding: 10px;
+              }
+              .acrylic-card {
+                background: ${isCream ? '#FAF6F0' : '#0E2F2C'} !important;
+                color: ${isCream ? '#0E2F2C' : '#FAF7F2'} !important;
+                border: 2.5px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
+                border-radius: 20px;
+                padding: 16px 14px;
+                text-align: center;
+                break-inside: avoid;
+                page-break-inside: avoid;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+              }
+              .brand-name {
+                font-size: 11px;
+                font-weight: 900;
+                letter-spacing: 2px;
+                display: block;
+                color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
+              }
+              .brand-tagline {
+                font-size: 8px;
+                letter-spacing: 1.5px;
+                opacity: 0.8;
+                display: block;
+                margin-top: 2px;
+              }
+              .table-badge {
+                display: inline-block;
+                background: ${isCream ? '#0E2F2C' : '#E5CFAF'};
+                color: ${isCream ? '#E5CFAF' : '#0E2F2C'};
+                font-size: 14px;
+                font-weight: 900;
+                letter-spacing: 1.5px;
+                padding: 4px 14px;
+                border-radius: 20px;
+                margin: 10px 0 6px;
+              }
+              .qr-box {
+                background: #E5CFAF;
+                padding: 8px;
+                border-radius: 12px;
+                display: inline-block;
+                margin: 4px auto;
+              }
+              .qr-box img {
+                width: 130px;
+                height: 130px;
+                display: block;
+              }
+              .instruction {
+                font-size: 9px;
+                margin-top: 6px;
+                line-height: 1.3;
+              }
+              .wifi-pill {
+                margin-top: 8px;
+                padding: 4px 8px;
+                background: ${isCream ? '#EDE2D1' : '#143B37'};
+                border-radius: 8px;
+                font-size: 8px;
+                line-height: 1.2;
+              }
+              .wifi-label {
+                font-weight: 800;
+                letter-spacing: 1px;
+                color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
+                display: block;
+              }
+              .wifi-value, .wifi-pass {
+                font-family: monospace;
+                display: block;
+              }
+            </style>
+          </head>
+          <body>
+            <div class="grid-container">
+              ${cardsHtml}
+            </div>
+            <script>
+              window.onload = function() {
+                setTimeout(function() {
+                  window.print();
+                }, 300);
+              };
+            </script>
+          </body>
+        </html>
+      `);
+      printWindow.document.close();
+      return;
+    }
+
+    // Single card printing
+    const selectedObj = tables.find((t) => t.tableNumber === selectedTable);
+    const tableLabel = selectedTable === 'master' ? 'MAIN ROASTERY' : (selectedObj?.label || `TABLE ${selectedTable}`);
 
     printWindow.document.write(`
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Kabun Coffee + Roastery - Official Table QR Stand</title>
+          <title>Kabun Coffee - ${tableLabel} QR Stand</title>
           <style>
             @page { size: auto; margin: 10mm; }
             * { box-sizing: border-box; }
@@ -85,149 +288,109 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
               min-height: 100vh;
               margin: 0;
               background: #ffffff;
-              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
             }
             .acrylic-card {
-              width: 330px;
-              background-color: ${isCream ? '#FAF6F0' : '#0E2F2C'} !important;
+              width: 320px;
+              background: ${isCream ? '#FAF6F0' : '#0E2F2C'} !important;
               color: ${isCream ? '#0E2F2C' : '#FAF7F2'} !important;
               border: 3px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
-              border-radius: 28px;
-              padding: 28px 24px;
+              border-radius: 26px;
+              padding: 24px 20px;
               text-align: center;
+              box-shadow: 0 10px 40px rgba(0,0,0,0.15);
               -webkit-print-color-adjust: exact !important;
               print-color-adjust: exact !important;
-              box-shadow: 0 10px 40px ${isCream ? 'rgba(14,47,44,0.15)' : 'rgba(0,0,0,0.3)'};
-            }
-            .emblem-wrapper {
-              width: 64px;
-              height: 64px;
-              margin: 0 auto 8px;
-              border-radius: 50%;
-              overflow: hidden;
-              border: 2px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
-              background: ${isCream ? '#FAF6F0' : '#0E2F2C'};
-            }
-            .emblem-wrapper img {
-              width: 100%;
-              height: 100%;
-              object-fit: contain;
-            }
-            .geez-title {
-              font-size: 26px;
-              font-weight: 900;
-              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
-              line-height: 1.1;
-              letter-spacing: 2px;
-              margin: 0;
             }
             .brand-name {
               font-size: 13px;
-              font-weight: 800;
-              letter-spacing: 3px;
-              text-transform: uppercase;
-              color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
-              margin: 2px 0 1px;
-            }
-            .brand-sub {
-              font-size: 9px;
-              font-weight: ${isCream ? '700' : '600'};
-              letter-spacing: 2px;
-              color: ${isCream ? '#3D524F' : '#C5D5D3'};
-              text-transform: uppercase;
-              margin-bottom: 12px;
-            }
-            .badge {
-              display: inline-block;
-              background-color: ${isCream ? '#0E2F2C' : '#E5CFAF'} !important;
-              color: ${isCream ? '#E5CFAF' : '#0E2F2C'} !important;
-              font-size: 9.5px;
               font-weight: 900;
-              letter-spacing: 1.5px;
-              text-transform: uppercase;
-              padding: 6px 14px;
-              border-radius: 999px;
-              margin-bottom: 14px;
-            }
-            .qr-wrapper {
-              background: #E5CFAF !important;
-              padding: 12px;
-              border-radius: 20px;
-              display: inline-block;
-              margin-bottom: 12px;
-              border: 2px solid ${isCream ? '#0E2F2C' : '#E5CFAF'};
-            }
-            .qr-wrapper img {
-              width: 175px;
-              height: 175px;
+              letter-spacing: 2.5px;
+              color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
               display: block;
             }
-            .instructions {
-              font-size: 12px;
-              font-weight: 800;
-              text-transform: uppercase;
-              letter-spacing: 1px;
-              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
-              margin: 0 0 3px;
-            }
-            .sub-instructions {
+            .brand-tagline {
               font-size: 9px;
-              color: ${isCream ? '#3D524F' : '#C5D5D3'};
-              margin: 0 0 14px;
-              font-style: italic;
+              letter-spacing: 2px;
+              opacity: 0.8;
+              display: block;
+              margin-top: 2px;
+            }
+            .table-badge {
+              display: inline-block;
+              background: ${isCream ? '#0E2F2C' : '#E5CFAF'};
+              color: ${isCream ? '#E5CFAF' : '#0E2F2C'};
+              font-size: 16px;
+              font-weight: 900;
+              letter-spacing: 2px;
+              padding: 5px 18px;
+              border-radius: 24px;
+              margin: 14px 0 10px;
+            }
+            .qr-box {
+              background: #E5CFAF;
+              padding: 10px;
+              border-radius: 16px;
+              display: inline-block;
+              margin: 6px auto;
+            }
+            .qr-box img {
+              width: 170px;
+              height: 170px;
+              display: block;
+            }
+            .instruction {
+              font-size: 11px;
+              margin-top: 10px;
+              line-height: 1.4;
             }
             .wifi-box {
-              background-color: ${isCream ? '#EFE2CE' : '#133834'} !important;
-              border: 1px solid ${isCream ? '#DFC9AA' : '#1D4D47'};
-              border-radius: 14px;
-              padding: 10px 12px;
+              margin-top: 14px;
+              padding: 8px 12px;
+              background: ${isCream ? '#EDE2D1' : '#143B37'};
+              border-radius: 12px;
               font-size: 10px;
-              color: ${isCream ? '#0E2F2C' : '#C5D5D3'};
-              text-align: center;
             }
-            .wifi-header {
+            .wifi-label {
               font-weight: 800;
-              color: ${isCream ? '#0E2F2C' : '#FAF7F2'};
-              margin-bottom: 3px;
-              text-transform: uppercase;
-              font-size: 9px;
-              letter-spacing: 1px;
+              letter-spacing: 1.5px;
+              color: ${isCream ? '#0E2F2C' : '#E5CFAF'};
+              display: block;
             }
-            .wifi-line {
+            .wifi-val {
               font-family: monospace;
-              font-size: 10px;
-              margin: 2px 0;
+              display: block;
+              margin-top: 2px;
             }
-            .highlight { color: ${isCream ? '#0E2F2C' : '#E5CFAF'}; font-weight: bold; }
           </style>
         </head>
         <body>
           <div class="acrylic-card">
-            <div class="emblem-wrapper">
-              <img src="${isCream ? '/assets/kabun/kabun-emblem-cream.png' : '/assets/kabun/kabun-emblem-dark.png'}" alt="Kabun Logo" />
+            <span class="brand-name">KABUN COFFEE + ROASTERY</span>
+            <span class="brand-tagline">CRAFTED FROM COFFEE</span>
+
+            <div class="table-badge">
+              ${tableLabel.toUpperCase()}
             </div>
-            <div class="geez-title">ካቡን</div>
-            <div class="brand-name">KABUN COFFEE + ROASTERY</div>
-            <div class="brand-sub">MEKELLE &bull; ETHIOPIA</div>
-            <div>
-              <span class="badge">Crafted from coffee &bull; Scan for Menu &amp; Wi-Fi</span>
+
+            <div class="qr-box">
+              <img src="${qrDataUrl}" alt="${tableLabel} QR" />
             </div>
-            <div class="qr-wrapper">
-              <img src="${qrDataUrl}" alt="Menu QR Code" />
+
+            <div class="instruction">
+              <strong>SCAN WITH YOUR SMARTPHONE</strong><br>
+              <span>Explore Menu &bull; Order Drinks &bull; Call Barista</span>
             </div>
-            <p class="instructions">Scan to Explore Roastery Menu</p>
-            <p class="sub-instructions">Single-Origin Roasts &bull; Specialty Cold Brew &bull; Viennoiserie</p>
+
             <div class="wifi-box">
-              <div class="wifi-header">Complimentary Guest Wi-Fi</div>
-              <div class="wifi-line">SSID: <strong>${wifiSsid}</strong></div>
-              <div class="wifi-line">Password: <span class="highlight">${wifiPassword}</span></div>
+              <span class="wifi-label">COMPLIMENTARY GUEST WI-FI</span>
+              <span class="wifi-val">${wifiSsid} &bull; PW: ${wifiPassword}</span>
             </div>
           </div>
           <script>
             window.onload = function() {
-              window.focus();
-              window.print();
-              setTimeout(function() { window.close(); }, 500);
+              setTimeout(function() {
+                window.print();
+              }, 300);
             };
           </script>
         </body>
@@ -236,169 +399,210 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({ isOpen, onClose }) =
     printWindow.document.close();
   };
 
+  const wifiSsid = settings?.wifiSsid || 'Kabun_Guest_WiFi';
+  const wifiPassword = settings?.wifiPassword || 'craftedfromcoffee';
+
   return (
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={
-        <div className="flex items-center gap-2">
-          <QrCode className="w-5 h-5 text-[#E5CFAF]" />
-          <span>Official Roastery Master QR Stand</span>
-        </div>
-      }
-      subtitle="Print this single master QR card for tables, counters, and roastery stands"
-      maxWidth="md"
+      title={isBatch ? 'Batch Print All Table QR Stands' : `Table ${selectedTable} QR Stand Card`}
+      subtitle="High-resolution QR table stand cards with automatic ordering and waiter call links"
+      maxWidth={isBatch ? '2xl' : 'lg'}
     >
-      <div className="space-y-4">
-        {/* Style Selector */}
-        <div className="flex items-center justify-center gap-2 bg-[#0B2523] p-1.5 rounded-2xl border border-[#1D4D47] w-fit mx-auto">
-          <button
-            type="button"
-            onClick={() => setStandTheme('cream')}
-            className={`px-3 py-1.5 rounded-xl font-headline text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              standTheme === 'cream'
-                ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-md font-extrabold'
-                : 'text-[#C5D5D3] hover:text-white'
-            }`}
-          >
-            ☀️ Roastery Cream Stand
-          </button>
-          <button
-            type="button"
-            onClick={() => setStandTheme('teal')}
-            className={`px-3 py-1.5 rounded-xl font-headline text-xs font-bold uppercase tracking-wider transition-all cursor-pointer ${
-              standTheme === 'teal'
-                ? 'bg-[#E5CFAF] text-[#0E2F2C] shadow-md font-extrabold'
-                : 'text-[#C5D5D3] hover:text-white'
-            }`}
-          >
-            🌙 Midnight Teal Stand
-          </button>
+      <div className="space-y-5">
+        {/* Selector & Mode Switch */}
+        <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-[#0B2523] border border-[#1D4D47]">
+          {/* Mode toggle */}
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setIsBatch(false)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-headline font-bold uppercase tracking-wider transition-all ${
+                !isBatch ? 'bg-[#E5CFAF] text-[#0E2F2C]' : 'text-[#C5D5D3] hover:text-white'
+              }`}
+            >
+              Single Table
+            </button>
+            <button
+              onClick={() => setIsBatch(true)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-headline font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 ${
+                isBatch ? 'bg-[#E5CFAF] text-[#0E2F2C]' : 'text-[#C5D5D3] hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Batch All ({tables.length})</span>
+            </button>
+          </div>
+
+          {/* Table select dropdown if in Single Mode */}
+          {!isBatch && (
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-[#C5D5D3] uppercase tracking-wider font-bold">Select Table:</span>
+              <select
+                value={selectedTable}
+                onChange={(e) => setSelectedTable(e.target.value)}
+                className="bg-[#133834] border border-[#1D4D47] text-white text-xs font-headline font-bold uppercase tracking-wider rounded-lg px-2.5 py-1.5 focus:border-[#E5CFAF] outline-none"
+              >
+                <option value="master">Master QR (Generic / All Tables)</option>
+                {tables.map((t) => (
+                  <option key={t.id} value={t.tableNumber}>
+                    {t.label || `Table ${t.tableNumber}`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
+
+          {/* Theme Switcher for Stand */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-[#C5D5D3]">Card Theme:</span>
+            <button
+              onClick={() => setStandTheme('cream')}
+              className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                standTheme === 'cream' ? 'bg-[#FAF6F0] text-[#0E2F2C]' : 'text-[#C5D5D3]'
+              }`}
+            >
+              Cream
+            </button>
+            <button
+              onClick={() => setStandTheme('teal')}
+              className={`px-2.5 py-1 rounded-md text-xs font-bold ${
+                standTheme === 'teal' ? 'bg-[#0E2F2C] text-[#E5CFAF] border border-[#1D4D47]' : 'text-[#C5D5D3]'
+              }`}
+            >
+              Teal
+            </button>
+          </div>
         </div>
 
-        {/* Printable Table Tent Preview Card */}
-        <div className="flex justify-center">
-          <div
-            ref={printCardRef}
-            className={`w-full max-w-xs p-6 rounded-3xl shadow-2xl border-2 text-center space-y-3.5 transition-colors ${
-              standTheme === 'cream'
-                ? 'bg-[#FAF6F0] text-[#0E2F2C] border-[#0E2F2C]'
-                : 'bg-[#0E2F2C] text-[#FAF7F2] border-[#E5CFAF]'
-            }`}
-          >
-            {/* Kabun Circular Emblem */}
-            <div className="flex justify-center pt-1">
-              <KabunLogo variant="emblem" lightMode={standTheme === 'cream'} className="w-16 h-16 mx-auto" />
+        {/* Preview Container */}
+        {isBatch ? (
+          <div className="space-y-3">
+            <p className="text-xs text-[#C5D5D3]">
+              Generating QR codes for all <strong>{tables.length} tables</strong>. Clicking <em>"Print All Stand Cards"</em> will print them 2-per-page formatted for acrylic table tents or counter cardstock.
+            </p>
+            <div className="max-h-[360px] overflow-y-auto grid grid-cols-2 sm:grid-cols-3 gap-3 p-2 bg-[#0B2523] rounded-xl border border-[#1D4D47]">
+              {batchQRs.map((item) => (
+                <div
+                  key={item.tableNumber}
+                  className="bg-[#133834] border border-[#1D4D47] rounded-xl p-3 text-center space-y-1.5"
+                >
+                  <span className="px-2 py-0.5 rounded-full bg-[#E5CFAF] text-[#0E2F2C] text-[10px] font-black uppercase">
+                    TABLE {item.tableNumber}
+                  </span>
+                  <div className="w-20 h-20 mx-auto bg-[#E5CFAF] p-1 rounded-lg">
+                    <img src={item.qrUrl} alt={item.label} className="w-full h-full" />
+                  </div>
+                  <span className="text-[10px] text-[#A2B8B5] block truncate">{item.label}</span>
+                </div>
+              ))}
             </div>
-
-            <div>
-              <h2 className={`font-headline font-black text-2xl tracking-wider leading-none ${
-                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
-              }`}>
-                ካቡን
-              </h2>
-              <p className={`font-headline font-extrabold text-xs tracking-[0.25em] uppercase mt-0.5 ${
-                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'
-              }`}>
-                KABUN COFFEE + ROASTERY
-              </p>
-            </div>
-
-            <div className="py-0.5">
-              <span className={`inline-block px-3.5 py-1 rounded-full text-[10px] font-headline font-black tracking-wider uppercase ${
+          </div>
+        ) : (
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-6 py-2">
+            {/* Stand Card Preview */}
+            <div
+              ref={printCardRef}
+              className={`w-64 rounded-2xl p-5 text-center space-y-3 border-2 transition-all shadow-xl ${
                 standTheme === 'cream'
-                  ? 'bg-[#0E2F2C] text-[#E5CFAF] shadow-[0_2px_8px_rgba(14,47,44,0.2)]'
-                  : 'bg-[#E5CFAF] text-[#0E2F2C] shadow-[0_0_12px_rgba(229,207,175,0.4)]'
-              }`}>
-                Crafted from coffee &bull; Scan for Menu &amp; Wi-Fi
-              </span>
-            </div>
+                  ? 'bg-[#FAF6F0] text-[#0E2F2C] border-[#0E2F2C]'
+                  : 'bg-[#0E2F2C] text-[#FAF7F2] border-[#E5CFAF]'
+              }`}
+            >
+              <div>
+                <span className="font-headline text-[11px] font-black uppercase tracking-widest block">
+                  KABUN COFFEE + ROASTERY
+                </span>
+                <span className="text-[8px] uppercase tracking-wider block opacity-75">
+                  CRAFTED FROM COFFEE
+                </span>
+              </div>
 
-            {/* High-Resolution QR Code: Cream Background with Teal Pattern */}
-            <div className={`p-3 bg-[#E5CFAF] rounded-2xl inline-block shadow-lg border-2 ${
-              standTheme === 'cream' ? 'border-[#0E2F2C]' : 'border-[#E5CFAF]'
-            }`}>
-              {qrDataUrl ? (
-                <img
-                  src={qrDataUrl}
-                  alt="Official Kabun Coffee Menu QR Code"
-                  className="w-44 h-44 mx-auto object-contain"
-                />
-              ) : (
-                <div className="w-44 h-44 flex items-center justify-center text-zinc-400 text-xs">
-                  Generating QR...
+              <span
+                className={`inline-block px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest ${
+                  standTheme === 'cream' ? 'bg-[#0E2F2C] text-[#E5CFAF]' : 'bg-[#E5CFAF] text-[#0E2F2C]'
+                }`}
+              >
+                {selectedTable === 'master' ? 'MAIN ROASTERY' : `TABLE ${selectedTable}`}
+              </span>
+
+              {qrDataUrl && (
+                <div className="w-40 h-40 mx-auto bg-[#E5CFAF] p-2 rounded-xl shadow-inner">
+                  <img src={qrDataUrl} alt="Table QR" className="w-full h-full" />
                 </div>
               )}
-            </div>
 
-            <div className="space-y-0.5">
-              <p className={`font-headline text-xs font-extrabold uppercase tracking-wider ${
-                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
-              }`}>
-                Scan with any Smartphone Camera
-              </p>
-              <p className={`text-[10px] italic ${
-                standTheme === 'cream' ? 'text-[#3D524F]' : 'text-[#C5D5D3]'
-              }`}>
-                Single-Origin Roasts &bull; Cold Brew &bull; Fresh Viennoiserie
-              </p>
-            </div>
-
-            {/* Dynamic Wi-Fi callout at bottom of table card */}
-            <div className={`pt-2.5 border-t text-[10px] space-y-1 rounded-xl p-2.5 ${
-              standTheme === 'cream'
-                ? 'border-[#DFC9AA] text-[#3D524F] bg-[#EFE2CE]'
-                : 'border-[#1D4D47] text-[#C5D5D3] bg-[#133834]'
-            }`}>
-              <div className={`flex items-center justify-center gap-1.5 font-bold ${
-                standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#FAF7F2]'
-              }`}>
-                <Wifi className={`w-3.5 h-3.5 ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
-                <span>Complimentary Guest Wi-Fi</span>
+              <div className="text-[10px] leading-tight space-y-0.5">
+                <strong className="block uppercase tracking-wider">Scan with Phone</strong>
+                <span className="opacity-80">Order Drinks &bull; Call Barista</span>
               </div>
-              <p className="font-mono">
-                Network: <span className={`font-bold ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-white'}`}>{settings?.wifiSsid || 'Kabun_Guest_WiFi'}</span>
+
+              <div
+                className={`p-2 rounded-xl text-[9px] ${
+                  standTheme === 'cream' ? 'bg-[#EDE2D1]' : 'bg-[#143B37]'
+                }`}
+              >
+                <div className="flex items-center justify-center gap-1 font-bold">
+                  <Wifi className="w-3 h-3" />
+                  <span>WI-FI: {wifiSsid}</span>
+                </div>
+                <div className="font-mono opacity-80">PW: {wifiPassword}</div>
+              </div>
+            </div>
+
+            {/* Side Information */}
+            <div className="flex-1 space-y-3 max-w-xs">
+              <div className="space-y-1">
+                <h4 className="font-headline text-sm font-bold text-white uppercase tracking-wider">
+                  Target Customer URL:
+                </h4>
+                <div className="p-2.5 rounded-xl bg-[#0B2523] border border-[#1D4D47] text-xs font-mono text-[#E5CFAF] break-all">
+                  {targetUrl}
+                </div>
+              </div>
+
+              <p className="text-xs text-[#C5D5D3] leading-relaxed">
+                When seated customers scan this QR code, their phone automatically locks to{' '}
+                <strong className="text-white">Table {selectedTable}</strong>. Any items they order or assistance calls go directly to the Cashier desktop!
               </p>
-              <p className="font-mono">
-                Password: <span className={`font-bold ${standTheme === 'cream' ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`}>{settings?.wifiPassword || 'craftedfromcoffee'}</span>
-              </p>
+
+              <div className="pt-2 flex flex-col gap-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleCopy}
+                  leftIcon={copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  className="w-full justify-center"
+                >
+                  {copiedLink ? 'Link Copied!' : 'Copy Table Link'}
+                </Button>
+
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleDownload}
+                  leftIcon={<Download className="w-3.5 h-3.5" />}
+                  className="w-full justify-center"
+                >
+                  Download PNG
+                </Button>
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
-        {/* Target link display & Copy */}
-        <div className="bg-[#0B2523] border border-[#1D4D47] rounded-xl p-3 flex items-center justify-between gap-2">
-          <div className="truncate text-xs text-[#C5D5D3] font-mono">
-            {targetUrl}
-          </div>
-          <div className="flex items-center gap-1 shrink-0">
-            <button
-              onClick={handleCopy}
-              className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] transition-colors flex items-center gap-1 text-xs cursor-pointer"
-              title="Copy URL"
-            >
-              {copiedLink ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-              <span>{copiedLink ? 'Copied' : 'Copy'}</span>
-            </button>
-            <a
-              href={targetUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="p-1.5 rounded-lg bg-[#133834] hover:bg-[#18423D] text-[#FAF7F2] transition-colors"
-              title="Open Link"
-            >
-              <ExternalLink className="w-3.5 h-3.5" />
-            </a>
-          </div>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2 border-t border-[#1D4D47]">
-          <Button variant="secondary" onClick={handleDownload} leftIcon={<Download className="w-4 h-4" />}>
-            Download High-Res PNG
+        {/* Footer Actions */}
+        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#1D4D47]">
+          <Button variant="secondary" onClick={onClose}>
+            Close
           </Button>
-          <Button variant="yellow" onClick={handlePrint} leftIcon={<Printer className="w-4 h-4 text-[#0E2F2C]" />}>
-            Print {standTheme === 'cream' ? 'Cream' : 'Teal'} Stand Card
+          <Button
+            variant="yellow"
+            onClick={handlePrint}
+            leftIcon={<Printer className="w-4 h-4 text-[#0E2F2C]" />}
+            className="font-bold"
+          >
+            {isBatch ? `Print All ${tables.length} Stand Cards` : `Print Table ${selectedTable} Stand`}
           </Button>
         </div>
       </div>

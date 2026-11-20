@@ -8,6 +8,8 @@ import {
   Check,
   Copy,
   Lock,
+  Bell,
+  ShoppingBag,
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useMenu, useSiteSettings } from '../hooks/useMenu';
@@ -21,6 +23,9 @@ import { api } from '../api/client';
 import { Language, translations } from '../i18n/translations';
 import { INITIAL_CATEGORIES } from '../data/initialMenu';
 import { useTheme } from '../context/ThemeContext';
+import { CallWaiterModal } from '../components/customer/CallWaiterModal';
+import { OrderTrayModal, TrayItem } from '../components/customer/OrderTrayModal';
+import { TableSelectorModal } from '../components/customer/TableSelectorModal';
 
 export const CustomerMenu: React.FC = () => {
   const { data: categories = [], isLoading, error, refetch } = useMenu();
@@ -38,6 +43,76 @@ export const CustomerMenu: React.FC = () => {
   const [copiedWifi, setCopiedWifi] = useState<boolean>(false);
 
   const navigate = useNavigate();
+
+  // Table management & QR parameter detection
+  const [activeTable, setActiveTable] = useState<string>(() => {
+    if (typeof window !== 'undefined') {
+      const p = new URLSearchParams(window.location.search).get('table');
+      if (p) {
+        localStorage.setItem('kabun_table_number', p);
+        return p;
+      }
+      return localStorage.getItem('kabun_table_number') || '1';
+    }
+    return '1';
+  });
+
+  // Customer Modals state
+  const [isTrayModalOpen, setIsTrayModalOpen] = useState(false);
+  const [isWaiterModalOpen, setIsWaiterModalOpen] = useState(false);
+  const [isTableModalOpen, setIsTableModalOpen] = useState(false);
+
+  // Tray / Cart State
+  const [tray, setTray] = useState<TrayItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const saved = localStorage.getItem('kabun_order_tray');
+        return saved ? JSON.parse(saved) : [];
+      } catch {}
+    }
+    return [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem('kabun_order_tray', JSON.stringify(tray));
+  }, [tray]);
+
+  const handleAddToTray = (item: MenuItem) => {
+    setTray((prev) => {
+      const existing = prev.find((t) => t.menuItem.id === item.id);
+      if (existing) {
+        return prev.map((t) =>
+          t.menuItem.id === item.id ? { ...t, quantity: t.quantity + 1 } : t
+        );
+      }
+      return [...prev, { menuItem: item, quantity: 1 }];
+    });
+  };
+
+  const handleUpdateQuantity = (itemId: string, delta: number) => {
+    setTray((prev) => {
+      return prev
+        .map((t) => {
+          if (t.menuItem.id === itemId) {
+            const nextQty = t.quantity + delta;
+            return nextQty > 0 ? { ...t, quantity: nextQty } : null;
+          }
+          return t;
+        })
+        .filter(Boolean) as TrayItem[];
+    });
+  };
+
+  const handleClearTray = () => {
+    setTray([]);
+    localStorage.removeItem('kabun_order_tray');
+  };
+
+  const trayCount = tray.reduce((sum, item) => sum + item.quantity, 0);
+  const trayTotal = tray.reduce(
+    (sum, item) => sum + (item.menuItem.price || 0) * item.quantity,
+    0
+  );
 
   // Track visit on mount (count all QR scans together in one total)
   useEffect(() => {
@@ -474,13 +549,19 @@ export const CustomerMenu: React.FC = () => {
           {!isLoading && !error && displayedItems.length > 0 && (
             <div className="min-h-[35vh]">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 items-start">
-                {displayedItems.map((item, index) => (
-                  <MenuCard
-                    key={item.id}
-                    item={item}
-                    index={index}
-                  />
-                ))}
+                {displayedItems.map((item, index) => {
+                  const inTray = tray.find((t) => t.menuItem.id === item.id);
+                  return (
+                    <MenuCard
+                      key={item.id}
+                      item={item}
+                      index={index}
+                      quantityInTray={inTray?.quantity || 0}
+                      onAddToTray={handleAddToTray}
+                      onUpdateQuantity={handleUpdateQuantity}
+                    />
+                  );
+                })}
               </div>
             </div>
           )}
@@ -1196,7 +1277,7 @@ export const CustomerMenu: React.FC = () => {
           onClick={scrollToTop}
           type="button"
           aria-label="Scroll back to top"
-          className="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
+          className="fixed bottom-20 right-4 z-30 w-10 h-10 rounded-full backdrop-blur-md border shadow-[0_10px_25px_rgba(0,0,0,0.5)] hover:scale-105 transition-all duration-300 flex items-center justify-center cursor-pointer animate-in fade-in"
           style={{
             backgroundColor: isCream ? '#0E2F2C' : `${cardColor}E6`,
             color: isCream ? '#E5CFAF' : '#FAF7F2',
@@ -1204,9 +1285,75 @@ export const CustomerMenu: React.FC = () => {
           }}
           title="Back to Top"
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-4 h-4" />
         </button>
       )}
+
+      {/* Persistent Customer Action Bar: Seated Table, Call Waiter & Order Tray */}
+      <div className="fixed bottom-3 left-3 right-3 sm:left-auto sm:right-6 sm:w-auto z-40 flex items-center justify-between sm:justify-end gap-2 p-2 rounded-2xl bg-[#0E2F2C]/95 backdrop-blur-xl border border-[#E5CFAF]/30 shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
+        {/* Table Selector Pill */}
+        <button
+          onClick={() => setIsTableModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#143B37] hover:bg-[#1A4B46] border border-[#1D4D47] text-[#FAF7F2] text-xs font-headline font-bold uppercase tracking-wider transition-all"
+          title="Click to view or change your seated table"
+        >
+          <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" />
+          <span>Table {activeTable}</span>
+        </button>
+
+        {/* Call Waiter Bell Button */}
+        <button
+          onClick={() => setIsWaiterModalOpen(true)}
+          className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-[#143B37] hover:bg-[#1A4B46] border border-[#1D4D47] text-[#E5CFAF] hover:text-white text-xs font-headline font-bold uppercase tracking-wider transition-all"
+          title="Call Waiter or Request Bill"
+        >
+          <Bell className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>Call Staff</span>
+        </button>
+
+        {/* Order Tray Pill */}
+        <button
+          onClick={() => setIsTrayModalOpen(true)}
+          className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-headline font-black uppercase tracking-wider transition-all shadow-md ${
+            trayCount > 0
+              ? 'bg-[#E5CFAF] text-[#0E2F2C] hover:brightness-110 shadow-[0_0_20px_rgba(229,207,175,0.4)] animate-pulse'
+              : 'bg-[#143B37] text-[#C5D5D3] border border-[#1D4D47] hover:text-white'
+          }`}
+          title="View Your Order Tray"
+        >
+          <ShoppingBag className={`w-4 h-4 ${trayCount > 0 ? 'text-[#0E2F2C]' : 'text-[#E5CFAF]'}`} />
+          <span>
+            {trayCount > 0 ? `${trayCount} Item${trayCount > 1 ? 's' : ''} • ${trayTotal.toLocaleString()} ETB` : 'Order Tray'}
+          </span>
+        </button>
+      </div>
+
+      {/* Customer Modals */}
+      <OrderTrayModal
+        isOpen={isTrayModalOpen}
+        onClose={() => setIsTrayModalOpen(false)}
+        tableNumber={activeTable}
+        tray={tray}
+        onUpdateQuantity={handleUpdateQuantity}
+        onClearTray={handleClearTray}
+        onSelectTablePrompt={() => setIsTableModalOpen(true)}
+      />
+
+      <CallWaiterModal
+        isOpen={isWaiterModalOpen}
+        onClose={() => setIsWaiterModalOpen(false)}
+        tableNumber={activeTable}
+      />
+
+      <TableSelectorModal
+        isOpen={isTableModalOpen}
+        onClose={() => setIsTableModalOpen(false)}
+        activeTable={activeTable}
+        onSelectTable={(num) => {
+          setActiveTable(num);
+          localStorage.setItem('kabun_table_number', num);
+        }}
+      />
     </div>
   );
 };

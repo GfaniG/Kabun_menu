@@ -7,6 +7,8 @@ import {
   EyeOff,
   Palette,
   TrendingUp,
+  Bell,
+  QrCode,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import {
@@ -14,6 +16,8 @@ import {
   useItems,
   useCreateItem,
   useUpdateItem,
+  useCashierSummary,
+  useTables,
 } from '../hooks/useMenu';
 import { AdminHeader } from '../components/admin/AdminHeader';
 import { CategoryManager } from '../components/admin/CategoryManager';
@@ -21,18 +25,22 @@ import { ItemListTable } from '../components/admin/ItemListTable';
 import { ItemFormModal } from '../components/admin/ItemFormModal';
 import { SiteSettingsCMS } from '../components/admin/SiteSettingsCMS';
 import { AnalyticsDashboard } from '../components/admin/AnalyticsDashboard';
+import { CashierOrdersView } from '../components/admin/CashierOrdersView';
+import { TableManagerView } from '../components/admin/TableManagerView';
 import { MenuItem } from '../types/menu';
 
 export const AdminDashboard: React.FC = () => {
   const { isAuthenticated, isLoading: isAuthLoading } = useAuth();
 
-  const [activeTab, setActiveTab] = useState<'items' | 'categories' | 'cms' | 'analytics'>('items');
+  const [activeTab, setActiveTab] = useState<'orders' | 'tables' | 'items' | 'categories' | 'cms' | 'analytics'>('orders');
   const [isItemModalOpen, setIsItemModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
 
   // Queries
   const { data: categories = [] } = useCategories();
   const { data: items = [] } = useItems();
+  const { data: summary } = useCashierSummary();
+  const { data: tables = [] } = useTables();
 
   // Mutations
   const createItemMutation = useCreateItem();
@@ -149,8 +157,37 @@ export const AdminDashboard: React.FC = () => {
           </div>
         </div>
 
-        {/* Navigation Tabs (Dishes vs Categories vs Customize Menu & CMS) */}
+        {/* Navigation Tabs (Cashier vs Tables vs Dishes vs Categories vs CMS vs Analytics) */}
         <div className="flex border-b border-[#1D4D47] gap-1 sm:gap-2 overflow-x-auto no-scrollbar -mx-3 px-3 sm:mx-0 sm:px-0">
+          <button
+            onClick={() => setActiveTab('orders')}
+            className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
+              activeTab === 'orders'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <Bell className={`w-4 h-4 ${summary && summary.totalPendingAlerts > 0 ? 'text-amber-400 animate-bounce' : 'text-[#E5CFAF]'}`} />
+            <span>Cashier &amp; Orders</span>
+            {summary && summary.totalPendingAlerts > 0 && (
+              <span className="px-2 py-0.5 rounded-full bg-amber-500 text-[#0E2F2C] text-[10px] font-black animate-pulse">
+                {summary.totalPendingAlerts} New!
+              </span>
+            )}
+          </button>
+
+          <button
+            onClick={() => setActiveTab('tables')}
+            className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
+              activeTab === 'tables'
+                ? 'border-[#E5CFAF] text-[#E5CFAF] bg-white/5 font-extrabold'
+                : 'border-transparent text-[#C5D5D3] hover:text-white hover:bg-white/5'
+            }`}
+          >
+            <QrCode className="w-4 h-4 text-[#E5CFAF]" />
+            <span>Tables &amp; QR ({tables.length})</span>
+          </button>
+
           <button
             onClick={() => setActiveTab('items')}
             className={`px-3.5 sm:px-5 py-2.5 sm:py-3 font-headline text-xs uppercase tracking-wider sm:tracking-widest font-bold transition-all flex items-center gap-2 border-b-2 rounded-t-xl -mb-px shrink-0 cursor-pointer ${
@@ -160,7 +197,7 @@ export const AdminDashboard: React.FC = () => {
             }`}
           >
             <Utensils className="w-4 h-4 text-[#E5CFAF]" />
-            <span className="hidden sm:inline">Items &amp; Live Pricing ({items.length})</span>
+            <span className="hidden sm:inline">Dishes &amp; Live Pricing ({items.length})</span>
             <span className="sm:hidden">Items ({items.length})</span>
           </button>
 
@@ -203,6 +240,12 @@ export const AdminDashboard: React.FC = () => {
             <span className="sm:hidden">Analytics</span>
           </button>
         </div>
+
+        {/* Tab View 0: Cashier Live Feed */}
+        {activeTab === 'orders' && <CashierOrdersView />}
+
+        {/* Tab View 0.5: Tables & QR Codes Manager */}
+        {activeTab === 'tables' && <TableManagerView />}
 
         {/* Tab View 1: Dishes Table */}
         {activeTab === 'items' && (

@@ -49,6 +49,25 @@ export async function ensureDatabaseReady() {
     }).catch(() => null);
 
     const adminCount = await prisma.admin.count().catch(() => 0);
+    const tableCount = await prisma.table.count().catch(() => 0);
+
+    if (tableCount === 0) {
+      console.log('🌱 Ensuring initial 15 roastery dining tables...');
+      for (let i = 1; i <= 15; i++) {
+        const tableNum = String(i);
+        await prisma.table.upsert({
+          where: { tableNumber: tableNum },
+          update: {},
+          create: {
+            tableNumber: tableNum,
+            label: `Table ${tableNum}`,
+            sortOrder: i,
+            capacity: i <= 4 ? 2 : i <= 12 ? 4 : 6,
+            isActive: true,
+          },
+        }).catch(() => {});
+      }
+    }
 
     if (!kabunCategory || adminCount === 0) {
       console.log('🌱 Running automated Kabun Coffee + Roastery database seeding...');

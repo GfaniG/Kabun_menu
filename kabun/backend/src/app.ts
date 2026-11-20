@@ -13,6 +13,9 @@ import { menuRoutes } from './routes/menu.routes.js';
 import { settingsRoutes } from './routes/settings.routes.js';
 import { analyticsRoutes } from './routes/analytics.routes.js';
 import { syncRoutes } from './routes/sync.routes.js';
+import { tableRoutes } from './routes/table.routes.js';
+import { orderRoutes } from './routes/order.routes.js';
+import { serviceRoutes } from './routes/service.routes.js';
 
 const app = Fastify({
   logger: {
@@ -65,6 +68,9 @@ async function main() {
   await app.register(settingsRoutes, { prefix: '/api' });
   await app.register(analyticsRoutes, { prefix: '/api/analytics' });
   await app.register(syncRoutes, { prefix: '/api' });
+  await app.register(tableRoutes, { prefix: '/api' });
+  await app.register(orderRoutes, { prefix: '/api' });
+  await app.register(serviceRoutes, { prefix: '/api' });
 
   const __filename = fileURLToPath(import.meta.url);
   const __dirname = path.dirname(__filename);

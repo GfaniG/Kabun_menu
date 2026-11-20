@@ -1,6 +1,16 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { api } from '../api/client';
-import { Category, MenuItem, SiteSettings, AdminUser } from '../types/menu';
+import {
+  Category,
+  MenuItem,
+  SiteSettings,
+  AdminUser,
+  DiningTable,
+  CustomerOrder,
+  OrderItemInput,
+  ServiceRequest,
+  CashierSummary,
+} from '../types/menu';
 import { INITIAL_CATEGORIES } from '../data/initialMenu';
 
 export const MENU_QUERY_KEYS = {
@@ -242,5 +252,149 @@ export function useAnalyticsSummary() {
       return res.data;
     },
     refetchInterval: 15000,
+  });
+}
+
+// 12. Tables Hooks
+export function useTables() {
+  return useQuery({
+    queryKey: ['tables'],
+    queryFn: async () => {
+      const res = await api.getTables();
+      return res.data;
+    },
+    refetchInterval: 5000,
+  });
+}
+
+export function useCreateTable() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { tableNumber: string; label?: string; capacity?: number; sortOrder?: number }) =>
+      api.createTable(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tables'] });
+    },
+  });
+}
+
+export function useUpdateTable() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, data }: { id: string; data: Partial<DiningTable> }) =>
+      api.updateTable(id, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tables'] });
+    },
+  });
+}
+
+export function useDeleteTable() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => api.deleteTable(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['tables'] });
+    },
+  });
+}
+
+// 13. Orders Hooks (Live 3-second polling for Cashier desktop)
+export function useOrders(status?: string) {
+  return useQuery({
+    queryKey: ['orders', { status }],
+    queryFn: async () => {
+      const res = await api.getOrders(status);
+      return res.data;
+    },
+    refetchInterval: 3000,
+  });
+}
+
+export function useCreateOrder() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { tableNumber: string; items: OrderItemInput[]; customerNotes?: string }) =>
+      api.createOrder(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['cashier-summary'] });
+    },
+  });
+}
+
+export function useUpdateOrderStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
+      api.updateOrderStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['orders'] });
+      queryClient.invalidateQueries({ queryKey: ['cashier-summary'] });
+    },
+  });
+}
+
+export function useTableOrders(tableNumber: string | null) {
+  return useQuery({
+    queryKey: ['table-orders', tableNumber],
+    queryFn: async () => {
+      if (!tableNumber) return [];
+      const res = await api.getTableOrders(tableNumber);
+      return res.data;
+    },
+    enabled: !!tableNumber,
+    refetchInterval: 5000,
+  });
+}
+
+// 14. Service Requests / Waiter Call Hooks (Live 3-second polling)
+export function useServiceRequests(status?: string) {
+  return useQuery({
+    queryKey: ['service-requests', { status }],
+    queryFn: async () => {
+      const res = await api.getServiceRequests(status);
+      return res.data;
+    },
+    refetchInterval: 3000,
+  });
+}
+
+export function useCreateServiceRequest() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: {
+      tableNumber: string;
+      type: 'CALL_WAITER' | 'REQUEST_BILL' | 'WATER_REFILL' | string;
+      paymentMethod?: string;
+      notes?: string;
+    }) => api.createServiceRequest(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['service-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['cashier-summary'] });
+    },
+  });
+}
+
+export function useUpdateServiceRequestStatus() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, status }: { id: string; status: string }) =>
+      api.updateServiceRequestStatus(id, status),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['service-requests'] });
+      queryClient.invalidateQueries({ queryKey: ['cashier-summary'] });
+    },
+  });
+}
+
+export function useCashierSummary() {
+  return useQuery({
+    queryKey: ['cashier-summary'],
+    queryFn: async () => {
+      const res = await api.getCashierSummary();
+      return res.data;
+    },
+    refetchInterval: 3000,
   });
 }
