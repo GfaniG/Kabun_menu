@@ -87,7 +87,7 @@ export class TableController {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to create table',
+        error: 'We could not save the table details right now. Please try again.',
       });
     }
   }

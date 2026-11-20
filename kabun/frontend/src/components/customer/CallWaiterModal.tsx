@@ -13,6 +13,7 @@ import {
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { useCreateServiceRequest } from '../../hooks/useMenu';
+import { toFriendlyErrorMessage } from '../../utils/friendlyErrors';
 
 interface CallWaiterModalProps {
   isOpen: boolean;
@@ -58,7 +59,12 @@ export const CallWaiterModal: React.FC<CallWaiterModalProps> = ({
         onClose();
       }, 2500);
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to send assistance request.');
+      setErrorMessage(
+        toFriendlyErrorMessage(
+          err,
+          "We couldn't notify the barista right now. Please try calling again in a moment."
+        )
+      );
     }
   };
 

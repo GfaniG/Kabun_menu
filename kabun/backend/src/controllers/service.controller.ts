@@ -46,7 +46,7 @@ export class ServiceController {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to submit service request',
+        error: 'We could not dispatch your assistance request right now. Please try calling again in a moment.',
       });
     }
   }

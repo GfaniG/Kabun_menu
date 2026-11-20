@@ -5,6 +5,7 @@ import { useUpdateAdminProfile } from '../../hooks/useMenu';
 import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
+import { toFriendlyErrorMessage } from '../../utils/friendlyErrors';
 
 interface AccountSecurityModalProps {
   isOpen: boolean;
@@ -84,8 +85,12 @@ export const AccountSecurityModal: React.FC<AccountSecurityModalProps> = ({
         onClose();
       }, 1400);
     } catch (err: any) {
-      const msg = err.response?.data?.message || err.message || 'Failed to update account';
-      setErrorMessage(msg);
+      setErrorMessage(
+        toFriendlyErrorMessage(
+          err,
+          "We couldn't update your account details. Please double-check your current password and try again."
+        )
+      );
     }
   };
 

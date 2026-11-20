@@ -76,7 +76,7 @@ export class OrderController {
       request.log.error(error);
       return reply.status(500).send({
         success: false,
-        error: error.message || 'Failed to place order',
+        error: 'We could not submit your order right now. Please try tapping Send again.',
       });
     }
   }

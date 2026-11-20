@@ -25,6 +25,7 @@ import { INITIAL_CATEGORIES } from '../data/initialMenu';
 import { useTheme } from '../context/ThemeContext';
 import { CallWaiterModal } from '../components/customer/CallWaiterModal';
 import { OrderTrayModal, TrayItem } from '../components/customer/OrderTrayModal';
+import { toFriendlyErrorMessage } from '../utils/friendlyErrors';
 
 export const CustomerMenu: React.FC = () => {
   const { data: categories = [], isLoading, error, refetch } = useMenu();
@@ -492,20 +493,25 @@ export const CustomerMenu: React.FC = () => {
             </div>
           )}
 
-          {/* Error Message */}
+          {/* Human-Friendly Connection Notice */}
           {error && (
             <div
               className="p-6 border border-[#1D4D47] rounded-xl text-center space-y-3 max-w-md mx-auto"
               style={{ backgroundColor: cardColor }}
             >
               <AlertCircle className="w-8 h-8 text-[#E5CFAF] mx-auto" />
-              <h4 className="font-headline text-lg font-bold text-white">Could not load the menu</h4>
-              <p className="text-xs text-[#C5D5D3]">{(error as any)?.message}</p>
+              <h4 className="font-headline text-lg font-bold text-white">We couldn't load the menu right now</h4>
+              <p className="text-xs text-[#C5D5D3] leading-relaxed max-w-sm mx-auto">
+                {toFriendlyErrorMessage(
+                  error,
+                  "We're having trouble connecting to the roastery. Please check your internet connection or tap below to refresh."
+                )}
+              </p>
               <button
                 onClick={() => refetch()}
-                className="px-5 py-2 bg-[#0E2F2C] border border-[#1D4D47] text-[#FAF7F2] text-xs font-headline uppercase font-semibold rounded-lg hover:bg-[#18423D] cursor-pointer"
+                className="px-6 py-2.5 bg-[#0E2F2C] border border-[#1D4D47] text-[#FAF7F2] text-xs font-headline uppercase font-semibold rounded-lg hover:bg-[#18423D] cursor-pointer transition-colors shadow-sm"
               >
-                Retry
+                Refresh Menu
               </button>
             </div>
           )}

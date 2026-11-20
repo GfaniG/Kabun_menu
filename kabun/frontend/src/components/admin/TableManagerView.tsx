@@ -23,6 +23,7 @@ import { DiningTable } from '../../types/menu';
 import { Button } from '../ui/Button';
 import { Input } from '../ui/Input';
 import { Modal } from '../ui/Modal';
+import { toFriendlyErrorMessage } from '../../utils/friendlyErrors';
 import { TableQRModal } from './TableQRModal';
 
 export const TableManagerView: React.FC = () => {
@@ -97,7 +98,12 @@ export const TableManagerView: React.FC = () => {
       }
       setIsModalOpen(false);
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to save table.');
+      setErrorMessage(
+        toFriendlyErrorMessage(
+          err,
+          "We couldn't save the table details. Please check the table number and try again."
+        )
+      );
     }
   };
 

@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
 import { KabunLogo } from '../components/common/KabunLogo';
+import { toFriendlyErrorMessage } from '../utils/friendlyErrors';
 
 export const AdminLogin: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -49,10 +50,15 @@ export const AdminLogin: React.FC = () => {
           setError(null);
         }, 30000);
       } else {
-        const errorMsg = err.message?.includes('Incorrect password')
-          ? 'Incorrect password. Access denied.'
-          : err.message || 'Invalid username or password. Access denied.';
-        setError(`${errorMsg} (${5 - nextAttempts} attempts remaining)`);
+        const raw = err?.message || '';
+        const isPasswordWrong = raw.toLowerCase().includes('password');
+        const friendlyMsg = isPasswordWrong
+          ? 'Incorrect password. Please try again.'
+          : toFriendlyErrorMessage(
+              err,
+              'Invalid username or password. Please verify your credentials and try again.'
+            );
+        setError(`${friendlyMsg} (${5 - nextAttempts} attempts remaining)`);
       }
     } finally {
       setIsLoading(false);

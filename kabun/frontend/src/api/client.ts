@@ -9,6 +9,7 @@ import {
   ServiceRequest,
   CashierSummary,
 } from '../types/menu';
+import { toFriendlyErrorMessage } from '../utils/friendlyErrors';
 
 // In production, always use relative paths (same origin). In development, fallback to proxy or env.
 const API_BASE = import.meta.env.PROD ? '' : (import.meta.env.VITE_API_URL || '');
@@ -36,15 +37,33 @@ class ApiClient {
 
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE}${endpoint}`;
 
-    const res = await fetch(url, {
-      ...options,
-      headers,
-    });
+    let res: Response;
+    try {
+      res = await fetch(url, {
+        ...options,
+        headers,
+      });
+    } catch {
+      // In browsers, network loss or server cold starts throw "TypeError: Failed to fetch"
+      throw new Error(
+        "We're having trouble connecting to the roastery. Please check your internet connection or try again in a moment."
+      );
+    }
 
     const data = await res.json().catch(() => null);
 
     if (!res.ok) {
-      const errorMsg = data?.error || data?.message || `Request failed with status ${res.status}`;
+      const rawError = data?.error || data?.message;
+      const errorMsg = toFriendlyErrorMessage(
+        rawError,
+        res.status >= 500
+          ? 'Our system is taking a brief moment to refresh. Please give it a few seconds and try again.'
+          : res.status === 404
+          ? 'The requested menu item, table, or service could not be found.'
+          : res.status === 401 || res.status === 403
+          ? 'Your session has ended. Please sign in again to continue.'
+          : 'Something unexpected happened. Please give it another try.'
+      );
       throw new Error(errorMsg);
     }
 

@@ -15,6 +15,7 @@ import { Modal } from '../ui/Modal';
 import { Button } from '../ui/Button';
 import { MenuItem, CustomerOrder } from '../../types/menu';
 import { useCreateOrder } from '../../hooks/useMenu';
+import { toFriendlyErrorMessage } from '../../utils/friendlyErrors';
 
 export interface TrayItem {
   menuItem: MenuItem;
@@ -79,7 +80,12 @@ export const OrderTrayModal: React.FC<OrderTrayModalProps> = ({
       setConfirmedOrder(res.data);
       onClearTray();
     } catch (err: any) {
-      setErrorMessage(err.message || 'Failed to submit order to barista');
+      setErrorMessage(
+        toFriendlyErrorMessage(
+          err,
+          "We couldn't send your order to the barista right now. Please check your connection and tap Send again."
+        )
+      );
     }
   };
 
