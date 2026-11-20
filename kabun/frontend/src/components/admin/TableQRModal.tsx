@@ -159,7 +159,6 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
 
                   <div class="card-footer">
                     <strong>SCAN TO ORDER</strong>
-                    <span>ይቃኙ እና ያዝዙ</span>
                   </div>
                 </div>
               </div>
@@ -178,7 +177,6 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                     </div>
                     <div class="card-footer">
                       <strong>SCAN TO ORDER</strong>
-                      <span>ይቃኙ እና ያዝዙ</span>
                     </div>
                   </div>
                   <div class="right-col">
@@ -284,7 +282,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               .qr-container {
                 width: 33mm;
                 height: 33mm;
-                background: #ffffff;
+                background: ${isCream ? '#FAF6F0' : '#E5CFAF'} !important;
                 padding: 1.5mm;
                 border-radius: 3mm;
                 display: flex;
@@ -298,17 +296,13 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                 display: block;
               }
               .card-footer {
-                font-size: 6pt;
+                font-size: 6.5pt;
                 line-height: 1.25;
               }
               .card-footer strong {
                 display: block;
                 letter-spacing: 0.8px;
-                font-size: 6.5pt;
-              }
-              .card-footer span {
-                opacity: 0.8;
-                font-size: 5.5pt;
+                font-size: 7pt;
               }
 
               /* Landscape specifics */
@@ -335,7 +329,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               .qr-container-landscape {
                 width: 34mm;
                 height: 34mm;
-                background: #ffffff;
+                background: ${isCream ? '#FAF6F0' : '#E5CFAF'} !important;
                 padding: 1.5mm;
                 border-radius: 3mm;
               }
@@ -451,7 +445,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
             .qr-container {
               width: 35mm;
               height: 35mm;
-              background: #ffffff;
+              background: ${isCream ? '#FAF6F0' : '#E5CFAF'} !important;
               padding: 2mm;
               border-radius: 3mm;
               display: flex;
@@ -465,17 +459,13 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
               display: block;
             }
             .card-footer {
-              font-size: 6.5pt;
+              font-size: 7pt;
               line-height: 1.25;
             }
             .card-footer strong {
               display: block;
               letter-spacing: 1px;
-              font-size: 7pt;
-            }
-            .card-footer span {
-              opacity: 0.8;
-              font-size: 6pt;
+              font-size: 7.5pt;
             }
 
             /* Landscape format */
@@ -502,7 +492,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
             .qr-container-landscape {
               width: 35mm;
               height: 35mm;
-              background: #ffffff;
+              background: ${isCream ? '#FAF6F0' : '#E5CFAF'} !important;
               padding: 2mm;
               border-radius: 3mm;
             }
@@ -533,7 +523,6 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
 
                 <div class="card-footer">
                   <strong>SCAN TO ORDER</strong>
-                  <span>ይቃኙ እና ያዝዙ</span>
                 </div>
               </div>
             `
@@ -549,7 +538,6 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                   </div>
                   <div class="card-footer">
                     <strong>SCAN TO ORDER</strong>
-                    <span>ይቃኙ እና ያዝዙ</span>
                   </div>
                 </div>
                 <div class="right-col">
@@ -696,7 +684,7 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                   >
                     TABLE {item.tableNumber}
                   </span>
-                  <div className="w-16 h-16 bg-white p-1 rounded-md shadow-sm">
+                  <div className={`w-16 h-16 p-1 rounded-md shadow-sm ${standTheme === 'cream' ? 'bg-[#FAF6F0]' : 'bg-[#E5CFAF]'}`}>
                     <img src={item.qrUrl} alt={item.label} className="w-full h-full" />
                   </div>
                   <span className="text-[8px] font-bold uppercase tracking-tight block mt-1">
@@ -744,14 +732,13 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                     </span>
 
                     {qrDataUrl && (
-                      <div className="w-28 h-28 bg-white p-1.5 rounded-xl shadow-inner flex items-center justify-center">
+                      <div className={`w-28 h-28 p-1.5 rounded-xl shadow-inner flex items-center justify-center ${standTheme === 'cream' ? 'bg-[#FAF6F0]' : 'bg-[#E5CFAF]'}`}>
                         <img src={qrDataUrl} alt="Table QR" className="w-full h-full object-contain" />
                       </div>
                     )}
 
-                    <div className="text-[8px] leading-tight space-y-0.5">
+                    <div className="text-[9px] leading-tight">
                       <strong className="block uppercase tracking-wider">SCAN TO ORDER</strong>
-                      <span className="opacity-80">ይቃኙ እና ያዝዙ</span>
                     </div>
                   </>
                 ) : (
@@ -776,14 +763,13 @@ export const TableQRModal: React.FC<TableQRModalProps> = ({
                         {selectedTable === 'master' ? 'MAIN ROASTERY' : `TABLE ${selectedTable}`}
                       </span>
 
-                      <div className="text-[7.5px] leading-tight">
+                      <div className="text-[8.5px] leading-tight">
                         <strong className="block uppercase tracking-wider">SCAN TO ORDER</strong>
-                        <span className="opacity-80">ይቃኙ እና ያዝዙ</span>
                       </div>
                     </div>
 
                     {qrDataUrl && (
-                      <div className="w-28 h-28 bg-white p-1.5 rounded-xl shadow-inner flex items-center justify-center shrink-0">
+                      <div className={`w-28 h-28 p-1.5 rounded-xl shadow-inner flex items-center justify-center shrink-0 ${standTheme === 'cream' ? 'bg-[#FAF6F0]' : 'bg-[#E5CFAF]'}`}>
                         <img src={qrDataUrl} alt="Table QR" className="w-full h-full object-contain" />
                       </div>
                     )}
